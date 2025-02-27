@@ -16,7 +16,7 @@ export default function ResumePrompt() {
         <div>
           <h3 className="font-medium">Welcome back!</h3>
           <p className="text-sm text-muted-foreground">
-            We've restored your previous progress. You left off at the {currentSection.replace('_', ' ')} section.
+            We&apos;ve restored your previous progress. You left off at the {currentSection.replace('_', ' ')} section.
           </p>
         </div>
         <div className="flex gap-2">
