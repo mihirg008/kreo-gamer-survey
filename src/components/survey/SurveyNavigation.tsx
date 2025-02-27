@@ -1,48 +1,38 @@
 'use client';
 
-import { useState } from 'react';
+import React from 'react';
 import { useSurvey } from '@/context/SurveyContext';
 
-interface SurveyNavigationProps {
-  onValidate?: () => boolean;
-}
-
-export default function SurveyNavigation({ onValidate }: SurveyNavigationProps) {
-  const { currentSection, setCurrentSection } = useSurvey();
-  const [isLoading, setIsLoading] = useState(false);
+export default function SurveyNavigation() {
+  const { goToNextSection, goToPreviousSection, currentSection, isLastSection } = useSurvey();
+  const [isLoading, setIsLoading] = React.useState(false);
 
   const handleNext = async () => {
-    if (onValidate) {
-      setIsLoading(true);
-      const isValid = onValidate();
-      if (!isValid) {
-        setIsLoading(false);
-        return;
-      }
+    setIsLoading(true);
+    try {
+      // Add any async validation here if needed
+      goToNextSection();
+    } catch (error) {
+      console.error(error);
     }
-    setCurrentSection(currentSection + 1);
     setIsLoading(false);
   };
 
-  const handlePrevious = () => {
-    setCurrentSection(currentSection - 1);
-  };
-
   return (
-    <div className="flex justify-between mt-8">
+    <div className="flex justify-between mt-6">
       <button
-        onClick={handlePrevious}
-        disabled={currentSection === 1 || isLoading}
+        onClick={goToPreviousSection}
+        disabled={currentSection === 'demographics' || isLoading}
         className="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-md hover:bg-gray-200 disabled:opacity-50 disabled:cursor-not-allowed"
       >
         Previous
       </button>
       <button
         onClick={handleNext}
-        disabled={isLoading}
-        className="px-4 py-2 text-sm font-medium text-white bg-purple-600 rounded-md hover:bg-purple-700 disabled:opacity-75"
+        disabled={isLoading || isLastSection}
+        className="px-4 py-2 text-sm font-medium text-white bg-purple-600 rounded-md hover:bg-purple-700 disabled:opacity-50 disabled:cursor-not-allowed"
       >
-        {isLoading ? 'Saving...' : 'Next'}
+        {isLastSection ? 'Submit' : 'Next'}
       </button>
     </div>
   );
