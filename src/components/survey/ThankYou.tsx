@@ -4,11 +4,8 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { useSurvey } from '@/context/SurveyContext';
 
 export default function ThankYou() {
-  const { responses } = useSurvey();
-
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -44,7 +41,7 @@ export default function ThankYou() {
               <Button 
                 className="w-48 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700"
                 onClick={() => {
-                  // Handle newsletter signup or social media follow
+                  alert("Newsletter signup feature is not yet implemented.");
                 }}
               >
                 Follow Updates
@@ -60,7 +57,14 @@ export default function ThankYou() {
           className="text-sm text-muted-foreground"
         >
           <p>Share this survey with your fellow gamers!</p>
-          {/* Add social share buttons here if needed */}
+          <div className="flex justify-center gap-4 mt-4">
+            <Button onClick={() => window.open('https://www.facebook.com/sharer/sharer.php?u=' + window.location.href, '_blank')}>
+              Share on Facebook
+            </Button>
+            <Button onClick={() => window.open('https://twitter.com/intent/tweet?url=' + window.location.href, '_blank')}>
+              Share on Twitter
+            </Button>
+          </div>
         </motion.div>
       </Card>
     </motion.div>
