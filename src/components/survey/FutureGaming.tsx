@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
@@ -24,6 +24,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
+import ThankYou from './ThankYou';
 
 const interestOptions = [
   { value: 'very_interested', label: 'Very Interested' },
@@ -54,7 +55,8 @@ const sustainabilityOptions = [
 ];
 
 export default function FutureGaming() {
-  const { updateResponses, goToNextSection, goToPreviousSection, isLastSection } = useSurvey();
+  const { updateResponses, goToPreviousSection } = useSurvey();
+  const [isSubmitted, setIsSubmitted] = useState(false);
 
   const form = useForm<z.infer<typeof futureGamingSchema>>({
     resolver: zodResolver(futureGamingSchema),
@@ -67,8 +69,13 @@ export default function FutureGaming() {
   });
 
   function onSubmit(values: z.infer<typeof futureGamingSchema>) {
+    console.log('Submitting final form', values);
     updateResponses('future_gaming', values);
-    goToNextSection();
+    setIsSubmitted(true);
+  }
+
+  if (isSubmitted) {
+    return <ThankYou />;
   }
 
   return (
@@ -205,9 +212,13 @@ export default function FutureGaming() {
               </Button>
               <Button 
                 type="submit"
+                onClick={() => {
+                  console.log('Form submitted');
+                  form.handleSubmit(onSubmit)();
+                }}
                 className="w-32 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700"
               >
-                {isLastSection ? 'Submit' : 'Next'}
+                Submit
               </Button>
             </div>
           </form>
@@ -215,4 +226,4 @@ export default function FutureGaming() {
       </Card>
     </motion.div>
   );
-} 
+}
