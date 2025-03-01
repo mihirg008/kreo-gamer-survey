@@ -1,6 +1,6 @@
 'use client';
 
-import { createContext, useContext, useState, ReactNode, useEffect, useRef, useCallback } from 'react';
+import { createContext, useContext, useState, ReactNode, useEffect, useRef } from 'react';
 import { SurveySection, SurveyData } from '@/types/survey';
 import { saveSurveyResponses, markSurveyCompleted } from '@/lib/survey-service';
 
@@ -42,21 +42,6 @@ export function SurveyProvider({ children }: { children: ReactNode }) {
   
   // Ref for tracking user inactivity
   const inactivityTimerRef = useRef<NodeJS.Timeout | null>(null);
-  
-  // Function to save data to Firebase - MOVED UP HERE
-  const saveToFirebase = useCallback(async () => {
-    if (Object.keys(responses).length === 0) return;
-    
-    setIsSaving(true);
-    try {
-      await saveSurveyResponses(responses, SECTION_ORDER[currentSectionIndex]);
-      setLastSaved(new Date());
-    } catch (error) {
-      console.error('Error saving to Firebase:', error);
-    } finally {
-      setIsSaving(false);
-    }
-  }, [responses, currentSectionIndex]);
   
   // Load saved data from localStorage on initial render
   useEffect(() => {
@@ -103,7 +88,8 @@ export function SurveyProvider({ children }: { children: ReactNode }) {
         clearTimeout(inactivityTimerRef.current);
       }
     };
-  }, [responses, isInitialized, saveToFirebase]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [responses, isInitialized]);
 
   // Save current section to localStorage whenever it changes
   useEffect(() => {
@@ -116,8 +102,24 @@ export function SurveyProvider({ children }: { children: ReactNode }) {
       // Save to Firebase when section changes
       saveToFirebase();
     }
-  }, [currentSectionIndex, isInitialized, saveToFirebase]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentSectionIndex, isInitialized]);
   
+  // Function to save data to Firebase
+  const saveToFirebase = async () => {
+    if (Object.keys(responses).length === 0) return;
+    
+    setIsSaving(true);
+    try {
+      await saveSurveyResponses(responses, SECTION_ORDER[currentSectionIndex]);
+      setLastSaved(new Date());
+    } catch (error) {
+      console.error('Error saving to Firebase:', error);
+    } finally {
+      setIsSaving(false);
+    }
+  };
+
   const currentSection = SECTION_ORDER[currentSectionIndex];
   const isLastSection = currentSectionIndex === SECTION_ORDER.length - 1;
 
