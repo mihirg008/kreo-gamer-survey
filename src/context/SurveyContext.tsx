@@ -1,7 +1,8 @@
 'use client';
 
-import { createContext, useContext, useState, ReactNode, useEffect } from 'react';
+import { createContext, useContext, useState, ReactNode, useEffect, useRef, useCallback } from 'react';
 import { SurveySection, SurveyData } from '@/types/survey';
+import { saveSurveyResponses, markSurveyCompleted } from '@/lib/survey-service';
 
 interface SurveyContextType {
   currentSection: SurveySection;
@@ -12,6 +13,8 @@ interface SurveyContextType {
   goToNextSection: () => void;
   goToPreviousSection: () => void;
   resetSurvey: () => void;
+  isSaving: boolean;
+  lastSaved: Date | null;
 }
 
 const SECTION_ORDER: SurveySection[] = [
@@ -34,7 +37,27 @@ export function SurveyProvider({ children }: { children: ReactNode }) {
   const [currentSectionIndex, setCurrentSectionIndex] = useState(0);
   const [responses, setResponses] = useState<Partial<SurveyData>>({});
   const [isInitialized, setIsInitialized] = useState(false);
-
+  const [isSaving, setIsSaving] = useState(false);
+  const [lastSaved, setLastSaved] = useState<Date | null>(null);
+  
+  // Ref for tracking user inactivity
+  const inactivityTimerRef = useRef<NodeJS.Timeout | null>(null);
+  
+  // Function to save data to Firebase - MOVED UP HERE
+  const saveToFirebase = useCallback(async () => {
+    if (Object.keys(responses).length === 0) return;
+    
+    setIsSaving(true);
+    try {
+      await saveSurveyResponses(responses, SECTION_ORDER[currentSectionIndex]);
+      setLastSaved(new Date());
+    } catch (error) {
+      console.error('Error saving to Firebase:', error);
+    } finally {
+      setIsSaving(false);
+    }
+  }, [responses, currentSectionIndex]);
+  
   // Load saved data from localStorage on initial render
   useEffect(() => {
     if (typeof window !== 'undefined') {
@@ -64,8 +87,23 @@ export function SurveyProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     if (isInitialized && typeof window !== 'undefined') {
       localStorage.setItem(LOCAL_STORAGE_KEYS.RESPONSES, JSON.stringify(responses));
+      
+      // Start inactivity timer for auto-save
+      if (inactivityTimerRef.current) {
+        clearTimeout(inactivityTimerRef.current);
+      }
+      
+      inactivityTimerRef.current = setTimeout(() => {
+        saveToFirebase();
+      }, 10000); // 10 seconds of inactivity
     }
-  }, [responses, isInitialized]);
+    
+    return () => {
+      if (inactivityTimerRef.current) {
+        clearTimeout(inactivityTimerRef.current);
+      }
+    };
+  }, [responses, isInitialized, saveToFirebase]);
 
   // Save current section to localStorage whenever it changes
   useEffect(() => {
@@ -74,23 +112,25 @@ export function SurveyProvider({ children }: { children: ReactNode }) {
         LOCAL_STORAGE_KEYS.CURRENT_SECTION, 
         SECTION_ORDER[currentSectionIndex]
       );
+      
+      // Save to Firebase when section changes
+      saveToFirebase();
     }
-  }, [currentSectionIndex, isInitialized]);
-
+  }, [currentSectionIndex, isInitialized, saveToFirebase]);
+  
   const currentSection = SECTION_ORDER[currentSectionIndex];
   const isLastSection = currentSectionIndex === SECTION_ORDER.length - 1;
 
   const goToNextSection = () => {
-    console.log('Current section index:', currentSectionIndex);
-    console.log('Available sections:', SECTION_ORDER);
-    console.log('Is last section?', isLastSection);
-    
+    console.log('Going to next section', currentSectionIndex, SECTION_ORDER.length);
     if (currentSectionIndex < SECTION_ORDER.length - 1) {
-      console.log('Moving to section:', SECTION_ORDER[currentSectionIndex + 1]);
-      setCurrentSectionIndex(prev => {
-        console.log('Updating index from', prev, 'to', prev + 1);
-        return prev + 1;
-      });
+      setCurrentSectionIndex(prev => prev + 1);
+    } else if (currentSectionIndex === SECTION_ORDER.length - 1) {
+      // If this is the last section, mark as completed
+      const responseId = localStorage.getItem('survey_response_id');
+      if (responseId) {
+        markSurveyCompleted(responseId);
+      }
     }
   };
 
@@ -120,9 +160,11 @@ export function SurveyProvider({ children }: { children: ReactNode }) {
     if (typeof window !== 'undefined') {
       localStorage.removeItem(LOCAL_STORAGE_KEYS.RESPONSES);
       localStorage.removeItem(LOCAL_STORAGE_KEYS.CURRENT_SECTION);
+      localStorage.removeItem('survey_response_id');
     }
     setResponses({});
     setCurrentSectionIndex(0);
+    setLastSaved(null);
   };
 
   return (
@@ -136,6 +178,8 @@ export function SurveyProvider({ children }: { children: ReactNode }) {
         goToNextSection,
         goToPreviousSection,
         resetSurvey,
+        isSaving,
+        lastSaved,
       }}
     >
       {children}
@@ -149,4 +193,4 @@ export function useSurvey() {
     throw new Error('useSurvey must be used within a SurveyProvider');
   }
   return context;
-}
+} 

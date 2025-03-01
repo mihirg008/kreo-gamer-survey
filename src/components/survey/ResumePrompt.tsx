@@ -35,25 +35,31 @@ export default function ResumePrompt() {
   if (!showPrompt) return null;
 
   return (
-    <div className="fixed top-14 left-0 right-0 z-40 bg-amber-100 border-b border-amber-300 p-3">
-      <div className="max-w-4xl mx-auto flex items-center justify-between">
-        <div>
-          <h3 className="font-medium">Welcome back!</h3>
-          <p className="text-sm text-muted-foreground">
-            We&apos;ve restored your previous progress. You left off at the {currentSection.replace('_', ' ')} section.
+    <div className="fixed top-14 left-0 right-0 z-40 bg-amber-100 border-b border-amber-300 p-3 pt-6">
+      <div className="max-w-4xl mx-auto flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 sm:gap-2">
+        <div className="w-full sm:w-auto">
+          <h3 className="font-medium text-lg">Welcome back!</h3>
+          <p className="text-sm text-muted-foreground mt-1">
+            We&apos;ve restored your previous progress. You left off at the{' '}
+            <span className="font-medium">
+              {currentSection.replace('_', ' ')}
+            </span>{' '}
+            section.
           </p>
         </div>
-        <div className="flex gap-2">
+        <div className="flex w-full sm:w-auto gap-2">
           <Button 
             variant="outline" 
             size="sm"
             onClick={resetSurvey}
+            className="flex-1 sm:flex-none"
           >
             Start Over
           </Button>
           <Button 
             size="sm"
             onClick={() => setShowPrompt(false)}
+            className="flex-1 sm:flex-none bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700"
           >
             Continue
           </Button>

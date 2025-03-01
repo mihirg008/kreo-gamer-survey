@@ -12,6 +12,7 @@ import GamingFamily from './GamingFamily';
 import FutureGaming from './FutureGaming';
 import ThankYou from './ThankYou';
 import ResumePrompt from './ResumePrompt';
+import SavingIndicator from './SavingIndicator';
 
 export default function SurveyLayout() {
   const { currentSection } = useSurvey();
@@ -39,6 +40,7 @@ export default function SurveyLayout() {
     <div className="min-h-screen bg-background">
       <ProgressIndicator />
       <ResumePrompt />
+      <SavingIndicator />
       <AnimatePresence mode="wait">
         <motion.div
           key={currentSection}
