@@ -96,7 +96,7 @@ const argumentsOptions = [
 export default function GamingFamilyUnder18Male() {
   const { updateResponses, goToNextSection, goToPreviousSection, responses } = useSurvey();
 
-  const savedData = (responses.gaming_family || {}) as {
+  const savedData = (responses.gaming_family_under18_male || {}) as {
     family_perception?: string;
     family_gamers?: boolean;
     gaming_impact?: string;
@@ -130,7 +130,7 @@ export default function GamingFamilyUnder18Male() {
   });
 
   function onSubmit(values: z.infer<typeof gamingFamilyUnder18MaleSchema>) {
-    updateResponses('gaming_family', values);
+    updateResponses('gaming_family_under18_male', values);
     goToNextSection();
   }
 

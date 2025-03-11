@@ -92,7 +92,7 @@ const representationOptions = [
 export default function GamingFamily18to24Female() {
   const { updateResponses, goToNextSection, goToPreviousSection, responses } = useSurvey();
 
-  const savedData = (responses.gaming_family || {}) as {
+  const savedData = (responses.gaming_family_18to24_female || {}) as {
     family_perception?: string;
     family_gamers?: boolean;
     gaming_impact?: string;
@@ -128,7 +128,7 @@ export default function GamingFamily18to24Female() {
   });
 
   function onSubmit(values: z.infer<typeof gamingFamily18to24FemaleSchema>) {
-    updateResponses('gaming_family', values);
+    updateResponses('gaming_family_18to24_female', values);
     goToNextSection();
   }
 

@@ -83,7 +83,7 @@ const careerOptions = [
 export default function GamingFamily18to24Male() {
   const { updateResponses, goToNextSection, goToPreviousSection, responses } = useSurvey();
 
-  const savedData = (responses.gaming_family || {}) as {
+  const savedData = (responses.gaming_family_18to24_male || {}) as {
     family_perception?: string;
     family_gamers?: boolean;
     gaming_impact?: string;
@@ -119,7 +119,7 @@ export default function GamingFamily18to24Male() {
   });
 
   function onSubmit(values: z.infer<typeof gamingFamily18to24MaleSchema>) {
-    updateResponses('gaming_family', values);
+    updateResponses('gaming_family_18to24_male', values);
     goToNextSection();
   }
 

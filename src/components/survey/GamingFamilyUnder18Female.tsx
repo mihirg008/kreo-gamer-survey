@@ -82,7 +82,7 @@ const encouragementOptions = [
 export default function GamingFamilyUnder18Female() {
   const { updateResponses, goToNextSection, goToPreviousSection, responses } = useSurvey();
 
-  const savedData = (responses.gaming_family || {}) as {
+  const savedData = (responses.gaming_family_under18_female || {}) as {
     family_perception?: string;
     family_gamers?: boolean;
     gaming_impact?: string;
@@ -118,7 +118,7 @@ export default function GamingFamilyUnder18Female() {
   });
 
   function onSubmit(values: z.infer<typeof gamingFamilyUnder18FemaleSchema>) {
-    updateResponses('gaming_family', values);
+    updateResponses('gaming_family_under18_female', values);
     goToNextSection();
   }
 

@@ -61,12 +61,95 @@ export interface SurveyData {
     merchandise_spending: string;
     gaming_events: string[];
   };
-  gaming_family: {
+  gaming_family_under18_male?: {
     family_perception: string;
     family_gamers: boolean;
     gaming_impact: string;
     character_preference?: string;
     gender_bias?: string;
+    parent_gaming_rules?: string;
+    parents_play_games?: string;
+    gaming_with_siblings?: string;
+    homework_compromise?: string;
+    friends_parents_rules?: string;
+    gaming_arguments?: string;
+  };
+  gaming_family_under18_female?: {
+    family_perception: string;
+    family_gamers: boolean;
+    gaming_impact: string;
+    character_preference?: string;
+    gender_bias?: string;
+    parents_supportive?: string;
+    different_rules?: string;
+    play_with_family?: string;
+    hidden_gaming?: string;
+    female_friends_play?: string;
+    gender_comments?: string;
+    family_encouragement?: string;
+  };
+  gaming_family_18to24_male?: {
+    family_perception: string;
+    family_gamers: boolean;
+    gaming_impact: string;
+    character_preference?: string;
+    gender_bias?: string;
+    primary_reason?: string;
+    social_relationships?: string;
+    game_with_roommates?: string;
+    balance_gaming?: string;
+    influence_friends?: string;
+    college_events?: string;
+    replace_social?: string;
+    gaming_career?: string;
+  };
+  gaming_family_18to24_female?: {
+    family_perception: string;
+    family_gamers: boolean;
+    gaming_impact: string;
+    character_preference?: string;
+    gender_bias?: string;
+    primary_reason?: string;
+    peers_reaction?: string;
+    women_communities?: string;
+    dating_supportive?: string;
+    gender_interactions?: string;
+    hide_gender?: string;
+    academic_networking?: string;
+    feel_represented?: string;
+  };
+  gaming_family_25plus_male?: {
+    family_perception: string;
+    family_gamers: boolean;
+    gaming_impact: string;
+    character_preference?: string;
+    gender_bias?: string;
+    primary_reason?: string;
+    game_with_partner?: string;
+    time_management?: string;
+    parenting_approach?: string;
+    pattern_changes?: string;
+    work_perception?: string;
+    stress_relief?: string;
+    use_for_networking?: string;
+    monthly_spending?: string;
+  };
+  gaming_family_25plus_female?: {
+    family_perception: string;
+    family_gamers: boolean;
+    gaming_impact: string;
+    character_preference?: string;
+    gender_bias?: string;
+    primary_reason?: string;
+    game_with_partner?: string;
+    female_experience?: string;
+    family_balance?: string;
+    perspective_change?: string;
+    gender_interactions?: string;
+    representation?: string;
+    gaming_networking?: string;
+    community_support?: string;
+    stereotype_navigation?: string;
   };
   future_gaming: {
     metaverse_interest: string;

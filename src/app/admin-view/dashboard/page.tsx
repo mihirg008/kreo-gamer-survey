@@ -36,13 +36,12 @@ interface ResponseData {
   gaming_preferences?: Partial<SurveyData['gaming_preferences']>;
   gaming_habits?: Partial<SurveyData['gaming_habits']>;
   gaming_lifestyle?: Partial<SurveyData['gaming_lifestyle']>;
-  gaming_family?: Partial<SurveyData['gaming_family']>;
-  gaming_family_under18_male?: ConditionalSectionData;
-  gaming_family_under18_female?: ConditionalSectionData;
-  gaming_family_18to24_male?: ConditionalSectionData;
-  gaming_family_18to24_female?: ConditionalSectionData;
-  gaming_family_25plus_male?: ConditionalSectionData;
-  gaming_family_25plus_female?: ConditionalSectionData;
+  gaming_family_under18_male?: Partial<SurveyData['gaming_family_under18_male']>;
+  gaming_family_under18_female?: Partial<SurveyData['gaming_family_under18_female']>;
+  gaming_family_18to24_male?: Partial<SurveyData['gaming_family_18to24_male']>;
+  gaming_family_18to24_female?: Partial<SurveyData['gaming_family_18to24_female']>;
+  gaming_family_25plus_male?: Partial<SurveyData['gaming_family_25plus_male']>;
+  gaming_family_25plus_female?: Partial<SurveyData['gaming_family_25plus_female']>;
   future_gaming?: Partial<SurveyData['future_gaming']>;
   [key: string]: ResponseValue | undefined; // Replace any with more specific union type
 }

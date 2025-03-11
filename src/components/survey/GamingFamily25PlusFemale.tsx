@@ -109,7 +109,7 @@ const stereotypeNavigationOptions = [
 export default function GamingFamily25PlusFemale() {
   const { updateResponses, goToNextSection, goToPreviousSection, responses } = useSurvey();
 
-  const savedData = (responses.gaming_family || {}) as {
+  const savedData = (responses.gaming_family_25plus_female || {}) as {
     family_perception?: string;
     family_gamers?: boolean;
     gaming_impact?: string;
@@ -149,7 +149,7 @@ export default function GamingFamily25PlusFemale() {
   });
 
   function onSubmit(values: z.infer<typeof gamingFamily25PlusFemaleSchema>) {
-    updateResponses('gaming_family', values);
+    updateResponses('gaming_family_25plus_female', values);
     goToNextSection();
   }
 
