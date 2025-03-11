@@ -1,36 +1,91 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Kreo Gamer Survey
 
-## Getting Started
+<div align="center">
+  <img src="public/controller.svg" alt="Kreo Gamer Survey" width="200" height="200" />
+  <h3>India's first comprehensive gamer lifestyle survey platform</h3>
+</div>
 
-First, run the development server:
+[![Next.js](https://img.shields.io/badge/Next.js-15.1.7-black?style=flat&logo=next.js)](https://nextjs.org/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.2.2-blue?style=flat&logo=typescript)](https://www.typescriptlang.org/)
+[![Firebase](https://img.shields.io/badge/Firebase-10.5.0-orange?style=flat&logo=firebase)](https://firebase.google.com/)
+[![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-3.3.3-38B2AC?style=flat&logo=tailwind-css)](https://tailwindcss.com/)
+
+## 📊 About
+
+Kreo Gamer Survey is a sleek, modern web application designed to collect comprehensive data on gaming habits and preferences across India. The platform features a multi-section survey flow with conditional questions based on user demographics, real-time data saving, and an analytics dashboard for administrators.
+
+## ✨ Features
+
+- **Adaptive Survey Flow** - Questions dynamically adapt based on age, gender, and other user attributes
+- **Real-time Data Saving** - Responses are saved instantly to Firebase
+- **Unique User Tracking** - Prevents duplicate submissions while allowing users to resume incomplete surveys
+- **Admin Dashboard** - Visualize and export collected data
+- **Responsive Design** - Optimized experience across all device sizes
+
+## 🚀 Getting Started
+
+### Prerequisites
+
+- Node.js 18.17.0 or later
+- npm or yarn
+- Firebase account
+
+### Installation
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+# Clone the repository
+git clone https://github.com/yourusername/kreo-gamer-survey.git
+cd kreo-gamer-survey
+
+# Install dependencies
+npm install
+
+# Set up environment variables
+cp .env.example .env.local
+# Edit .env.local with your Firebase configuration
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### Development
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+# Start the development server
+npm run dev
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Visit http://localhost:3000 to see the application.
 
-## Learn More
+## 🔧 Tech Stack
 
-To learn more about Next.js, take a look at the following resources:
+- **Framework**: Next.js 15 (App Router)
+- **Language**: TypeScript
+- **Database**: Firebase Firestore
+- **Authentication**: Firebase Auth
+- **Styling**: Tailwind CSS, Shadcn UI
+- **Form Management**: React Hook Form, Zod
+- **Analytics**: Chart.js, React-Chartjs-2
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## 📱 Survey Sections
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- **Demographics** - Customized based on age group (Under 18, 18-24, 25+)
+- **Gaming Preferences** - Platforms, genres, games, spending
+- **Gaming Habits** - Time spent, skill level, competitive play
+- **Gaming Lifestyle** - Streaming, merchandise, communities
+- **Gaming & Family** - Age/gender-specific dynamics
+- **Future of Gaming** - VR, metaverse, sustainability
 
-## Deploy on Vercel
+## 📈 Admin Features
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- **Dashboard** - Overview statistics and completion rates
+- **Response Viewer** - Detailed view of individual responses
+- **Analytics** - Visual representation of survey trends
+- **Export** - Download data in CSV format
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## 📄 License
+
+This project is proprietary and confidential. Unauthorized copying or distribution is prohibited.
+
+---
+
+<div align="center">
+  <p>Built with ❤️ by Kreo Tech</p>
+</div>
