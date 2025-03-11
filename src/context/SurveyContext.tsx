@@ -1,6 +1,6 @@
 'use client';
 
-import { createContext, useContext, useState, ReactNode, useEffect, useRef } from 'react';
+import { createContext, useContext, useState, ReactNode, useEffect, useRef, useCallback } from 'react';
 import { SurveySection, SurveyData } from '@/types/survey';
 import { saveSurveyResponses, markSurveyCompleted } from '@/lib/survey-service';
 
@@ -15,20 +15,28 @@ interface SurveyContextType {
   resetSurvey: () => void;
   isSaving: boolean;
   lastSaved: Date | null;
+  getDemographicSection: () => SurveySection;
+  getFamilySection: () => SurveySection;
+  forceSave: () => void;
 }
 
-const SECTION_ORDER: SurveySection[] = [
+// Base section order
+const BASE_SECTION_ORDER: SurveySection[] = [
   'demographics',
+  // Demographics L2 is conditional and inserted dynamically
   'gaming_preferences',
   'gaming_habits',
   'gaming_lifestyle',
-  'gaming_family',
+  // Family section is conditional and inserted dynamically
   'future_gaming',
 ];
 
 const LOCAL_STORAGE_KEYS = {
   RESPONSES: 'kreo_survey_responses',
   CURRENT_SECTION: 'kreo_survey_current_section',
+  LEFT_PAGE: 'survey_left_page',
+  RESPONSE_ID: 'survey_response_id',
+  FIRST_TIME: 'survey_first_time',
 };
 
 const SurveyContext = createContext<SurveyContextType | undefined>(undefined);
@@ -43,10 +51,112 @@ export function SurveyProvider({ children }: { children: ReactNode }) {
   // Ref for tracking user inactivity
   const inactivityTimerRef = useRef<NodeJS.Timeout | null>(null);
   
+  // Determine the demographic section based on age
+  const getDemographicSection = (): SurveySection => {
+    const age = responses.demographics?.age;
+    if (!age) return 'demographics';
+    
+    if (age === 'Under 18') return 'demographics_under18';
+    if (age === '18-24') return 'demographics_18to24';
+    return 'demographics_25plus';
+  };
+  
+  // Determine the family section based on age and gender
+  const getFamilySection = (): SurveySection => {
+    const age = responses.demographics?.age;
+    const gender = responses.demographics?.gender;
+    
+    if (!age || !gender) return 'gaming_family_under18_male'; // Default
+    
+    // Check if user is female, otherwise use male/non-binary version
+    const isFemale = gender.toLowerCase() === 'female';
+    
+    if (age === 'Under 18') {
+      return isFemale 
+        ? 'gaming_family_under18_female' 
+        : 'gaming_family_under18_male';
+    }
+    
+    if (age === '18-24') {
+      return isFemale
+        ? 'gaming_family_18to24_female' 
+        : 'gaming_family_18to24_male';
+    }
+    
+    return isFemale
+      ? 'gaming_family_25plus_female' 
+      : 'gaming_family_25plus_male';
+  };
+  
+  // Get dynamic section order based on current responses
+  const getSectionOrder = (): SurveySection[] => {
+    const demographicSection = getDemographicSection();
+    const familySection = getFamilySection();
+    
+    return [
+      'demographics',
+      demographicSection,
+      'gaming_preferences',
+      'gaming_habits',
+      'gaming_lifestyle',
+      familySection,
+      'future_gaming',
+    ];
+  };
+
+  // Force save all data immediately to localStorage and Firebase
+  const forceSave = useCallback(async () => {
+    if (typeof window !== 'undefined' && isInitialized) {
+      // Save to localStorage first
+      localStorage.setItem(LOCAL_STORAGE_KEYS.RESPONSES, JSON.stringify(responses));
+      localStorage.setItem(
+        LOCAL_STORAGE_KEYS.CURRENT_SECTION, 
+        getSectionOrder()[currentSectionIndex]
+      );
+      localStorage.setItem(LOCAL_STORAGE_KEYS.LEFT_PAGE, 'true');
+      
+      // Then save to Firebase
+      await saveToFirebase();
+    }
+  }, [responses, currentSectionIndex, isInitialized]);
+  
+  // Setup page unload/refresh handling
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const handleBeforeUnload = (event: BeforeUnloadEvent) => {
+        // Only set the LEFT_PAGE flag for actual page unloads (refresh, close, navigate away)
+        // This check helps distinguish between navigation within the app and actual page unloads
+        if (event.type === 'beforeunload') {
+          // Mark that user left the page
+          localStorage.setItem(LOCAL_STORAGE_KEYS.LEFT_PAGE, 'true');
+          
+          // Force sync save to localStorage
+          localStorage.setItem(LOCAL_STORAGE_KEYS.RESPONSES, JSON.stringify(responses));
+          localStorage.setItem(
+            LOCAL_STORAGE_KEYS.CURRENT_SECTION, 
+            getSectionOrder()[currentSectionIndex]
+          );
+        }
+      };
+      
+      // Setup listeners for page unload/refresh
+      window.addEventListener('beforeunload', handleBeforeUnload);
+      
+      return () => {
+        window.removeEventListener('beforeunload', handleBeforeUnload);
+      };
+    }
+  }, [responses, currentSectionIndex]);
+  
   // Load saved data from localStorage on initial render
   useEffect(() => {
     if (typeof window !== 'undefined') {
       try {
+        // Check if this is the first time the user is visiting
+        if (!localStorage.getItem(LOCAL_STORAGE_KEYS.FIRST_TIME)) {
+          localStorage.setItem(LOCAL_STORAGE_KEYS.FIRST_TIME, 'true');
+        }
+        
         // Load saved responses
         const savedResponses = localStorage.getItem(LOCAL_STORAGE_KEYS.RESPONSES);
         if (savedResponses) {
@@ -56,7 +166,7 @@ export function SurveyProvider({ children }: { children: ReactNode }) {
         // Load saved section
         const savedSection = localStorage.getItem(LOCAL_STORAGE_KEYS.CURRENT_SECTION);
         if (savedSection) {
-          const sectionIndex = SECTION_ORDER.indexOf(savedSection as SurveySection);
+          const sectionIndex = getSectionOrder().indexOf(savedSection as SurveySection);
           if (sectionIndex !== -1) {
             setCurrentSectionIndex(sectionIndex);
           }
@@ -66,6 +176,7 @@ export function SurveyProvider({ children }: { children: ReactNode }) {
       }
       setIsInitialized(true);
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // Save responses to localStorage whenever they change
@@ -96,7 +207,7 @@ export function SurveyProvider({ children }: { children: ReactNode }) {
     if (isInitialized && typeof window !== 'undefined') {
       localStorage.setItem(
         LOCAL_STORAGE_KEYS.CURRENT_SECTION, 
-        SECTION_ORDER[currentSectionIndex]
+        getSectionOrder()[currentSectionIndex]
       );
       
       // Save to Firebase when section changes
@@ -111,7 +222,7 @@ export function SurveyProvider({ children }: { children: ReactNode }) {
     
     setIsSaving(true);
     try {
-      await saveSurveyResponses(responses, SECTION_ORDER[currentSectionIndex]);
+      await saveSurveyResponses(responses, getSectionOrder()[currentSectionIndex]);
       setLastSaved(new Date());
     } catch (error) {
       console.error('Error saving to Firebase:', error);
@@ -120,16 +231,24 @@ export function SurveyProvider({ children }: { children: ReactNode }) {
     }
   };
 
-  const currentSection = SECTION_ORDER[currentSectionIndex];
-  const isLastSection = currentSectionIndex === SECTION_ORDER.length - 1;
+  const currentSection = getSectionOrder()[currentSectionIndex];
+  const isLastSection = currentSectionIndex === getSectionOrder().length - 1;
 
   const goToNextSection = () => {
-    console.log('Going to next section', currentSectionIndex, SECTION_ORDER.length);
-    if (currentSectionIndex < SECTION_ORDER.length - 1) {
-      setCurrentSectionIndex(prev => prev + 1);
-    } else if (currentSectionIndex === SECTION_ORDER.length - 1) {
+    const sectionOrder = getSectionOrder();
+    if (currentSectionIndex < sectionOrder.length - 1) {
+      // If we're on demographics, we need to go to the appropriate next section
+      if (currentSection === 'demographics') {
+        const demographicSection = getDemographicSection();
+        const nextIndex = sectionOrder.indexOf(demographicSection);
+        setCurrentSectionIndex(nextIndex);
+      } else {
+        // Normal progression
+        setCurrentSectionIndex(prev => prev + 1);
+      }
+    } else if (currentSectionIndex === sectionOrder.length - 1) {
       // If this is the last section, mark as completed
-      const responseId = localStorage.getItem('survey_response_id');
+      const responseId = localStorage.getItem(LOCAL_STORAGE_KEYS.RESPONSE_ID);
       if (responseId) {
         markSurveyCompleted(responseId);
       }
@@ -137,33 +256,58 @@ export function SurveyProvider({ children }: { children: ReactNode }) {
   };
 
   const goToPreviousSection = () => {
-    console.log('Going to previous section', currentSectionIndex);
+    const sectionOrder = getSectionOrder();
     if (currentSectionIndex > 0) {
-      setCurrentSectionIndex(prev => prev - 1);
+      // If we're in a demographic conditional section, go back to main demographics
+      if (['demographics_under18', 'demographics_18to24', 'demographics_25plus'].includes(currentSection)) {
+        const demographicsIndex = sectionOrder.indexOf('demographics');
+        setCurrentSectionIndex(demographicsIndex);
+      } else {
+        // Normal progression
+        setCurrentSectionIndex(prev => prev - 1);
+      }
     }
   };
 
   const setCurrentSection = (section: SurveySection) => {
-    const index = SECTION_ORDER.indexOf(section);
+    const index = getSectionOrder().indexOf(section);
     if (index !== -1) {
       setCurrentSectionIndex(index);
     }
   };
 
   const updateResponses = (sectionId: SurveySection, data: Record<string, unknown>) => {
-    console.log('Updating responses for', sectionId, data);
-    setResponses(prev => ({
-      ...prev,
-      [sectionId]: data,
-    }));
+    setResponses(prev => {
+      const newResponses = {
+        ...prev,
+        [sectionId]: data,
+      };
+      
+      if (isInitialized && typeof window !== 'undefined') {
+        localStorage.setItem(LOCAL_STORAGE_KEYS.RESPONSES, JSON.stringify(newResponses));
+      }
+      
+      return newResponses;
+    });
   };
   
   const resetSurvey = () => {
     if (typeof window !== 'undefined') {
+      // Clear all survey data from localStorage
       localStorage.removeItem(LOCAL_STORAGE_KEYS.RESPONSES);
       localStorage.removeItem(LOCAL_STORAGE_KEYS.CURRENT_SECTION);
-      localStorage.removeItem('survey_response_id');
+      localStorage.removeItem(LOCAL_STORAGE_KEYS.RESPONSE_ID);
+      localStorage.removeItem(LOCAL_STORAGE_KEYS.LEFT_PAGE);
+      
+      // Additional cleanup for any other related keys
+      for (const key in localStorage) {
+        if (key.startsWith('kreo_') || key.startsWith('survey_')) {
+          localStorage.removeItem(key);
+        }
+      }
     }
+    
+    // Reset state
     setResponses({});
     setCurrentSectionIndex(0);
     setLastSaved(null);
@@ -182,6 +326,9 @@ export function SurveyProvider({ children }: { children: ReactNode }) {
         resetSurvey,
         isSaving,
         lastSaved,
+        getDemographicSection,
+        getFamilySection,
+        forceSave,
       }}
     >
       {children}

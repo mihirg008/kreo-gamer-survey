@@ -8,6 +8,20 @@ export const demographicsSchema = z.object({
   location: z.string().min(2, { message: 'Location is required' }),
 });
 
+export const demographicsUnder18Schema = z.object({
+  grade: z.string({ required_error: 'Please select your grade/class' }),
+  parent_control: z.string({ required_error: 'Please select an option' }),
+});
+
+export const demographics18to24Schema = z.object({
+  occupation: z.string({ required_error: 'Please select your occupation' }),
+});
+
+export const demographics25PlusSchema = z.object({
+  occupation: z.string({ required_error: 'Please select your occupation' }),
+  marital_status: z.string({ required_error: 'Please select your marital status' }),
+});
+
 export const gamingPreferencesSchema = z.object({
   platforms: z.array(z.string()).min(1, { message: 'Select at least one platform' }),
   favorite_games: z.array(z.string()).min(1, { message: 'Select at least one game' }),
@@ -35,6 +49,8 @@ export const gamingFamilySchema = z.object({
   family_perception: z.string({ required_error: 'Please select perception' }),
   family_gamers: z.boolean(),
   gaming_impact: z.string().min(10, { message: 'Please describe the impact' }),
+  character_preference: z.string().optional(),
+  gender_bias: z.string().optional(),
 });
 
 export const futureGamingSchema = z.object({

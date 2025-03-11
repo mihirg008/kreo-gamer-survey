@@ -55,16 +55,24 @@ const yearsGaming = [
 ];
 
 export default function GamingHabits() {
-  const { updateResponses, goToNextSection, goToPreviousSection } = useSurvey();
+  const { updateResponses, goToNextSection, goToPreviousSection, responses } = useSurvey();
+
+  const savedData = (responses.gaming_habits || {}) as {
+    hours_weekly?: string;
+    play_time?: string[];
+    multiplayer_preference?: string;
+    skill_level?: string;
+    years_gaming?: string;
+  };
 
   const form = useForm<z.infer<typeof gamingHabitsSchema>>({
     resolver: zodResolver(gamingHabitsSchema),
     defaultValues: {
-      hours_weekly: '',
-      play_time: [],
-      multiplayer_preference: '',
-      skill_level: '',
-      years_gaming: '',
+      hours_weekly: savedData.hours_weekly || '',
+      play_time: savedData.play_time || [],
+      multiplayer_preference: savedData.multiplayer_preference || '',
+      skill_level: savedData.skill_level || '',
+      years_gaming: savedData.years_gaming || '',
     },
   });
 

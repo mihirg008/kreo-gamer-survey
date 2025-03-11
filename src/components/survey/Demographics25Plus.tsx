@@ -5,8 +5,8 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import * as z from 'zod';
 import { useSurvey } from '@/context/SurveyContext';
+import { demographics25PlusSchema } from '@/lib/survey-validation';
 import { Card } from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import {
   Form,
@@ -24,52 +24,44 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 
-const formSchema = z.object({
-  ign: z.string().optional(),
-  email: z.string().email({ message: 'Please enter a valid email address' }),
-  age: z.string({ required_error: 'Please select your age' }),
-  gender: z.string({ required_error: 'Please select your gender' }),
-  location: z.string().min(2, { message: 'Location is required' }),
-});
-
-const ageOptions = [
-  { value: 'Under 18', label: 'Under 18' },
-  { value: '18-24', label: '18-24' },
-  { value: '25-34', label: '25-34' },
-  { value: '35+', label: '35+' },
+const occupationOptions = [
+  { value: 'college_student', label: 'College Student' },
+  { value: 'software_engineer', label: 'Software Engineer' },
+  { value: 'designer_marketer', label: 'Designer/Marketer' },
+  { value: 'content_creator', label: 'Content Creator' },
+  { value: 'doctor_lawyer', label: 'Doctor/Lawyer' },
+  { value: 'product_manager', label: 'Product Manager' },
+  { value: 'founder_director', label: 'Founder/Director' },
+  { value: 'self_employed', label: 'Self Employed' },
+  { value: 'other', label: 'Other' },
 ];
 
-const genderOptions = [
-  { value: 'male', label: 'Male' },
-  { value: 'female', label: 'Female' },
-  { value: 'non-binary', label: 'Non-binary' },
-  { value: 'prefer_not_to_say', label: 'Prefer not to say' },
+const maritalStatusOptions = [
+  { value: 'single', label: 'Single' },
+  { value: 'relationship', label: 'In a Relationship' },
+  { value: 'married', label: 'Married' },
+  { value: 'married_with_kids', label: 'Married with Kids' },
+  { value: 'complicated', label: 'It\'s complicated' },
 ];
 
-export default function BasicDemographics() {
+export default function Demographics25Plus() {
   const { updateResponses, goToNextSection, goToPreviousSection, responses } = useSurvey();
 
-  const savedData = (responses.demographics || {}) as {
-    ign?: string;
-    email?: string;
-    age?: string;
-    gender?: string;
-    location?: string;
+  const savedData = (responses.demographics_25plus || {}) as {
+    occupation?: string;
+    marital_status?: string;
   };
 
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+  const form = useForm<z.infer<typeof demographics25PlusSchema>>({
+    resolver: zodResolver(demographics25PlusSchema),
     defaultValues: {
-      ign: savedData.ign || '',
-      email: savedData.email || '',
-      age: savedData.age || '',
-      gender: savedData.gender || '',
-      location: savedData.location || '',
+      occupation: savedData.occupation || '',
+      marital_status: savedData.marital_status || '',
     },
   });
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    updateResponses('demographics', values);
+  function onSubmit(values: z.infer<typeof demographics25PlusSchema>) {
+    updateResponses('demographics_25plus', values);
     goToNextSection();
   }
 
@@ -87,10 +79,10 @@ export default function BasicDemographics() {
           transition={{ delay: 0.2 }}
         >
           <h2 className="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-pink-600">
-            Basic Demographics
+            Work & Relationships
           </h2>
           <p className="text-muted-foreground mt-2">
-            Help us understand our gaming community better
+            Tell us about your life outside of gaming
           </p>
         </motion.div>
 
@@ -98,46 +90,18 @@ export default function BasicDemographics() {
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
             <FormField
               control={form.control}
-              name="ign"
+              name="occupation"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>In-Game Name (IGN)</FormLabel>
-                  <FormControl>
-                    <Input placeholder="Your gaming nickname" {...field} className="bg-background/50" />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
-              name="email"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Email</FormLabel>
-                  <FormControl>
-                    <Input placeholder="your.email@example.com" {...field} className="bg-background/50" />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
-              name="age"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Age</FormLabel>
+                  <FormLabel>What do you do when you're not gaming? (Education/Occupation)</FormLabel>
                   <Select onValueChange={field.onChange} defaultValue={field.value}>
                     <FormControl>
                       <SelectTrigger className="bg-background/50">
-                        <SelectValue placeholder="Select your age" />
+                        <SelectValue placeholder="Select your occupation" />
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
-                      {ageOptions.map((option) => (
+                      {occupationOptions.map((option) => (
                         <SelectItem key={option.value} value={option.value}>
                           {option.label}
                         </SelectItem>
@@ -151,38 +115,24 @@ export default function BasicDemographics() {
 
             <FormField
               control={form.control}
-              name="gender"
+              name="marital_status"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Gender</FormLabel>
+                  <FormLabel>What is your Marital Status?</FormLabel>
                   <Select onValueChange={field.onChange} defaultValue={field.value}>
                     <FormControl>
                       <SelectTrigger className="bg-background/50">
-                        <SelectValue placeholder="Select your gender" />
+                        <SelectValue placeholder="Select your marital status" />
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
-                      {genderOptions.map((option) => (
+                      {maritalStatusOptions.map((option) => (
                         <SelectItem key={option.value} value={option.value}>
                           {option.label}
                         </SelectItem>
                       ))}
                     </SelectContent>
                   </Select>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
-              name="location"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Location</FormLabel>
-                  <FormControl>
-                    <Input placeholder="City, State" {...field} className="bg-background/50" />
-                  </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
@@ -199,7 +149,6 @@ export default function BasicDemographics() {
               </Button>
               <Button 
                 type="submit"
-                onClick={form.handleSubmit(onSubmit)}
                 className="w-32 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700"
               >
                 Next

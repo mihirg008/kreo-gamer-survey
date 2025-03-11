@@ -1,16 +1,13 @@
 'use client';
 
-import React from 'react';
 import { motion } from 'framer-motion';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import * as z from 'zod';
 import { useSurvey } from '@/context/SurveyContext';
-import { gamingFamilySchema } from '@/lib/survey-validation';
+import { demographicsUnder18Schema } from '@/lib/survey-validation';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Checkbox } from '@/components/ui/checkbox';
-import { Textarea } from '@/components/ui/textarea';
 import {
   Form,
   FormControl,
@@ -26,29 +23,43 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
+import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 
-const perceptionOptions = [
-  { value: 'very_supportive', label: 'Very Supportive' },
-  { value: 'supportive', label: 'Supportive' },
-  { value: 'neutral', label: 'Neutral' },
-  { value: 'concerned', label: 'Concerned' },
-  { value: 'very_concerned', label: 'Very Concerned' },
+const gradeOptions = [
+  { value: '6th', label: '6th Grade' },
+  { value: '7th', label: '7th Grade' },
+  { value: '8th', label: '8th Grade' },
+  { value: '9th', label: '9th Grade' },
+  { value: '10th', label: '10th Grade' },
+  { value: '11th', label: '11th Grade' },
+  { value: '12th', label: '12th Grade' },
+  { value: 'other', label: 'Other' },
 ];
 
-export default function GamingFamily() {
-  const { updateResponses, goToNextSection, goToPreviousSection } = useSurvey();
+const parentControlOptions = [
+  { value: 'strict', label: 'Yes, strictly' },
+  { value: 'flexible', label: 'Yes, but flexible' },
+  { value: 'no', label: 'No, I decide my own gaming schedule' },
+];
 
-  const form = useForm<z.infer<typeof gamingFamilySchema>>({
-    resolver: zodResolver(gamingFamilySchema),
+export default function DemographicsUnder18() {
+  const { updateResponses, goToNextSection, goToPreviousSection, responses } = useSurvey();
+
+  const savedData = (responses.demographics_under18 || {}) as {
+    grade?: string;
+    parent_control?: string;
+  };
+
+  const form = useForm<z.infer<typeof demographicsUnder18Schema>>({
+    resolver: zodResolver(demographicsUnder18Schema),
     defaultValues: {
-      family_perception: '',
-      family_gamers: false,
-      gaming_impact: '',
+      grade: savedData.grade || '',
+      parent_control: savedData.parent_control || '',
     },
   });
 
-  function onSubmit(values: z.infer<typeof gamingFamilySchema>) {
-    updateResponses('gaming_family', values);
+  function onSubmit(values: z.infer<typeof demographicsUnder18Schema>) {
+    updateResponses('demographics_under18', values);
     goToNextSection();
   }
 
@@ -66,10 +77,10 @@ export default function GamingFamily() {
           transition={{ delay: 0.2 }}
         >
           <h2 className="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-pink-600">
-            Gaming & Family
+            Tell Us About School
           </h2>
           <p className="text-muted-foreground mt-2">
-            Tell us about how gaming fits into your family life
+            A few more questions about your school life
           </p>
         </motion.div>
 
@@ -77,18 +88,18 @@ export default function GamingFamily() {
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
             <FormField
               control={form.control}
-              name="family_perception"
+              name="grade"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>How does your family view your gaming?</FormLabel>
+                  <FormLabel>What grade/class are you in?</FormLabel>
                   <Select onValueChange={field.onChange} defaultValue={field.value}>
                     <FormControl>
                       <SelectTrigger className="bg-background/50">
-                        <SelectValue placeholder="Select family's perception" />
+                        <SelectValue placeholder="Select your grade/class" />
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
-                      {perceptionOptions.map((option) => (
+                      {gradeOptions.map((option) => (
                         <SelectItem key={option.value} value={option.value}>
                           {option.label}
                         </SelectItem>
@@ -102,36 +113,25 @@ export default function GamingFamily() {
 
             <FormField
               control={form.control}
-              name="family_gamers"
-              render={({ field }) => (
-                <FormItem className="flex flex-row items-start space-x-3 space-y-0">
-                  <FormControl>
-                    <Checkbox
-                      checked={field.value}
-                      onCheckedChange={field.onChange}
-                    />
-                  </FormControl>
-                  <div className="space-y-1 leading-none">
-                    <FormLabel>
-                      Do other family members play games?
-                    </FormLabel>
-                  </div>
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
-              name="gaming_impact"
+              name="parent_control"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>How has gaming impacted your family relationships?</FormLabel>
+                  <FormLabel>Do your parents control your gaming time?</FormLabel>
                   <FormControl>
-                    <Textarea
-                      placeholder="Describe how gaming has affected your family dynamics..."
-                      className="bg-background/50 min-h-[100px]"
-                      {...field}
-                    />
+                    <RadioGroup
+                      onValueChange={field.onChange}
+                      defaultValue={field.value}
+                      className="flex flex-col space-y-3"
+                    >
+                      {parentControlOptions.map((option) => (
+                        <div key={option.value} className="flex items-center space-x-2">
+                          <RadioGroupItem value={option.value} id={option.value} />
+                          <FormLabel htmlFor={option.value} className="font-normal">
+                            {option.label}
+                          </FormLabel>
+                        </div>
+                      ))}
+                    </RadioGroup>
                   </FormControl>
                   <FormMessage />
                 </FormItem>

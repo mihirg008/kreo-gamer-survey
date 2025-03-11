@@ -42,15 +42,22 @@ const eventTypes = [
 ];
 
 export default function GamingLifestyle() {
-  const { updateResponses, goToNextSection, goToPreviousSection } = useSurvey();
+  const { updateResponses, goToNextSection, goToPreviousSection, responses } = useSurvey();
+
+  const savedData = (responses.gaming_lifestyle || {}) as {
+    streams_content?: boolean;
+    platform_handles?: string[];
+    merchandise_spending?: string;
+    gaming_events?: string[];
+  };
 
   const form = useForm<z.infer<typeof gamingLifestyleSchema>>({
     resolver: zodResolver(gamingLifestyleSchema),
     defaultValues: {
-      streams_content: false,
-      platform_handles: [],
-      merchandise_spending: '',
-      gaming_events: [],
+      streams_content: savedData.streams_content || false,
+      platform_handles: savedData.platform_handles || [],
+      merchandise_spending: savedData.merchandise_spending || '',
+      gaming_events: savedData.gaming_events || [],
     },
   });
 

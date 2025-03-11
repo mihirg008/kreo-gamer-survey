@@ -9,6 +9,11 @@ import {
 } from 'firebase/firestore';
 import { SurveyData, SurveySection } from '@/types/survey';
 
+// Constants for localStorage keys
+const LOCAL_STORAGE_KEYS = {
+  RESPONSE_ID: 'survey_response_id',
+};
+
 // Generate a unique ID for the survey response
 const generateResponseId = () => {
   return `response_${Date.now()}_${Math.random().toString(36).substring(2, 9)}`;
@@ -18,10 +23,10 @@ const generateResponseId = () => {
 const getResponseId = () => {
   if (typeof window === 'undefined') return null;
   
-  let responseId = localStorage.getItem('survey_response_id');
+  let responseId = localStorage.getItem(LOCAL_STORAGE_KEYS.RESPONSE_ID);
   if (!responseId) {
     responseId = generateResponseId();
-    localStorage.setItem('survey_response_id', responseId);
+    localStorage.setItem(LOCAL_STORAGE_KEYS.RESPONSE_ID, responseId);
   }
   return responseId;
 };
@@ -65,14 +70,18 @@ export const saveSurveyResponses = async (
     
     return responseId;
   } catch (error) {
+    // Handle permission errors gracefully - continue with localStorage only
     console.error('Error saving survey responses:', error);
-    return null;
+    
+    // Don't let Firebase errors disrupt the user experience
+    // Just return the ID so the app continues to work with localStorage
+    return getResponseId();
   }
 };
 
 // Calculate completion percentage based on filled sections
 const calculateCompletionPercentage = (responses: Partial<SurveyData>) => {
-  const totalSections = 6; // Total number of survey sections
+  const totalSections = 7; // Updated to 7 sections total including family section
   const completedSections = Object.keys(responses).length;
   return Math.round((completedSections / totalSections) * 100);
 };
@@ -86,7 +95,12 @@ export const markSurveyCompleted = async (responseId: string) => {
       'user_info.completion_percentage': 100,
       'user_info.completion_time': serverTimestamp()
     });
+    return true;
   } catch (error) {
+    // Handle permission errors gracefully
     console.error('Error marking survey as completed:', error);
+    // Don't let Firebase errors disrupt the user experience
+    // Just return success so the app continues to work with localStorage
+    return true;
   }
 }; 

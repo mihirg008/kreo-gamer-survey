@@ -1,19 +1,46 @@
 export type SurveySection = 
   | 'demographics'
+  | 'demographics_under18'
+  | 'demographics_18to24'
+  | 'demographics_25plus'
   | 'gaming_preferences'
   | 'gaming_habits'
   | 'gaming_lifestyle'
-  | 'gaming_family'
+  | 'gaming_family_under18_male'
+  | 'gaming_family_under18_female'
+  | 'gaming_family_18to24_male'
+  | 'gaming_family_18to24_female'
+  | 'gaming_family_25plus_male'
+  | 'gaming_family_25plus_female'
   | 'future_gaming';
 
+export interface DemographicsBase {
+  ign: string;
+  email: string;
+  age: string;
+  gender: string;
+  location: string;
+}
+
+export interface DemographicsUnder18 {
+  grade: string;
+  parent_control: string;
+}
+
+export interface Demographics18to24 {
+  occupation: string;
+}
+
+export interface Demographics25Plus {
+  occupation: string;
+  marital_status: string;
+}
+
 export interface SurveyData {
-  demographics: {
-    ign: string;
-    email: string;
-    age: string;
-    gender: string;
-    location: string;
-  };
+  demographics: DemographicsBase;
+  demographics_under18?: DemographicsUnder18;
+  demographics_18to24?: Demographics18to24;
+  demographics_25plus?: Demographics25Plus;
   gaming_preferences: {
     platforms: string[];
     favorite_games: string[];
@@ -38,6 +65,8 @@ export interface SurveyData {
     family_perception: string;
     family_gamers: boolean;
     gaming_impact: string;
+    character_preference?: string;
+    gender_bias?: string;
   };
   future_gaming: {
     metaverse_interest: string;

@@ -55,22 +55,30 @@ const sustainabilityOptions = [
 ];
 
 export default function FutureGaming() {
-  const { updateResponses, goToPreviousSection } = useSurvey();
+  const { updateResponses, goToPreviousSection, goToNextSection, responses } = useSurvey();
   const [isSubmitted, setIsSubmitted] = useState(false);
+
+  const savedData = (responses.future_gaming || {}) as {
+    metaverse_interest?: string;
+    vr_adoption?: string;
+    cloud_gaming?: string;
+    sustainability?: string;
+  };
 
   const form = useForm<z.infer<typeof futureGamingSchema>>({
     resolver: zodResolver(futureGamingSchema),
     defaultValues: {
-      metaverse_interest: '',
-      vr_adoption: '',
-      cloud_gaming: '',
-      sustainability: '',
+      metaverse_interest: savedData.metaverse_interest || '',
+      vr_adoption: savedData.vr_adoption || '',
+      cloud_gaming: savedData.cloud_gaming || '',
+      sustainability: savedData.sustainability || '',
     },
   });
 
   function onSubmit(values: z.infer<typeof futureGamingSchema>) {
     console.log('Submitting final form', values);
     updateResponses('future_gaming', values);
+    goToNextSection();
     setIsSubmitted(true);
   }
 
@@ -212,10 +220,6 @@ export default function FutureGaming() {
               </Button>
               <Button 
                 type="submit"
-                onClick={() => {
-                  console.log('Form submitted');
-                  form.handleSubmit(onSubmit)();
-                }}
                 className="w-32 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700"
               >
                 Submit
