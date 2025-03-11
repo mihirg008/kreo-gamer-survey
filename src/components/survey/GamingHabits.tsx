@@ -54,6 +54,38 @@ const yearsGaming = [
   { value: 'more_than_7', label: 'More than 7 years' },
 ];
 
+const frequencyOptions = [
+  { value: 'daily', label: 'Daily' },
+  { value: 'few_times_week', label: 'Few times a week' },
+  { value: 'weekends', label: 'Weekends only' },
+  { value: 'few_times_month', label: 'Few times a month' },
+  { value: 'rarely', label: 'Rarely' },
+];
+
+const sessionLengthOptions = [
+  { value: 'under_1_hour', label: 'Under 1 hour' },
+  { value: '1_2_hours', label: '1-2 hours' },
+  { value: '2_4_hours', label: '2-4 hours' },
+  { value: '4_6_hours', label: '4-6 hours' },
+  { value: 'above_6_hours', label: 'Above 6 hours' },
+];
+
+const rageQuitOptions = [
+  { value: 'never', label: 'Never' },
+  { value: 'rarely', label: 'Rarely' },
+  { value: 'sometimes', label: 'Sometimes' },
+  { value: 'often', label: 'Often' },
+  { value: 'very_often', label: 'Very often' },
+];
+
+const gamingBreakOptions = [
+  { value: 'hourly', label: 'Every hour' },
+  { value: 'every_few_hours', label: 'Every few hours' },
+  { value: 'when_tired', label: 'Only when tired' },
+  { value: 'rarely', label: 'Rarely take breaks' },
+  { value: 'no_breaks', label: 'No breaks during gaming' },
+];
+
 export default function GamingHabits() {
   const { updateResponses, goToNextSection, goToPreviousSection, responses } = useSurvey();
 
@@ -63,6 +95,11 @@ export default function GamingHabits() {
     multiplayer_preference?: string;
     skill_level?: string;
     years_gaming?: string;
+    gaming_frequency?: string;
+    gaming_sessions?: string;
+    competitive_play?: boolean;
+    rage_quit_frequency?: string;
+    gaming_breaks?: string;
   };
 
   const form = useForm<z.infer<typeof gamingHabitsSchema>>({
@@ -73,6 +110,11 @@ export default function GamingHabits() {
       multiplayer_preference: savedData.multiplayer_preference || '',
       skill_level: savedData.skill_level || '',
       years_gaming: savedData.years_gaming || '',
+      gaming_frequency: savedData.gaming_frequency || '',
+      gaming_sessions: savedData.gaming_sessions || '',
+      competitive_play: savedData.competitive_play || false,
+      rage_quit_frequency: savedData.rage_quit_frequency || '',
+      gaming_breaks: savedData.gaming_breaks || '',
     },
   });
 
@@ -106,6 +148,31 @@ export default function GamingHabits() {
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
             <FormField
               control={form.control}
+              name="gaming_frequency"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>How often do you play games?</FormLabel>
+                  <Select onValueChange={field.onChange} defaultValue={field.value}>
+                    <FormControl>
+                      <SelectTrigger className="bg-background/50">
+                        <SelectValue placeholder="Select your gaming frequency" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {frequencyOptions.map((option) => (
+                        <SelectItem key={option.value} value={option.value}>
+                          {option.label}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
               name="hours_weekly"
               render={({ field }) => (
                 <FormItem>
@@ -118,6 +185,31 @@ export default function GamingHabits() {
                     </FormControl>
                     <SelectContent>
                       {hoursOptions.map((option) => (
+                        <SelectItem key={option.value} value={option.value}>
+                          {option.label}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="gaming_sessions"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Average Gaming Session Length</FormLabel>
+                  <Select onValueChange={field.onChange} defaultValue={field.value}>
+                    <FormControl>
+                      <SelectTrigger className="bg-background/50">
+                        <SelectValue placeholder="Select your average session length" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {sessionLengthOptions.map((option) => (
                         <SelectItem key={option.value} value={option.value}>
                           {option.label}
                         </SelectItem>
@@ -171,6 +263,26 @@ export default function GamingHabits() {
 
             <FormField
               control={form.control}
+              name="competitive_play"
+              render={({ field }) => (
+                <FormItem className="flex flex-row items-start space-x-3 space-y-0">
+                  <FormControl>
+                    <Checkbox
+                      checked={field.value}
+                      onCheckedChange={field.onChange}
+                    />
+                  </FormControl>
+                  <div className="space-y-1 leading-none">
+                    <FormLabel>
+                      Do you play games competitively (tournaments, ranked modes, etc.)?
+                    </FormLabel>
+                  </div>
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
               name="skill_level"
               render={({ field }) => (
                 <FormItem>
@@ -185,6 +297,56 @@ export default function GamingHabits() {
                       {skillLevels.map((level) => (
                         <SelectItem key={level.value} value={level.value}>
                           {level.label}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="rage_quit_frequency"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>How often do you rage quit games?</FormLabel>
+                  <Select onValueChange={field.onChange} defaultValue={field.value}>
+                    <FormControl>
+                      <SelectTrigger className="bg-background/50">
+                        <SelectValue placeholder="Select your rage quit frequency" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {rageQuitOptions.map((option) => (
+                        <SelectItem key={option.value} value={option.value}>
+                          {option.label}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="gaming_breaks"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>How often do you take breaks while gaming?</FormLabel>
+                  <Select onValueChange={field.onChange} defaultValue={field.value}>
+                    <FormControl>
+                      <SelectTrigger className="bg-background/50">
+                        <SelectValue placeholder="Select your break frequency" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {gamingBreakOptions.map((option) => (
+                        <SelectItem key={option.value} value={option.value}>
+                          {option.label}
                         </SelectItem>
                       ))}
                     </SelectContent>

@@ -41,6 +41,60 @@ const eventTypes = [
   { id: 'esports', label: 'Esports Events' },
 ];
 
+const esportsOptions = [
+  { id: 'league_of_legends', label: 'League of Legends' },
+  { id: 'dota2', label: 'Dota 2' },
+  { id: 'csgo', label: 'CS:GO' },
+  { id: 'valorant', label: 'Valorant' },
+  { id: 'overwatch', label: 'Overwatch' },
+  { id: 'pubg', label: 'PUBG' },
+  { id: 'fortnite', label: 'Fortnite' },
+  { id: 'rocket_league', label: 'Rocket League' },
+];
+
+const influencerOptions = [
+  { id: 'ninja', label: 'Ninja' },
+  { id: 'shroud', label: 'Shroud' },
+  { id: 'pokimane', label: 'Pokimane' },
+  { id: 'pewdiepie', label: 'PewDiePie' },
+  { id: 'drlupo', label: 'DrLupo' },
+  { id: 'tfue', label: 'Tfue' },
+  { id: 'indian_streamers', label: 'Indian Streamers' },
+  { id: 'none', label: 'Don\'t follow influencers' },
+];
+
+const communityOptions = [
+  { id: 'discord', label: 'Discord Servers' },
+  { id: 'reddit', label: 'Reddit Communities' },
+  { id: 'facebook', label: 'Facebook Groups' },
+  { id: 'twitter', label: 'Twitter Communities' },
+  { id: 'official_forums', label: 'Official Game Forums' },
+  { id: 'whatsapp', label: 'WhatsApp Groups' },
+  { id: 'telegram', label: 'Telegram Channels' },
+];
+
+const subscriptionOptions = [
+  { id: 'game_pass', label: 'Xbox Game Pass' },
+  { id: 'ps_plus', label: 'PlayStation Plus' },
+  { id: 'ea_play', label: 'EA Play' },
+  { id: 'ubisoft_plus', label: 'Ubisoft+' },
+  { id: 'nintendo_online', label: 'Nintendo Switch Online' },
+  { id: 'twitch_prime', label: 'Twitch Prime' },
+  { id: 'youtube_premium', label: 'YouTube Premium' },
+  { id: 'none', label: 'No subscriptions' },
+];
+
+const newsSourceOptions = [
+  { id: 'ign', label: 'IGN' },
+  { id: 'gamespot', label: 'GameSpot' },
+  { id: 'kotaku', label: 'Kotaku' },
+  { id: 'polygon', label: 'Polygon' },
+  { id: 'youtube', label: 'YouTube Channels' },
+  { id: 'reddit', label: 'Reddit' },
+  { id: 'twitter', label: 'Twitter' },
+  { id: 'discord', label: 'Discord' },
+];
+
 export default function GamingLifestyle() {
   const { updateResponses, goToNextSection, goToPreviousSection, responses } = useSurvey();
 
@@ -49,6 +103,12 @@ export default function GamingLifestyle() {
     platform_handles?: string[];
     merchandise_spending?: string;
     gaming_events?: string[];
+    follows_esports?: boolean;
+    favorite_esports?: string[];
+    gaming_influencers?: string[];
+    gaming_communities?: string[];
+    gaming_subscriptions?: string[];
+    gaming_news_sources?: string[];
   };
 
   const form = useForm<z.infer<typeof gamingLifestyleSchema>>({
@@ -58,6 +118,12 @@ export default function GamingLifestyle() {
       platform_handles: savedData.platform_handles || [],
       merchandise_spending: savedData.merchandise_spending || '',
       gaming_events: savedData.gaming_events || [],
+      follows_esports: savedData.follows_esports || false,
+      favorite_esports: savedData.favorite_esports || [],
+      gaming_influencers: savedData.gaming_influencers || [],
+      gaming_communities: savedData.gaming_communities || [],
+      gaming_subscriptions: savedData.gaming_subscriptions || [],
+      gaming_news_sources: savedData.gaming_news_sources || [],
     },
   });
 
@@ -132,6 +198,188 @@ export default function GamingLifestyle() {
 
             <FormField
               control={form.control}
+              name="follows_esports"
+              render={({ field }) => (
+                <FormItem className="flex flex-row items-start space-x-3 space-y-0">
+                  <FormControl>
+                    <Checkbox
+                      checked={field.value}
+                      onCheckedChange={field.onChange}
+                    />
+                  </FormControl>
+                  <div className="space-y-1 leading-none">
+                    <FormLabel>
+                      Do you follow esports?
+                    </FormLabel>
+                  </div>
+                </FormItem>
+              )}
+            />
+
+            {form.watch('follows_esports') && (
+              <FormField
+                control={form.control}
+                name="favorite_esports"
+                render={() => (
+                  <FormItem>
+                    <FormLabel>Favorite Esports Titles</FormLabel>
+                    <div className="grid grid-cols-2 gap-4 mt-2">
+                      {esportsOptions.map((esport) => (
+                        <FormField
+                          key={esport.id}
+                          control={form.control}
+                          name="favorite_esports"
+                          render={({ field }) => (
+                            <FormItem className="flex items-center space-x-3">
+                              <FormControl>
+                                <Checkbox
+                                  checked={field.value?.includes(esport.id)}
+                                  onCheckedChange={(checked) => {
+                                    const value = field.value || [];
+                                    if (checked) {
+                                      field.onChange([...value, esport.id]);
+                                    } else {
+                                      field.onChange(value.filter((val) => val !== esport.id));
+                                    }
+                                  }}
+                                />
+                              </FormControl>
+                              <FormLabel className="font-normal">
+                                {esport.label}
+                              </FormLabel>
+                            </FormItem>
+                          )}
+                        />
+                      ))}
+                    </div>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            )}
+
+            <FormField
+              control={form.control}
+              name="gaming_influencers"
+              render={() => (
+                <FormItem>
+                  <FormLabel>Gaming Influencers You Follow</FormLabel>
+                  <div className="grid grid-cols-2 gap-4 mt-2">
+                    {influencerOptions.map((influencer) => (
+                      <FormField
+                        key={influencer.id}
+                        control={form.control}
+                        name="gaming_influencers"
+                        render={({ field }) => (
+                          <FormItem className="flex items-center space-x-3">
+                            <FormControl>
+                              <Checkbox
+                                checked={field.value?.includes(influencer.id)}
+                                onCheckedChange={(checked) => {
+                                  const value = field.value || [];
+                                  if (checked) {
+                                    field.onChange([...value, influencer.id]);
+                                  } else {
+                                    field.onChange(value.filter((val) => val !== influencer.id));
+                                  }
+                                }}
+                              />
+                            </FormControl>
+                            <FormLabel className="font-normal">
+                              {influencer.label}
+                            </FormLabel>
+                          </FormItem>
+                        )}
+                      />
+                    ))}
+                  </div>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="gaming_communities"
+              render={() => (
+                <FormItem>
+                  <FormLabel>Gaming Communities You're Part Of</FormLabel>
+                  <div className="grid grid-cols-2 gap-4 mt-2">
+                    {communityOptions.map((community) => (
+                      <FormField
+                        key={community.id}
+                        control={form.control}
+                        name="gaming_communities"
+                        render={({ field }) => (
+                          <FormItem className="flex items-center space-x-3">
+                            <FormControl>
+                              <Checkbox
+                                checked={field.value?.includes(community.id)}
+                                onCheckedChange={(checked) => {
+                                  const value = field.value || [];
+                                  if (checked) {
+                                    field.onChange([...value, community.id]);
+                                  } else {
+                                    field.onChange(value.filter((val) => val !== community.id));
+                                  }
+                                }}
+                              />
+                            </FormControl>
+                            <FormLabel className="font-normal">
+                              {community.label}
+                            </FormLabel>
+                          </FormItem>
+                        )}
+                      />
+                    ))}
+                  </div>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="gaming_subscriptions"
+              render={() => (
+                <FormItem>
+                  <FormLabel>Gaming Subscriptions You Have</FormLabel>
+                  <div className="grid grid-cols-2 gap-4 mt-2">
+                    {subscriptionOptions.map((subscription) => (
+                      <FormField
+                        key={subscription.id}
+                        control={form.control}
+                        name="gaming_subscriptions"
+                        render={({ field }) => (
+                          <FormItem className="flex items-center space-x-3">
+                            <FormControl>
+                              <Checkbox
+                                checked={field.value?.includes(subscription.id)}
+                                onCheckedChange={(checked) => {
+                                  const value = field.value || [];
+                                  if (checked) {
+                                    field.onChange([...value, subscription.id]);
+                                  } else {
+                                    field.onChange(value.filter((val) => val !== subscription.id));
+                                  }
+                                }}
+                              />
+                            </FormControl>
+                            <FormLabel className="font-normal">
+                              {subscription.label}
+                            </FormLabel>
+                          </FormItem>
+                        )}
+                      />
+                    ))}
+                  </div>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
               name="merchandise_spending"
               render={({ field }) => (
                 <FormItem>
@@ -150,6 +398,46 @@ export default function GamingLifestyle() {
                       ))}
                     </SelectContent>
                   </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="gaming_news_sources"
+              render={() => (
+                <FormItem>
+                  <FormLabel>Where Do You Get Gaming News?</FormLabel>
+                  <div className="grid grid-cols-2 gap-4 mt-2">
+                    {newsSourceOptions.map((source) => (
+                      <FormField
+                        key={source.id}
+                        control={form.control}
+                        name="gaming_news_sources"
+                        render={({ field }) => (
+                          <FormItem className="flex items-center space-x-3">
+                            <FormControl>
+                              <Checkbox
+                                checked={field.value?.includes(source.id)}
+                                onCheckedChange={(checked) => {
+                                  const value = field.value || [];
+                                  if (checked) {
+                                    field.onChange([...value, source.id]);
+                                  } else {
+                                    field.onChange(value.filter((val) => val !== source.id));
+                                  }
+                                }}
+                              />
+                            </FormControl>
+                            <FormLabel className="font-normal">
+                              {source.label}
+                            </FormLabel>
+                          </FormItem>
+                        )}
+                      />
+                    ))}
+                  </div>
                   <FormMessage />
                 </FormItem>
               )}

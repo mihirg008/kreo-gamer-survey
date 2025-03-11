@@ -54,6 +54,36 @@ const sustainabilityOptions = [
   { value: 'not_important', label: 'Not Important' },
 ];
 
+const aiInterestOptions = [
+  { value: 'very_excited', label: 'Very excited about AI in games' },
+  { value: 'somewhat_excited', label: 'Somewhat excited' },
+  { value: 'neutral', label: 'Neutral' },
+  { value: 'concerned', label: 'Concerned about AI in games' },
+  { value: 'very_concerned', label: 'Very concerned about AI in games' },
+];
+
+const blockchainOptions = [
+  { value: 'very_interested', label: 'Very interested in blockchain/NFT games' },
+  { value: 'somewhat_interested', label: 'Somewhat interested' },
+  { value: 'neutral', label: 'Neutral' },
+  { value: 'not_interested', label: 'Not interested' },
+  { value: 'opposed', label: 'Opposed to blockchain in gaming' },
+];
+
+const subscriptionOptions = [
+  { value: 'prefer_subscription', label: 'Prefer subscription services (Game Pass, etc.)' },
+  { value: 'prefer_ownership', label: 'Prefer to own individual games' },
+  { value: 'mix', label: 'Prefer a mix of both' },
+  { value: 'undecided', label: 'Undecided' },
+];
+
+const spendingOptions = [
+  { value: 'increase', label: 'Likely to increase spending on gaming' },
+  { value: 'same', label: 'Likely to maintain same spending level' },
+  { value: 'decrease', label: 'Likely to decrease spending on gaming' },
+  { value: 'unsure', label: 'Unsure about future spending' },
+];
+
 export default function FutureGaming() {
   const { updateResponses, goToPreviousSection, goToNextSection, responses } = useSurvey();
   const [isSubmitted, setIsSubmitted] = useState(false);
@@ -63,6 +93,10 @@ export default function FutureGaming() {
     vr_adoption?: string;
     cloud_gaming?: string;
     sustainability?: string;
+    ai_in_games?: string;
+    blockchain_gaming?: string;
+    subscription_services?: string;
+    future_spending?: string;
   };
 
   const form = useForm<z.infer<typeof futureGamingSchema>>({
@@ -72,6 +106,10 @@ export default function FutureGaming() {
       vr_adoption: savedData.vr_adoption || '',
       cloud_gaming: savedData.cloud_gaming || '',
       sustainability: savedData.sustainability || '',
+      ai_in_games: savedData.ai_in_games || '',
+      blockchain_gaming: savedData.blockchain_gaming || '',
+      subscription_services: savedData.subscription_services || '',
+      future_spending: savedData.future_spending || '',
     },
   });
 
@@ -136,6 +174,56 @@ export default function FutureGaming() {
 
             <FormField
               control={form.control}
+              name="ai_in_games"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Thoughts on AI in Games</FormLabel>
+                  <Select onValueChange={field.onChange} defaultValue={field.value}>
+                    <FormControl>
+                      <SelectTrigger className="bg-background/50">
+                        <SelectValue placeholder="Select your thoughts on AI" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {aiInterestOptions.map((option) => (
+                        <SelectItem key={option.value} value={option.value}>
+                          {option.label}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="blockchain_gaming"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Interest in Blockchain Gaming</FormLabel>
+                  <Select onValueChange={field.onChange} defaultValue={field.value}>
+                    <FormControl>
+                      <SelectTrigger className="bg-background/50">
+                        <SelectValue placeholder="Select your interest in blockchain gaming" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {blockchainOptions.map((option) => (
+                        <SelectItem key={option.value} value={option.value}>
+                          {option.label}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
               name="vr_adoption"
               render={({ field }) => (
                 <FormItem>
@@ -173,6 +261,56 @@ export default function FutureGaming() {
                     </FormControl>
                     <SelectContent>
                       {cloudGamingOptions.map((option) => (
+                        <SelectItem key={option.value} value={option.value}>
+                          {option.label}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="subscription_services"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Subscription Services vs. Game Ownership</FormLabel>
+                  <Select onValueChange={field.onChange} defaultValue={field.value}>
+                    <FormControl>
+                      <SelectTrigger className="bg-background/50">
+                        <SelectValue placeholder="Select your preference" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {subscriptionOptions.map((option) => (
+                        <SelectItem key={option.value} value={option.value}>
+                          {option.label}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="future_spending"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Future Gaming Spending Plans</FormLabel>
+                  <Select onValueChange={field.onChange} defaultValue={field.value}>
+                    <FormControl>
+                      <SelectTrigger className="bg-background/50">
+                        <SelectValue placeholder="Select your future spending plans" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {spendingOptions.map((option) => (
                         <SelectItem key={option.value} value={option.value}>
                           {option.label}
                         </SelectItem>

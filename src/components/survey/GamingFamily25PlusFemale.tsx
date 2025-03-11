@@ -6,7 +6,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import * as z from 'zod';
 import { useSurvey } from '@/context/SurveyContext';
-import { gamingFamilySchema } from '@/lib/survey-validation';
+import { gamingFamily25PlusFemaleSchema } from '@/lib/survey-validation';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
@@ -49,6 +49,63 @@ const reasonOptions = [
   { value: 'stress_relief', label: 'Stress relief' },
 ];
 
+const frequencyOptions = [
+  { value: 'always', label: 'Always' },
+  { value: 'often', label: 'Often' },
+  { value: 'sometimes', label: 'Sometimes' },
+  { value: 'rarely', label: 'Rarely' },
+  { value: 'never', label: 'Never' },
+];
+
+const yesNoOptions = [
+  { value: 'yes', label: 'Yes' },
+  { value: 'no', label: 'No' },
+  { value: 'sometimes', label: 'Sometimes' },
+];
+
+const impactOptions = [
+  { value: 'very_positive', label: 'Very positively' },
+  { value: 'somewhat_positive', label: 'Somewhat positively' },
+  { value: 'neutral', label: 'Neutral - no effect' },
+  { value: 'somewhat_negative', label: 'Somewhat negatively' },
+  { value: 'very_negative', label: 'Very negatively' },
+  { value: 'mixed', label: 'Mixed - both positive and negative' },
+];
+
+const balanceOptions = [
+  { value: 'very_well', label: 'Very well - I have a good balance' },
+  { value: 'somewhat_well', label: 'Somewhat well - Occasional conflicts' },
+  { value: 'neutral', label: 'Neutral' },
+  { value: 'somewhat_difficult', label: 'Somewhat difficult - Regular conflicts' },
+  { value: 'very_difficult', label: 'Very difficult - Significant conflicts' },
+];
+
+const representationOptions = [
+  { value: 'well_represented', label: 'Well represented' },
+  { value: 'somewhat_represented', label: 'Somewhat represented' },
+  { value: 'neutral', label: 'Neutral' },
+  { value: 'somewhat_underrepresented', label: 'Somewhat underrepresented' },
+  { value: 'very_underrepresented', label: 'Very underrepresented' },
+];
+
+const communityOptions = [
+  { value: 'very_supportive', label: 'Very supportive' },
+  { value: 'somewhat_supportive', label: 'Somewhat supportive' },
+  { value: 'neutral', label: 'Neutral/mixed' },
+  { value: 'somewhat_unsupportive', label: 'Somewhat unsupportive' },
+  { value: 'very_unsupportive', label: 'Very unsupportive' },
+  { value: 'avoid', label: 'I avoid gaming communities' },
+];
+
+const stereotypeNavigationOptions = [
+  { value: 'challenge', label: 'I actively challenge stereotypes' },
+  { value: 'ignore', label: 'I ignore stereotypes' },
+  { value: 'hide_gender', label: 'I hide my gender while gaming' },
+  { value: 'women_only', label: 'I mostly play in women-friendly spaces' },
+  { value: 'adapt', label: 'I adapt my behavior to fit in' },
+  { value: 'other', label: 'Other approach' },
+];
+
 export default function GamingFamily25PlusFemale() {
   const { updateResponses, goToNextSection, goToPreviousSection, responses } = useSurvey();
 
@@ -59,14 +116,19 @@ export default function GamingFamily25PlusFemale() {
     character_preference?: string;
     gender_bias?: string;
     primary_reason?: string;
+    game_with_partner?: string;
+    female_experience?: string;
+    family_balance?: string;
+    perspective_change?: string;
+    gender_interactions?: string;
+    representation?: string;
+    gaming_networking?: string;
+    community_support?: string;
+    stereotype_navigation?: string;
   };
 
-  const form = useForm<z.infer<typeof gamingFamilySchema> & { primary_reason: string, character_preference: string, gender_bias: string }>({
-    resolver: zodResolver(gamingFamilySchema.extend({
-      primary_reason: z.string({ required_error: 'Please select your primary reason' }),
-      character_preference: z.string({ required_error: 'Please select your preference' }),
-      gender_bias: z.string({ required_error: 'Please select an option' }),
-    })),
+  const form = useForm<z.infer<typeof gamingFamily25PlusFemaleSchema>>({
+    resolver: zodResolver(gamingFamily25PlusFemaleSchema),
     defaultValues: {
       family_perception: savedData.family_perception || '',
       family_gamers: savedData.family_gamers || false,
@@ -74,10 +136,19 @@ export default function GamingFamily25PlusFemale() {
       character_preference: savedData.character_preference || '',
       gender_bias: savedData.gender_bias || '',
       primary_reason: savedData.primary_reason || '',
+      game_with_partner: savedData.game_with_partner || '',
+      female_experience: savedData.female_experience || '',
+      family_balance: savedData.family_balance || '',
+      perspective_change: savedData.perspective_change || '',
+      gender_interactions: savedData.gender_interactions || '',
+      representation: savedData.representation || '',
+      gaming_networking: savedData.gaming_networking || '',
+      community_support: savedData.community_support || '',
+      stereotype_navigation: savedData.stereotype_navigation || '',
     },
   });
 
-  function onSubmit(values: z.infer<typeof gamingFamilySchema> & { primary_reason: string, character_preference: string, gender_bias: string }) {
+  function onSubmit(values: z.infer<typeof gamingFamily25PlusFemaleSchema>) {
     updateResponses('gaming_family', values);
     goToNextSection();
   }
@@ -119,6 +190,224 @@ export default function GamingFamily25PlusFemale() {
                     </FormControl>
                     <SelectContent>
                       {perceptionOptions.map((option) => (
+                        <SelectItem key={option.value} value={option.value}>
+                          {option.label}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="game_with_partner"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Do you game with your partner/spouse?</FormLabel>
+                  <Select onValueChange={field.onChange} defaultValue={field.value}>
+                    <FormControl>
+                      <SelectTrigger className="bg-background/50">
+                        <SelectValue placeholder="Select an option" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {frequencyOptions.map((option) => (
+                        <SelectItem key={option.value} value={option.value}>
+                          {option.label}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="female_experience"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>How does being female affect your gaming experience?</FormLabel>
+                  <Select onValueChange={field.onChange} defaultValue={field.value}>
+                    <FormControl>
+                      <SelectTrigger className="bg-background/50">
+                        <SelectValue placeholder="Select impact" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {impactOptions.map((option) => (
+                        <SelectItem key={option.value} value={option.value}>
+                          {option.label}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="family_balance"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>How well do you balance gaming with family responsibilities?</FormLabel>
+                  <Select onValueChange={field.onChange} defaultValue={field.value}>
+                    <FormControl>
+                      <SelectTrigger className="bg-background/50">
+                        <SelectValue placeholder="Select your experience" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {balanceOptions.map((option) => (
+                        <SelectItem key={option.value} value={option.value}>
+                          {option.label}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="perspective_change"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>How has your perspective on gaming changed as you've grown older?</FormLabel>
+                  <FormControl>
+                    <Textarea
+                      placeholder="Describe how your gaming interests, habits, or community engagement have evolved..."
+                      className="bg-background/50 min-h-[80px]"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="gender_interactions"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Have you experienced gender-based interactions in multiplayer games?</FormLabel>
+                  <Select onValueChange={field.onChange} defaultValue={field.value}>
+                    <FormControl>
+                      <SelectTrigger className="bg-background/50">
+                        <SelectValue placeholder="Select frequency" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {frequencyOptions.map((option) => (
+                        <SelectItem key={option.value} value={option.value}>
+                          {option.label}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="representation"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Do you feel represented in the games you play?</FormLabel>
+                  <Select onValueChange={field.onChange} defaultValue={field.value}>
+                    <FormControl>
+                      <SelectTrigger className="bg-background/50">
+                        <SelectValue placeholder="Select level of representation" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {representationOptions.map((option) => (
+                        <SelectItem key={option.value} value={option.value}>
+                          {option.label}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="gaming_networking"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Do you use gaming for professional or personal networking?</FormLabel>
+                  <Select onValueChange={field.onChange} defaultValue={field.value}>
+                    <FormControl>
+                      <SelectTrigger className="bg-background/50">
+                        <SelectValue placeholder="Select your answer" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {yesNoOptions.map((option) => (
+                        <SelectItem key={option.value} value={option.value}>
+                          {option.label}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="community_support"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>How supportive have gaming communities been for you?</FormLabel>
+                  <Select onValueChange={field.onChange} defaultValue={field.value}>
+                    <FormControl>
+                      <SelectTrigger className="bg-background/50">
+                        <SelectValue placeholder="Select level of support" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {communityOptions.map((option) => (
+                        <SelectItem key={option.value} value={option.value}>
+                          {option.label}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="stereotype_navigation"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>How do you navigate gaming stereotypes?</FormLabel>
+                  <Select onValueChange={field.onChange} defaultValue={field.value}>
+                    <FormControl>
+                      <SelectTrigger className="bg-background/50">
+                        <SelectValue placeholder="Select your approach" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {stereotypeNavigationOptions.map((option) => (
                         <SelectItem key={option.value} value={option.value}>
                           {option.label}
                         </SelectItem>

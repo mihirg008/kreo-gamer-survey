@@ -1,14 +1,22 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { collection, getDocs, deleteDoc, doc, Timestamp } from 'firebase/firestore';
+import { collection, getDocs, deleteDoc, doc, Timestamp, getDoc } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
 import { SurveyData } from '@/types/survey';
+import { FileDown } from 'lucide-react';
 
+// Define types for conditional sections
+type ConditionalSectionData = Record<string, string | string[] | number | boolean | null>;
+
+// Define a more specific index signature type
+type ResponseValue = string | number | boolean | null | string[] | Timestamp | Record<string, unknown>;
+
+// Update the ResponseData interface
 interface ResponseData {
   id: string;
   user_info: {
@@ -22,12 +30,22 @@ interface ResponseData {
     completion_time?: Timestamp;
   };
   demographics?: Partial<SurveyData['demographics']>;
+  demographics_under18?: ConditionalSectionData;
+  demographics_18to24?: ConditionalSectionData;
+  demographics_25plus?: ConditionalSectionData;
   gaming_preferences?: Partial<SurveyData['gaming_preferences']>;
   gaming_habits?: Partial<SurveyData['gaming_habits']>;
   gaming_lifestyle?: Partial<SurveyData['gaming_lifestyle']>;
   gaming_family?: Partial<SurveyData['gaming_family']>;
+  gaming_family_under18_male?: ConditionalSectionData;
+  gaming_family_under18_female?: ConditionalSectionData;
+  gaming_family_18to24_male?: ConditionalSectionData;
+  gaming_family_18to24_female?: ConditionalSectionData;
+  gaming_family_25plus_male?: ConditionalSectionData;
+  gaming_family_25plus_female?: ConditionalSectionData;
   future_gaming?: Partial<SurveyData['future_gaming']>;
-} 
+  [key: string]: ResponseValue | undefined; // Replace any with more specific union type
+}
 
 export default function Dashboard() {
   const [responses, setResponses] = useState<ResponseData[]>([]);
@@ -35,6 +53,7 @@ export default function Dashboard() {
   const [selectedResponse, setSelectedResponse] = useState<ResponseData | null>(null);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [deleteLoading, setDeleteLoading] = useState<string | null>(null);
+  const [exportLoading, setExportLoading] = useState(false);
 
   useEffect(() => {
     fetchResponses();
@@ -64,9 +83,35 @@ export default function Dashboard() {
     }
   };
 
-  const handleViewResponse = (response: ResponseData) => {
-    setSelectedResponse(response);
-    setIsDialogOpen(true);
+  const handleViewResponse = async (response: ResponseData) => {
+    setLoading(true);
+    try {
+      // Fetch the complete response to ensure all data is available
+      const responseDoc = await getDoc(doc(db, 'responses', response.id));
+      if (responseDoc.exists()) {
+        const fullResponse = {
+          id: responseDoc.id,
+          ...responseDoc.data()
+        } as ResponseData;
+        
+        // Log the response to help with debugging
+        console.log('Full response data:', fullResponse);
+        
+        setSelectedResponse(fullResponse);
+        setIsDialogOpen(true);
+      } else {
+        console.warn('Response document not found, using limited data');
+        setSelectedResponse(response);
+        setIsDialogOpen(true);
+      }
+    } catch (error) {
+      console.error('Error fetching complete response:', error);
+      // Fallback to using the existing response data
+      setSelectedResponse(response);
+      setIsDialogOpen(true);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleDeleteResponse = async (id: string) => {
@@ -98,14 +143,118 @@ export default function Dashboard() {
       .join(' ');
   };
 
+  // Fix the flattenObject function
+  const flattenObject = (obj: Record<string, unknown>, prefix = ''): Record<string, string> => {
+    return Object.keys(obj).reduce((acc: Record<string, string>, key) => {
+      const prefixedKey = prefix ? `${prefix}_${key}` : key;
+      
+      if (obj[key] !== null && typeof obj[key] === 'object' && !Array.isArray(obj[key]) && !(obj[key] instanceof Timestamp)) {
+        Object.assign(acc, flattenObject(obj[key] as Record<string, unknown>, prefixedKey));
+      } else if (obj[key] instanceof Timestamp) {
+        acc[prefixedKey] = formatDate(obj[key] as Timestamp);
+      } else if (Array.isArray(obj[key])) {
+        acc[prefixedKey] = (obj[key] as unknown[]).join(', ');
+      } else {
+        acc[prefixedKey] = String(obj[key] ?? '');
+      }
+      
+      return acc;
+    }, {} as Record<string, string>);
+  };
+
+  // Improved CSV export function to ensure all data is included
+  const exportToCSV = async () => {
+    setExportLoading(true);
+    try {
+      // Ensure we have the latest data with a fresh fetch
+      const responsesCollection = collection(db, 'responses');
+      const responsesSnapshot = await getDocs(responsesCollection);
+      
+      const fullResponsesList = await Promise.all(
+        responsesSnapshot.docs.map(async (docSnapshot) => {
+          // Get the full document for each response
+          const fullDoc = await getDoc(doc(db, 'responses', docSnapshot.id));
+          return {
+            id: docSnapshot.id,
+            ...fullDoc.data()
+          } as ResponseData;
+        })
+      );
+      
+      // Create CSV header
+      const headers = new Set<string>();
+      const flattenedResponses = fullResponsesList.map(response => {
+        const flat = flattenObject(response);
+        Object.keys(flat).forEach(key => headers.add(key));
+        return flat;
+      });
+      
+      const headerRow = Array.from(headers).join(',');
+      const csvRows = [headerRow];
+      
+      // Add data rows
+      flattenedResponses.forEach(response => {
+        const row = Array.from(headers).map(header => {
+          const value = response[header] !== undefined ? response[header] : '';
+          // Wrap values in quotes and escape any quotes inside the value
+          return `"${String(value).replace(/"/g, '""')}"`;
+        }).join(',');
+        csvRows.push(row);
+      });
+      
+      // Combine rows into a single CSV string
+      const csvString = csvRows.join('\n');
+      
+      // Create a download link and trigger the download
+      const blob = new Blob([csvString], { type: 'text/csv;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.setAttribute('href', url);
+      link.setAttribute('download', `kreo_survey_responses_${new Date().toISOString().split('T')[0]}.csv`);
+      link.style.visibility = 'hidden';
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    } catch (error) {
+      console.error('Error exporting to CSV:', error);
+      alert('Failed to export responses. Please try again.');
+    } finally {
+      setExportLoading(false);
+    }
+  };
+
   return (
     <div className="space-y-6">
+      {/* Export Card */}
       <Card className="bg-gray-900 border-gray-800">
-        <CardHeader>
-          <CardTitle className="text-white">Survey Responses</CardTitle>
-          <CardDescription className="text-gray-400">
-            View and manage all survey submissions
-          </CardDescription>
+        <CardContent className="p-6">
+          <div className="flex items-center justify-between">
+            <div>
+              <h3 className="text-xl font-bold text-white mb-2">Export Survey Data</h3>
+              <p className="text-gray-400">Download all survey responses in CSV format for analysis</p>
+            </div>
+            <Button
+              variant="default"
+              size="lg"
+              className="bg-purple-600 hover:bg-purple-700 text-white flex items-center gap-2"
+              onClick={exportToCSV}
+              disabled={exportLoading || loading || responses.length === 0}
+            >
+              <FileDown size={18} />
+              {exportLoading ? 'Exporting...' : 'Export All Responses (CSV)'}
+            </Button>
+          </div>
+        </CardContent>
+      </Card>
+
+      <Card className="bg-gray-900 border-gray-800">
+        <CardHeader className="flex flex-row items-center justify-between">
+          <div>
+            <CardTitle className="text-white">Survey Responses</CardTitle>
+            <CardDescription className="text-gray-400">
+              View and manage all survey submissions
+            </CardDescription>
+          </div>
         </CardHeader>
         <CardContent>
           {loading ? (
@@ -232,105 +381,42 @@ export default function Dashboard() {
                 </div>
               </div>
 
-              {/* Demographics Section */}
-              {selectedResponse.demographics && (
-                <div className="border border-gray-800 rounded-md p-4">
-                  <h3 className="text-lg font-medium text-purple-400 mb-3">Demographics</h3>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    {Object.entries(selectedResponse.demographics).map(([key, value]) => (
-                      <div key={key} className="bg-gray-800/50 p-3 rounded-md">
-                        <span className="text-gray-400">{formatSectionName(key)}:</span>{' '}
-                        <span className="text-white">{String(value)}</span>
-                      </div>
-                    ))}
+              {/* Function to render any section */}
+              {Object.entries(selectedResponse).map(([sectionKey, sectionData]) => {
+                // Skip non-section data
+                if (sectionKey === 'id' || sectionKey === 'user_info') {
+                  return null;
+                }
+                
+                // Skip empty sections
+                if (!sectionData || typeof sectionData !== 'object' || Object.keys(sectionData).length === 0) {
+                  return null;
+                }
+                
+                // Format section title
+                const sectionTitle = formatSectionName(sectionKey);
+                
+                return (
+                  <div key={sectionKey} className="border border-gray-800 rounded-md p-4">
+                    <h3 className="text-lg font-medium text-purple-400 mb-3">{sectionTitle}</h3>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      {Object.entries(sectionData).map(([key, value]) => (
+                        <div key={`${sectionKey}-${key}`} className="bg-gray-800/50 p-3 rounded-md">
+                          <span className="text-gray-400">{formatSectionName(key)}:</span>{' '}
+                          <span className="text-white">
+                            {Array.isArray(value) 
+                              ? value.join(', ') 
+                              : typeof value === 'object' && value !== null
+                                ? JSON.stringify(value)
+                                : String(value)
+                            }
+                          </span>
+                        </div>
+                      ))}
+                    </div>
                   </div>
-                </div>
-              )}
-
-              {/* Gaming Preferences Section */}
-              {selectedResponse.gaming_preferences && (
-                <div className="border border-gray-800 rounded-md p-4">
-                  <h3 className="text-lg font-medium text-purple-400 mb-3">Gaming Preferences</h3>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    {Object.entries(selectedResponse.gaming_preferences).map(([key, value]) => (
-                      <div key={key} className="bg-gray-800/50 p-3 rounded-md">
-                        <span className="text-gray-400">{formatSectionName(key)}:</span>{' '}
-                        <span className="text-white">
-                          {Array.isArray(value) ? value.join(', ') : String(value)}
-                        </span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              )}
-
-              {/* Gaming Habits Section */}
-              {selectedResponse.gaming_habits && (
-                <div className="border border-gray-800 rounded-md p-4">
-                  <h3 className="text-lg font-medium text-purple-400 mb-3">Gaming Habits</h3>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    {Object.entries(selectedResponse.gaming_habits).map(([key, value]) => (
-                      <div key={key} className="bg-gray-800/50 p-3 rounded-md">
-                        <span className="text-gray-400">{formatSectionName(key)}:</span>{' '}
-                        <span className="text-white">
-                          {Array.isArray(value) ? value.join(', ') : String(value)}
-                        </span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              )}
-
-              {/* Gaming Lifestyle Section */}
-              {selectedResponse.gaming_lifestyle && (
-                <div className="border border-gray-800 rounded-md p-4">
-                  <h3 className="text-lg font-medium text-purple-400 mb-3">Gaming Lifestyle</h3>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    {Object.entries(selectedResponse.gaming_lifestyle).map(([key, value]) => (
-                      <div key={key} className="bg-gray-800/50 p-3 rounded-md">
-                        <span className="text-gray-400">{formatSectionName(key)}:</span>{' '}
-                        <span className="text-white">
-                          {Array.isArray(value) ? value.join(', ') : String(value)}
-                        </span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              )}
-
-              {/* Gaming Family Section */}
-              {selectedResponse.gaming_family && (
-                <div className="border border-gray-800 rounded-md p-4">
-                  <h3 className="text-lg font-medium text-purple-400 mb-3">Gaming & Family</h3>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    {Object.entries(selectedResponse.gaming_family).map(([key, value]) => (
-                      <div key={key} className="bg-gray-800/50 p-3 rounded-md">
-                        <span className="text-gray-400">{formatSectionName(key)}:</span>{' '}
-                        <span className="text-white">
-                          {Array.isArray(value) ? value.join(', ') : String(value)}
-                        </span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              )}
-
-              {/* Future Gaming Section */}
-              {selectedResponse.future_gaming && (
-                <div className="border border-gray-800 rounded-md p-4">
-                  <h3 className="text-lg font-medium text-purple-400 mb-3">Future of Gaming</h3>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    {Object.entries(selectedResponse.future_gaming).map(([key, value]) => (
-                      <div key={key} className="bg-gray-800/50 p-3 rounded-md">
-                        <span className="text-gray-400">{formatSectionName(key)}:</span>{' '}
-                        <span className="text-white">
-                          {Array.isArray(value) ? value.join(', ') : String(value)}
-                        </span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              )}
+                );
+              })}
             </div>
           )}
         </DialogContent>

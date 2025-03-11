@@ -6,7 +6,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import * as z from 'zod';
 import { useSurvey } from '@/context/SurveyContext';
-import { gamingFamilySchema } from '@/lib/survey-validation';
+import { gamingFamily25PlusMaleSchema } from '@/lib/survey-validation';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
@@ -49,6 +49,63 @@ const reasonOptions = [
   { value: 'stress_relief', label: 'Stress relief' },
 ];
 
+const frequencyOptions = [
+  { value: 'always', label: 'Always' },
+  { value: 'often', label: 'Often' },
+  { value: 'sometimes', label: 'Sometimes' },
+  { value: 'rarely', label: 'Rarely' },
+  { value: 'never', label: 'Never' },
+];
+
+const yesNoOptions = [
+  { value: 'yes', label: 'Yes' },
+  { value: 'no', label: 'No' },
+  { value: 'sometimes', label: 'Sometimes' },
+];
+
+const timeManagementOptions = [
+  { value: 'very_well', label: 'Very well - I have a good balance' },
+  { value: 'somewhat_well', label: 'Somewhat well - Occasional conflicts' },
+  { value: 'neutral', label: 'Neutral' },
+  { value: 'somewhat_difficult', label: 'Somewhat difficult - Regular conflicts' },
+  { value: 'very_difficult', label: 'Very difficult - Significant conflicts' },
+];
+
+const parentingApproachOptions = [
+  { value: 'strict_limits', label: 'Strict time/content limits' },
+  { value: 'moderate_oversight', label: 'Moderate oversight with flexibility' },
+  { value: 'educational_focus', label: 'Focus on educational games' },
+  { value: 'play_together', label: 'We primarily play together as a family' },
+  { value: 'minimal_restrictions', label: 'Minimal restrictions' },
+  { value: 'no_children', label: 'I don\'t have children' },
+];
+
+const patternChangeOptions = [
+  { value: 'play_less', label: 'I play less than when I was younger' },
+  { value: 'play_more', label: 'I play more than when I was younger' },
+  { value: 'different_games', label: 'I play different types of games now' },
+  { value: 'same_patterns', label: 'My gaming patterns haven\'t changed much' },
+  { value: 'stopped_restarted', label: 'I stopped for years but restarted' },
+];
+
+const workPerceptionOptions = [
+  { value: 'very_positive', label: 'Very positive - it\'s respected' },
+  { value: 'somewhat_positive', label: 'Somewhat positive' },
+  { value: 'neutral', label: 'Neutral/indifferent' },
+  { value: 'somewhat_negative', label: 'Somewhat negative' },
+  { value: 'very_negative', label: 'Very negative - it\'s looked down upon' },
+  { value: 'hidden', label: 'I don\'t discuss gaming at work' },
+];
+
+const monthlySpendingOptions = [
+  { value: 'none', label: 'Nothing (only free games)' },
+  { value: 'under_500', label: 'Under ₹500 per month' },
+  { value: '500_1000', label: '₹500-₹1,000 per month' },
+  { value: '1000_3000', label: '₹1,000-₹3,000 per month' },
+  { value: '3000_5000', label: '₹3,000-₹5,000 per month' },
+  { value: 'over_5000', label: 'Over ₹5,000 per month' },
+];
+
 export default function GamingFamily25PlusMale() {
   const { updateResponses, goToNextSection, goToPreviousSection, responses } = useSurvey();
 
@@ -59,14 +116,18 @@ export default function GamingFamily25PlusMale() {
     character_preference?: string;
     gender_bias?: string;
     primary_reason?: string;
+    game_with_partner?: string;
+    time_management?: string;
+    parenting_approach?: string;
+    pattern_changes?: string;
+    work_perception?: string;
+    stress_relief?: string;
+    use_for_networking?: string;
+    monthly_spending?: string;
   };
 
-  const form = useForm<z.infer<typeof gamingFamilySchema> & { primary_reason: string, character_preference: string, gender_bias: string }>({
-    resolver: zodResolver(gamingFamilySchema.extend({
-      primary_reason: z.string({ required_error: 'Please select your primary reason' }),
-      character_preference: z.string({ required_error: 'Please select your preference' }),
-      gender_bias: z.string({ required_error: 'Please select an option' }),
-    })),
+  const form = useForm<z.infer<typeof gamingFamily25PlusMaleSchema>>({
+    resolver: zodResolver(gamingFamily25PlusMaleSchema),
     defaultValues: {
       family_perception: savedData.family_perception || '',
       family_gamers: savedData.family_gamers || false,
@@ -74,10 +135,18 @@ export default function GamingFamily25PlusMale() {
       character_preference: savedData.character_preference || '',
       gender_bias: savedData.gender_bias || '',
       primary_reason: savedData.primary_reason || '',
+      game_with_partner: savedData.game_with_partner || '',
+      time_management: savedData.time_management || '',
+      parenting_approach: savedData.parenting_approach || '',
+      pattern_changes: savedData.pattern_changes || '',
+      work_perception: savedData.work_perception || '',
+      stress_relief: savedData.stress_relief || '',
+      use_for_networking: savedData.use_for_networking || '',
+      monthly_spending: savedData.monthly_spending || '',
     },
   });
 
-  function onSubmit(values: z.infer<typeof gamingFamilySchema> & { primary_reason: string, character_preference: string, gender_bias: string }) {
+  function onSubmit(values: z.infer<typeof gamingFamily25PlusMaleSchema>) {
     updateResponses('gaming_family', values);
     goToNextSection();
   }
@@ -119,6 +188,206 @@ export default function GamingFamily25PlusMale() {
                     </FormControl>
                     <SelectContent>
                       {perceptionOptions.map((option) => (
+                        <SelectItem key={option.value} value={option.value}>
+                          {option.label}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="game_with_partner"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Do you game with your partner/spouse?</FormLabel>
+                  <Select onValueChange={field.onChange} defaultValue={field.value}>
+                    <FormControl>
+                      <SelectTrigger className="bg-background/50">
+                        <SelectValue placeholder="Select an option" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {frequencyOptions.map((option) => (
+                        <SelectItem key={option.value} value={option.value}>
+                          {option.label}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="time_management"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>How well do you manage time between work, family, and gaming?</FormLabel>
+                  <Select onValueChange={field.onChange} defaultValue={field.value}>
+                    <FormControl>
+                      <SelectTrigger className="bg-background/50">
+                        <SelectValue placeholder="Select your experience" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {timeManagementOptions.map((option) => (
+                        <SelectItem key={option.value} value={option.value}>
+                          {option.label}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="parenting_approach"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>If you have children, what's your approach to managing their gaming?</FormLabel>
+                  <Select onValueChange={field.onChange} defaultValue={field.value}>
+                    <FormControl>
+                      <SelectTrigger className="bg-background/50">
+                        <SelectValue placeholder="Select your approach" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {parentingApproachOptions.map((option) => (
+                        <SelectItem key={option.value} value={option.value}>
+                          {option.label}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="pattern_changes"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>How have your gaming patterns changed as you've gotten older?</FormLabel>
+                  <Select onValueChange={field.onChange} defaultValue={field.value}>
+                    <FormControl>
+                      <SelectTrigger className="bg-background/50">
+                        <SelectValue placeholder="Select how patterns have changed" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {patternChangeOptions.map((option) => (
+                        <SelectItem key={option.value} value={option.value}>
+                          {option.label}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="work_perception"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>How is gaming viewed in your professional environment?</FormLabel>
+                  <Select onValueChange={field.onChange} defaultValue={field.value}>
+                    <FormControl>
+                      <SelectTrigger className="bg-background/50">
+                        <SelectValue placeholder="Select perception at work" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {workPerceptionOptions.map((option) => (
+                        <SelectItem key={option.value} value={option.value}>
+                          {option.label}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="stress_relief"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Do you use gaming as a stress reliever from work/family responsibilities?</FormLabel>
+                  <Select onValueChange={field.onChange} defaultValue={field.value}>
+                    <FormControl>
+                      <SelectTrigger className="bg-background/50">
+                        <SelectValue placeholder="Select frequency" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {frequencyOptions.map((option) => (
+                        <SelectItem key={option.value} value={option.value}>
+                          {option.label}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="use_for_networking"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Do you use gaming for professional or social networking?</FormLabel>
+                  <Select onValueChange={field.onChange} defaultValue={field.value}>
+                    <FormControl>
+                      <SelectTrigger className="bg-background/50">
+                        <SelectValue placeholder="Select your answer" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {yesNoOptions.map((option) => (
+                        <SelectItem key={option.value} value={option.value}>
+                          {option.label}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="monthly_spending"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>How much do you typically spend on gaming monthly?</FormLabel>
+                  <Select onValueChange={field.onChange} defaultValue={field.value}>
+                    <FormControl>
+                      <SelectTrigger className="bg-background/50">
+                        <SelectValue placeholder="Select monthly spending" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {monthlySpendingOptions.map((option) => (
                         <SelectItem key={option.value} value={option.value}>
                           {option.label}
                         </SelectItem>

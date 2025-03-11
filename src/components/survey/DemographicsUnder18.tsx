@@ -24,6 +24,7 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
+import { Checkbox } from '@/components/ui/checkbox';
 
 const gradeOptions = [
   { value: '6th', label: '6th Grade' },
@@ -34,6 +35,56 @@ const gradeOptions = [
   { value: '11th', label: '11th Grade' },
   { value: '12th', label: '12th Grade' },
   { value: 'other', label: 'Other' },
+];
+
+const schoolTypeOptions = [
+  { value: 'government', label: 'Government School' },
+  { value: 'private', label: 'Private School' },
+  { value: 'international', label: 'International School' },
+  { value: 'home_schooled', label: 'Home Schooled' },
+  { value: 'other', label: 'Other' },
+];
+
+const extracurricularOptions = [
+  { value: 'yes_regularly', label: 'Yes, regularly' },
+  { value: 'yes_occasionally', label: 'Yes, occasionally' },
+  { value: 'no', label: 'No, I don\'t participate' },
+];
+
+const pocketMoneyOptions = [
+  { value: 'none', label: 'I don\'t receive pocket money' },
+  { value: 'under_500', label: 'Under ₹500 per month' },
+  { value: '500_1000', label: '₹500 - ₹1,000 per month' },
+  { value: '1000_2000', label: '₹1,000 - ₹2,000 per month' },
+  { value: 'over_2000', label: 'Over ₹2,000 per month' },
+];
+
+const travelOptions = [
+  { value: 'school_bus', label: 'School Bus' },
+  { value: 'public_transport', label: 'Public Transport' },
+  { value: 'parents_drop', label: 'Parents Drop Me Off' },
+  { value: 'walk', label: 'Walk' },
+  { value: 'bicycle', label: 'Bicycle' },
+  { value: 'other', label: 'Other' },
+];
+
+const subjectOptions = [
+  { id: 'maths', label: 'Mathematics' },
+  { id: 'science', label: 'Science' },
+  { id: 'computer_science', label: 'Computer Science' },
+  { id: 'languages', label: 'Languages' },
+  { id: 'social_studies', label: 'Social Studies' },
+  { id: 'arts', label: 'Arts' },
+  { id: 'physical_education', label: 'Physical Education' },
+  { id: 'other', label: 'Other' },
+];
+
+const studyHoursOptions = [
+  { value: 'less_than_1', label: 'Less than 1 hour' },
+  { value: '1_2_hours', label: '1-2 hours' },
+  { value: '2_3_hours', label: '2-3 hours' },
+  { value: '3_4_hours', label: '3-4 hours' },
+  { value: 'more_than_4', label: 'More than 4 hours' },
 ];
 
 const parentControlOptions = [
@@ -47,6 +98,12 @@ export default function DemographicsUnder18() {
 
   const savedData = (responses.demographics_under18 || {}) as {
     grade?: string;
+    school_type?: string;
+    extracurricular?: string;
+    pocket_money?: string;
+    travel_to_school?: string;
+    favorite_subjects?: string[];
+    study_hours?: string;
     parent_control?: string;
   };
 
@@ -54,6 +111,12 @@ export default function DemographicsUnder18() {
     resolver: zodResolver(demographicsUnder18Schema),
     defaultValues: {
       grade: savedData.grade || '',
+      school_type: savedData.school_type || '',
+      extracurricular: savedData.extracurricular || '',
+      pocket_money: savedData.pocket_money || '',
+      travel_to_school: savedData.travel_to_school || '',
+      favorite_subjects: savedData.favorite_subjects || [],
+      study_hours: savedData.study_hours || '',
       parent_control: savedData.parent_control || '',
     },
   });
@@ -80,7 +143,7 @@ export default function DemographicsUnder18() {
             Tell Us About School
           </h2>
           <p className="text-muted-foreground mt-2">
-            A few more questions about your school life
+            A few questions about your school life and gaming balance
           </p>
         </motion.div>
 
@@ -100,6 +163,179 @@ export default function DemographicsUnder18() {
                     </FormControl>
                     <SelectContent>
                       {gradeOptions.map((option) => (
+                        <SelectItem key={option.value} value={option.value}>
+                          {option.label}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="school_type"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>What type of school do you attend?</FormLabel>
+                  <Select onValueChange={field.onChange} defaultValue={field.value}>
+                    <FormControl>
+                      <SelectTrigger className="bg-background/50">
+                        <SelectValue placeholder="Select your school type" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {schoolTypeOptions.map((option) => (
+                        <SelectItem key={option.value} value={option.value}>
+                          {option.label}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="extracurricular"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Do you participate in extracurricular activities?</FormLabel>
+                  <Select onValueChange={field.onChange} defaultValue={field.value}>
+                    <FormControl>
+                      <SelectTrigger className="bg-background/50">
+                        <SelectValue placeholder="Select an option" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {extracurricularOptions.map((option) => (
+                        <SelectItem key={option.value} value={option.value}>
+                          {option.label}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="pocket_money"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>How much pocket money do you receive monthly?</FormLabel>
+                  <Select onValueChange={field.onChange} defaultValue={field.value}>
+                    <FormControl>
+                      <SelectTrigger className="bg-background/50">
+                        <SelectValue placeholder="Select an amount" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {pocketMoneyOptions.map((option) => (
+                        <SelectItem key={option.value} value={option.value}>
+                          {option.label}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="travel_to_school"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>How do you usually travel to school?</FormLabel>
+                  <Select onValueChange={field.onChange} defaultValue={field.value}>
+                    <FormControl>
+                      <SelectTrigger className="bg-background/50">
+                        <SelectValue placeholder="Select how you travel" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {travelOptions.map((option) => (
+                        <SelectItem key={option.value} value={option.value}>
+                          {option.label}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="favorite_subjects"
+              render={() => (
+                <FormItem>
+                  <div className="mb-4">
+                    <FormLabel className="text-base">Which subjects do you enjoy the most?</FormLabel>
+                  </div>
+                  <div className="grid grid-cols-2 gap-4">
+                    {subjectOptions.map((item) => (
+                      <FormField
+                        key={item.id}
+                        control={form.control}
+                        name="favorite_subjects"
+                        render={({ field }) => {
+                          return (
+                            <FormItem
+                              key={item.id}
+                              className="flex flex-row items-start space-x-3 space-y-0"
+                            >
+                              <FormControl>
+                                <Checkbox
+                                  checked={field.value?.includes(item.id)}
+                                  onCheckedChange={(checked) => {
+                                    return checked
+                                      ? field.onChange([...field.value, item.id])
+                                      : field.onChange(
+                                          field.value?.filter(
+                                            (value) => value !== item.id
+                                          )
+                                        );
+                                  }}
+                                />
+                              </FormControl>
+                              <FormLabel className="font-normal">
+                                {item.label}
+                              </FormLabel>
+                            </FormItem>
+                          );
+                        }}
+                      />
+                    ))}
+                  </div>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="study_hours"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>How many hours do you spend studying daily (outside school hours)?</FormLabel>
+                  <Select onValueChange={field.onChange} defaultValue={field.value}>
+                    <FormControl>
+                      <SelectTrigger className="bg-background/50">
+                        <SelectValue placeholder="Select study hours" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {studyHoursOptions.map((option) => (
                         <SelectItem key={option.value} value={option.value}>
                           {option.label}
                         </SelectItem>

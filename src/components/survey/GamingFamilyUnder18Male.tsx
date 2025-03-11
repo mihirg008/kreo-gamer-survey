@@ -6,7 +6,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import * as z from 'zod';
 import { useSurvey } from '@/context/SurveyContext';
-import { gamingFamilySchema } from '@/lib/survey-validation';
+import { gamingFamilyUnder18MaleSchema } from '@/lib/survey-validation';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
@@ -49,6 +49,50 @@ const reasonOptions = [
   { value: 'stress_relief', label: 'Stress relief' },
 ];
 
+const rulesOptions = [
+  { value: 'strict', label: 'Yes, very strict rules' },
+  { value: 'moderate', label: 'Yes, but reasonable rules' },
+  { value: 'flexible', label: 'Some loose guidelines' },
+  { value: 'none', label: 'No rules at all' },
+];
+
+const parentsPlayOptions = [
+  { value: 'regularly', label: 'Yes, regularly' },
+  { value: 'occasionally', label: 'Yes, occasionally' },
+  { value: 'rarely', label: 'Very rarely' },
+  { value: 'never', label: 'Never' },
+];
+
+const siblingGamingOptions = [
+  { value: 'daily', label: 'Daily' },
+  { value: 'weekly', label: 'Weekly' },
+  { value: 'monthly', label: 'Monthly' },
+  { value: 'rarely', label: 'Rarely' },
+  { value: 'never', label: 'Never' },
+  { value: 'no_siblings', label: 'No siblings or cousins' },
+];
+
+const homeworkOptions = [
+  { value: 'often', label: 'Yes, often' },
+  { value: 'sometimes', label: 'Sometimes' },
+  { value: 'rarely', label: 'Rarely' },
+  { value: 'never', label: 'Never' },
+];
+
+const friendsRulesOptions = [
+  { value: 'stricter', label: 'My friends have stricter rules' },
+  { value: 'similar', label: 'Similar rules to mine' },
+  { value: 'more_lenient', label: 'My friends have more lenient rules' },
+  { value: 'unsure', label: 'I don\'t know' },
+];
+
+const argumentsOptions = [
+  { value: 'often', label: 'Yes, often' },
+  { value: 'sometimes', label: 'Sometimes' },
+  { value: 'rarely', label: 'Rarely' },
+  { value: 'never', label: 'Never' },
+];
+
 export default function GamingFamilyUnder18Male() {
   const { updateResponses, goToNextSection, goToPreviousSection, responses } = useSurvey();
 
@@ -59,14 +103,16 @@ export default function GamingFamilyUnder18Male() {
     character_preference?: string;
     gender_bias?: string;
     primary_reason?: string;
+    parent_gaming_rules?: string;
+    parents_play_games?: string;
+    gaming_with_siblings?: string;
+    homework_compromise?: string;
+    friends_parents_rules?: string;
+    gaming_arguments?: string;
   };
 
-  const form = useForm<z.infer<typeof gamingFamilySchema> & { primary_reason: string, character_preference: string, gender_bias: string }>({
-    resolver: zodResolver(gamingFamilySchema.extend({
-      primary_reason: z.string({ required_error: 'Please select your primary reason' }),
-      character_preference: z.string({ required_error: 'Please select your preference' }),
-      gender_bias: z.string({ required_error: 'Please select an option' }),
-    })),
+  const form = useForm<z.infer<typeof gamingFamilyUnder18MaleSchema>>({
+    resolver: zodResolver(gamingFamilyUnder18MaleSchema),
     defaultValues: {
       family_perception: savedData.family_perception || '',
       family_gamers: savedData.family_gamers || false,
@@ -74,10 +120,16 @@ export default function GamingFamilyUnder18Male() {
       character_preference: savedData.character_preference || '',
       gender_bias: savedData.gender_bias || '',
       primary_reason: savedData.primary_reason || '',
+      parent_gaming_rules: savedData.parent_gaming_rules || '',
+      parents_play_games: savedData.parents_play_games || '',
+      gaming_with_siblings: savedData.gaming_with_siblings || '',
+      homework_compromise: savedData.homework_compromise || '',
+      friends_parents_rules: savedData.friends_parents_rules || '',
+      gaming_arguments: savedData.gaming_arguments || '',
     },
   });
 
-  function onSubmit(values: z.infer<typeof gamingFamilySchema> & { primary_reason: string, character_preference: string, gender_bias: string }) {
+  function onSubmit(values: z.infer<typeof gamingFamilyUnder18MaleSchema>) {
     updateResponses('gaming_family', values);
     goToNextSection();
   }
@@ -119,6 +171,156 @@ export default function GamingFamilyUnder18Male() {
                     </FormControl>
                     <SelectContent>
                       {perceptionOptions.map((option) => (
+                        <SelectItem key={option.value} value={option.value}>
+                          {option.label}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="parent_gaming_rules"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Do you have gaming rules set by your parents?</FormLabel>
+                  <Select onValueChange={field.onChange} defaultValue={field.value}>
+                    <FormControl>
+                      <SelectTrigger className="bg-background/50">
+                        <SelectValue placeholder="Select your answer" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {rulesOptions.map((option) => (
+                        <SelectItem key={option.value} value={option.value}>
+                          {option.label}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="parents_play_games"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Do your parents ever play games with you?</FormLabel>
+                  <Select onValueChange={field.onChange} defaultValue={field.value}>
+                    <FormControl>
+                      <SelectTrigger className="bg-background/50">
+                        <SelectValue placeholder="Select your answer" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {parentsPlayOptions.map((option) => (
+                        <SelectItem key={option.value} value={option.value}>
+                          {option.label}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="gaming_with_siblings"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>How often do you game with siblings or cousins?</FormLabel>
+                  <Select onValueChange={field.onChange} defaultValue={field.value}>
+                    <FormControl>
+                      <SelectTrigger className="bg-background/50">
+                        <SelectValue placeholder="Select frequency" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {siblingGamingOptions.map((option) => (
+                        <SelectItem key={option.value} value={option.value}>
+                          {option.label}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="homework_compromise"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Do you ever compromise on homework to play games?</FormLabel>
+                  <Select onValueChange={field.onChange} defaultValue={field.value}>
+                    <FormControl>
+                      <SelectTrigger className="bg-background/50">
+                        <SelectValue placeholder="Select your answer" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {homeworkOptions.map((option) => (
+                        <SelectItem key={option.value} value={option.value}>
+                          {option.label}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="friends_parents_rules"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Do your friends' parents have different gaming rules?</FormLabel>
+                  <Select onValueChange={field.onChange} defaultValue={field.value}>
+                    <FormControl>
+                      <SelectTrigger className="bg-background/50">
+                        <SelectValue placeholder="Select your answer" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {friendsRulesOptions.map((option) => (
+                        <SelectItem key={option.value} value={option.value}>
+                          {option.label}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="gaming_arguments"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Has gaming ever caused arguments at home?</FormLabel>
+                  <Select onValueChange={field.onChange} defaultValue={field.value}>
+                    <FormControl>
+                      <SelectTrigger className="bg-background/50">
+                        <SelectValue placeholder="Select your answer" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {argumentsOptions.map((option) => (
                         <SelectItem key={option.value} value={option.value}>
                           {option.label}
                         </SelectItem>

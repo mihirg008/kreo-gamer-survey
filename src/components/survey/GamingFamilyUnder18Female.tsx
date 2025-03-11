@@ -6,7 +6,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import * as z from 'zod';
 import { useSurvey } from '@/context/SurveyContext';
-import { gamingFamilySchema } from '@/lib/survey-validation';
+import { gamingFamilyUnder18FemaleSchema } from '@/lib/survey-validation';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
@@ -49,6 +49,36 @@ const reasonOptions = [
   { value: 'stress_relief', label: 'Stress relief' },
 ];
 
+const supportiveOptions = [
+  { value: 'very_supportive', label: 'Very supportive' },
+  { value: 'somewhat_supportive', label: 'Somewhat supportive' },
+  { value: 'neutral', label: 'Neutral' },
+  { value: 'somewhat_discouraging', label: 'Somewhat discouraging' },
+  { value: 'very_discouraging', label: 'Very discouraging' },
+];
+
+const yesNoNotApplicableOptions = [
+  { value: 'yes', label: 'Yes' },
+  { value: 'no', label: 'No' },
+  { value: 'na', label: 'Not applicable' },
+];
+
+const frequencyOptions = [
+  { value: 'always', label: 'Always' },
+  { value: 'often', label: 'Often' },
+  { value: 'sometimes', label: 'Sometimes' },
+  { value: 'rarely', label: 'Rarely' },
+  { value: 'never', label: 'Never' },
+];
+
+const encouragementOptions = [
+  { value: 'strongly_encourage', label: 'Strongly encourage' },
+  { value: 'somewhat_encourage', label: 'Somewhat encourage' },
+  { value: 'neutral', label: 'Neither encourage nor discourage' },
+  { value: 'somewhat_discourage', label: 'Somewhat discourage' },
+  { value: 'strongly_discourage', label: 'Strongly discourage' },
+];
+
 export default function GamingFamilyUnder18Female() {
   const { updateResponses, goToNextSection, goToPreviousSection, responses } = useSurvey();
 
@@ -59,14 +89,17 @@ export default function GamingFamilyUnder18Female() {
     character_preference?: string;
     gender_bias?: string;
     primary_reason?: string;
+    parents_supportive?: string;
+    different_rules?: string;
+    play_with_family?: string;
+    hidden_gaming?: string;
+    female_friends_play?: string;
+    gender_comments?: string;
+    family_encouragement?: string;
   };
 
-  const form = useForm<z.infer<typeof gamingFamilySchema> & { primary_reason: string, character_preference: string, gender_bias: string }>({
-    resolver: zodResolver(gamingFamilySchema.extend({
-      primary_reason: z.string({ required_error: 'Please select your primary reason' }),
-      character_preference: z.string({ required_error: 'Please select your preference' }),
-      gender_bias: z.string({ required_error: 'Please select an option' }),
-    })),
+  const form = useForm<z.infer<typeof gamingFamilyUnder18FemaleSchema>>({
+    resolver: zodResolver(gamingFamilyUnder18FemaleSchema),
     defaultValues: {
       family_perception: savedData.family_perception || '',
       family_gamers: savedData.family_gamers || false,
@@ -74,10 +107,17 @@ export default function GamingFamilyUnder18Female() {
       character_preference: savedData.character_preference || '',
       gender_bias: savedData.gender_bias || '',
       primary_reason: savedData.primary_reason || '',
+      parents_supportive: savedData.parents_supportive || '',
+      different_rules: savedData.different_rules || '',
+      play_with_family: savedData.play_with_family || '',
+      hidden_gaming: savedData.hidden_gaming || '',
+      female_friends_play: savedData.female_friends_play || '',
+      gender_comments: savedData.gender_comments || '',
+      family_encouragement: savedData.family_encouragement || '',
     },
   });
 
-  function onSubmit(values: z.infer<typeof gamingFamilySchema> & { primary_reason: string, character_preference: string, gender_bias: string }) {
+  function onSubmit(values: z.infer<typeof gamingFamilyUnder18FemaleSchema>) {
     updateResponses('gaming_family', values);
     goToNextSection();
   }
@@ -119,6 +159,181 @@ export default function GamingFamilyUnder18Female() {
                     </FormControl>
                     <SelectContent>
                       {perceptionOptions.map((option) => (
+                        <SelectItem key={option.value} value={option.value}>
+                          {option.label}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="parents_supportive"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>How supportive are your parents of girls playing video games?</FormLabel>
+                  <Select onValueChange={field.onChange} defaultValue={field.value}>
+                    <FormControl>
+                      <SelectTrigger className="bg-background/50">
+                        <SelectValue placeholder="Select level of support" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {supportiveOptions.map((option) => (
+                        <SelectItem key={option.value} value={option.value}>
+                          {option.label}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="different_rules"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Do you feel your parents have different gaming rules for you compared to male siblings?</FormLabel>
+                  <Select onValueChange={field.onChange} defaultValue={field.value}>
+                    <FormControl>
+                      <SelectTrigger className="bg-background/50">
+                        <SelectValue placeholder="Select your answer" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {yesNoNotApplicableOptions.map((option) => (
+                        <SelectItem key={option.value} value={option.value}>
+                          {option.label}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="play_with_family"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Do you play games with family members?</FormLabel>
+                  <Select onValueChange={field.onChange} defaultValue={field.value}>
+                    <FormControl>
+                      <SelectTrigger className="bg-background/50">
+                        <SelectValue placeholder="Select your answer" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {frequencyOptions.map((option) => (
+                        <SelectItem key={option.value} value={option.value}>
+                          {option.label}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="hidden_gaming"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Have you ever hidden your gaming from family members?</FormLabel>
+                  <Select onValueChange={field.onChange} defaultValue={field.value}>
+                    <FormControl>
+                      <SelectTrigger className="bg-background/50">
+                        <SelectValue placeholder="Select your answer" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {frequencyOptions.map((option) => (
+                        <SelectItem key={option.value} value={option.value}>
+                          {option.label}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="female_friends_play"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Do your female friends also play games?</FormLabel>
+                  <Select onValueChange={field.onChange} defaultValue={field.value}>
+                    <FormControl>
+                      <SelectTrigger className="bg-background/50">
+                        <SelectValue placeholder="Select your answer" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {frequencyOptions.map((option) => (
+                        <SelectItem key={option.value} value={option.value}>
+                          {option.label}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="gender_comments"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Have you ever experienced gender-based comments while gaming?</FormLabel>
+                  <Select onValueChange={field.onChange} defaultValue={field.value}>
+                    <FormControl>
+                      <SelectTrigger className="bg-background/50">
+                        <SelectValue placeholder="Select your answer" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {frequencyOptions.map((option) => (
+                        <SelectItem key={option.value} value={option.value}>
+                          {option.label}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="family_encouragement"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Does your family encourage or discourage your gaming interest?</FormLabel>
+                  <Select onValueChange={field.onChange} defaultValue={field.value}>
+                    <FormControl>
+                      <SelectTrigger className="bg-background/50">
+                        <SelectValue placeholder="Select your answer" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {encouragementOptions.map((option) => (
                         <SelectItem key={option.value} value={option.value}>
                           {option.label}
                         </SelectItem>
