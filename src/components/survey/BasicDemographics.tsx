@@ -195,14 +195,14 @@ export default function BasicDemographics() {
                 onClick={goToPreviousSection}
                 className="w-32"
               >
-                Previous
+                Previous Level?
               </Button>
               <Button 
                 type="submit"
                 onClick={form.handleSubmit(onSubmit)}
                 className="w-32 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700"
               >
-                Proceed to Next Level!
+                Level Up!
               </Button>
             </div>
           </form>
