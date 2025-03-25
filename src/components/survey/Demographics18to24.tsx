@@ -106,6 +106,14 @@ const occupationOptions = [
   { value: 'other', label: 'Other' },
 ];
 
+const igfriends = [
+  { value: 'solo', label: 'I ride solo. No random folks' },
+  { value: 'in_game_only', label: 'No. In-Game only!' },
+  { value: 'online', label: 'Online - Off Game' },
+  { value: 'acqintance', label: 'I know who they are..' },
+  { value: 'met_them', label: 'Of Course - have met them offline' },
+];
+
 export default function Demographics18to24() {
   const { updateResponses, goToNextSection, goToPreviousSection, responses } = useSurvey();
 
@@ -155,16 +163,16 @@ export default function Demographics18to24() {
           transition={{ delay: 0.2 }}
         >
           <h2 className="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-pink-600">
-            College & Occupation
+            Level 1
           </h2>
           <p className="text-muted-foreground mt-2">
-            Tell us what you do when you&apos;re not gaming
+            Ice-Breaker
           </p>
         </motion.div>
 
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-            <FormField
+{/*             <FormField
               control={form.control}
               name="education_level"
               render={({ field }) => (
@@ -188,8 +196,8 @@ export default function Demographics18to24() {
                 </FormItem>
               )}
             />
-
-            <FormField
+ */}
+{/*             <FormField
               control={form.control}
               name="field_of_study"
               render={({ field }) => (
@@ -213,58 +221,58 @@ export default function Demographics18to24() {
                 </FormItem>
               )}
             />
+ */}
+            // <FormField
+            //   control={form.control}
+            //   name="current_status"
+            //   render={({ field }) => (
+            //     <FormItem>
+            //       <FormLabel>What is your current status?</FormLabel>
+            //       <Select onValueChange={field.onChange} defaultValue={field.value}>
+            //         <FormControl>
+            //           <SelectTrigger className="bg-background/50">
+            //             <SelectValue placeholder="Select your current status" />
+            //           </SelectTrigger>
+            //         </FormControl>
+            //         <SelectContent>
+            //           {currentStatusOptions.map((option) => (
+            //             <SelectItem key={option.value} value={option.value}>
+            //               {option.label}
+            //             </SelectItem>
+            //           ))}
+            //         </SelectContent>
+            //       </Select>
+            //       <FormMessage />
+            //     </FormItem>
+            //   )}
+            // />
 
-            <FormField
-              control={form.control}
-              name="current_status"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>What is your current status?</FormLabel>
-                  <Select onValueChange={field.onChange} defaultValue={field.value}>
-                    <FormControl>
-                      <SelectTrigger className="bg-background/50">
-                        <SelectValue placeholder="Select your current status" />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      {currentStatusOptions.map((option) => (
-                        <SelectItem key={option.value} value={option.value}>
-                          {option.label}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+            // <FormField
+            //   control={form.control}
+            //   name="living_situation"
+            //   render={({ field }) => (
+            //     <FormItem>
+            //       <FormLabel>What is your living situation?</FormLabel>
+            //       <Select onValueChange={field.onChange} defaultValue={field.value}>
+            //         <FormControl>
+            //           <SelectTrigger className="bg-background/50">
+            //             <SelectValue placeholder="Select your living situation" />
+            //           </SelectTrigger>
+            //         </FormControl>
+            //         <SelectContent>
+            //           {livingSituationOptions.map((option) => (
+            //             <SelectItem key={option.value} value={option.value}>
+            //               {option.label}
+            //             </SelectItem>
+            //           ))}
+            //         </SelectContent>
+            //       </Select>
+            //       <FormMessage />
+            //     </FormItem>
+            //   )}
+            // />
 
-            <FormField
-              control={form.control}
-              name="living_situation"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>What is your living situation?</FormLabel>
-                  <Select onValueChange={field.onChange} defaultValue={field.value}>
-                    <FormControl>
-                      <SelectTrigger className="bg-background/50">
-                        <SelectValue placeholder="Select your living situation" />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      {livingSituationOptions.map((option) => (
-                        <SelectItem key={option.value} value={option.value}>
-                          {option.label}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <FormField
+{/*             <FormField
               control={form.control}
               name="monthly_income"
               render={({ field }) => (
@@ -288,8 +296,8 @@ export default function Demographics18to24() {
                 </FormItem>
               )}
             />
-
-            <FormField
+ */}
+{/*             <FormField
               control={form.control}
               name="income_source"
               render={({ field }) => (
@@ -313,8 +321,8 @@ export default function Demographics18to24() {
                 </FormItem>
               )}
             />
-
-            <FormField
+ */}
+{/*             <FormField
               control={form.control}
               name="relationship_status"
               render={({ field }) => (
@@ -338,31 +346,31 @@ export default function Demographics18to24() {
                 </FormItem>
               )}
             />
-
-            <FormField
-              control={form.control}
-              name="career_aspirations"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>What are your career aspirations?</FormLabel>
-                  <Select onValueChange={field.onChange} defaultValue={field.value}>
-                    <FormControl>
-                      <SelectTrigger className="bg-background/50">
-                        <SelectValue placeholder="Select your career aspiration" />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      {careerAspirationOptions.map((option) => (
-                        <SelectItem key={option.value} value={option.value}>
-                          {option.label}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+ */}
+            // <FormField
+            //   control={form.control}
+            //   name="career_aspirations"
+            //   render={({ field }) => (
+            //     <FormItem>
+            //       <FormLabel>What are your career aspirations?</FormLabel>
+            //       <Select onValueChange={field.onChange} defaultValue={field.value}>
+            //         <FormControl>
+            //           <SelectTrigger className="bg-background/50">
+            //             <SelectValue placeholder="Select your career aspiration" />
+            //           </SelectTrigger>
+            //         </FormControl>
+            //         <SelectContent>
+            //           {careerAspirationOptions.map((option) => (
+            //             <SelectItem key={option.value} value={option.value}>
+            //               {option.label}
+            //             </SelectItem>
+            //           ))}
+            //         </SelectContent>
+            //       </Select>
+            //       <FormMessage />
+            //     </FormItem>
+            //   )}
+            // />
 
             <FormField
               control={form.control}
@@ -389,6 +397,32 @@ export default function Demographics18to24() {
               )}
             />
 
+            <FormField
+              control={form.control}
+              name="occupation"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Have you met your in-game friends? (Occupation)</FormLabel>
+                  <Select onValueChange={field.onChange} defaultValue={field.value}>
+                    <FormControl>
+                      <SelectTrigger className="bg-background/50">
+                        <SelectValue placeholder="Vibe check" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {igfriends.map((option) => (
+                        <SelectItem key={option.value} value={option.value}>
+                          {option.label}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            
+
             <div className="flex justify-end space-x-4 pt-4">
               <Button 
                 variant="outline" 
@@ -396,13 +430,13 @@ export default function Demographics18to24() {
                 onClick={goToPreviousSection}
                 className="w-32"
               >
-                Previous
+                Previous Level
               </Button>
               <Button 
                 type="submit"
                 className="w-32 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700"
               >
-                Next
+                Level Up!
               </Button>
             </div>
           </form>
