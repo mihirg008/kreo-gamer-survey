@@ -399,7 +399,7 @@ export default function Demographics18to24() {
 
             <FormField
               control={form.control}
-              name="occupation"
+              name="igfr"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Have you met your in-game friends? (Occupation)</FormLabel>
