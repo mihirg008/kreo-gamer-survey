@@ -71,8 +71,6 @@ const maritalStatusOptions = [
   { value: 'relationship', label: 'In a Relationship' },
   { value: 'married', label: 'Married' },
   { value: 'married_with_kids', label: 'Married with Kids' },
-  { value: 'divorced', label: 'Divorced/Separated' },
-  { value: 'widowed', label: 'Widowed' },
   { value: 'complicated', label: 'It\'s complicated' },
 ];
 
@@ -114,6 +112,15 @@ const occupationOptions = [
   { value: 'retired', label: 'Retired' },
   { value: 'other', label: 'Other' },
 ];
+
+const igfriends = [
+  { value: 'solo', label: 'I ride solo. No random folks' },
+  { value: 'in_game_only', label: 'No. In-Game only!' },
+  { value: 'online', label: 'Online - Off Game' },
+  { value: 'acqintance', label: 'I know who they are..' },
+  { value: 'met_them', label: 'Of Course - have met them offline' },
+];
+
 
 export default function Demographics25Plus() {
   const { updateResponses, goToNextSection, goToPreviousSection, responses } = useSurvey();
@@ -164,16 +171,16 @@ export default function Demographics25Plus() {
           transition={{ delay: 0.2 }}
         >
           <h2 className="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-pink-600">
-            Work & Relationships
+            Level 1
           </h2>
           <p className="text-muted-foreground mt-2">
-            Tell us about your life outside of gaming
+           Ice-Breaker
           </p>
         </motion.div>
 
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-            <FormField
+{/*             <FormField
               control={form.control}
               name="education_level"
               render={({ field }) => (
@@ -196,9 +203,9 @@ export default function Demographics25Plus() {
                   <FormMessage />
                 </FormItem>
               )}
-            />
+            /> */}
 
-            <FormField
+{/*             <FormField
               control={form.control}
               name="employment_status"
               render={({ field }) => (
@@ -221,9 +228,9 @@ export default function Demographics25Plus() {
                   <FormMessage />
                 </FormItem>
               )}
-            />
+            /> */}
 
-            <FormField
+{/*             <FormField
               control={form.control}
               name="industry_sector"
               render={({ field }) => (
@@ -246,9 +253,9 @@ export default function Demographics25Plus() {
                   <FormMessage />
                 </FormItem>
               )}
-            />
+            /> */}
 
-            <FormField
+{/*             <FormField
               control={form.control}
               name="annual_income"
               render={({ field }) => (
@@ -272,33 +279,10 @@ export default function Demographics25Plus() {
                 </FormItem>
               )}
             />
+ */}
+            
 
-            <FormField
-              control={form.control}
-              name="marital_status"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>What is your Marital Status?</FormLabel>
-                  <Select onValueChange={field.onChange} defaultValue={field.value}>
-                    <FormControl>
-                      <SelectTrigger className="bg-background/50">
-                        <SelectValue placeholder="Select your marital status" />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      {maritalStatusOptions.map((option) => (
-                        <SelectItem key={option.value} value={option.value}>
-                          {option.label}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <FormField
+{/*             <FormField
               control={form.control}
               name="number_of_children"
               render={({ field }) => (
@@ -321,9 +305,9 @@ export default function Demographics25Plus() {
                   <FormMessage />
                 </FormItem>
               )}
-            />
+            /> */}
 
-            <FormField
+{/*             <FormField
               control={form.control}
               name="housing_type"
               render={({ field }) => (
@@ -346,9 +330,9 @@ export default function Demographics25Plus() {
                   <FormMessage />
                 </FormItem>
               )}
-            />
+            /> */}
 
-            <FormField
+{/*             <FormField
               control={form.control}
               name="financial_responsibilities"
               render={() => (
@@ -394,7 +378,7 @@ export default function Demographics25Plus() {
                   <FormMessage />
                 </FormItem>
               )}
-            />
+            /> */}
 
             <FormField
               control={form.control}
@@ -421,6 +405,56 @@ export default function Demographics25Plus() {
               )}
             />
 
+            <FormField
+              control={form.control}
+              name="marital_status"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>What is your Marital Status?</FormLabel>
+                  <Select onValueChange={field.onChange} defaultValue={field.value}>
+                    <FormControl>
+                      <SelectTrigger className="bg-background/50">
+                        <SelectValue placeholder="Select your marital status" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {maritalStatusOptions.map((option) => (
+                        <SelectItem key={option.value} value={option.value}>
+                          {option.label}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="occupation"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Have you met your in-game friends? (Occupation)</FormLabel>
+                  <Select onValueChange={field.onChange} defaultValue={field.value}>
+                    <FormControl>
+                      <SelectTrigger className="bg-background/50">
+                        <SelectValue placeholder="Vibe check" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {igfriends.map((option) => (
+                        <SelectItem key={option.value} value={option.value}>
+                          {option.label}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
             <div className="flex justify-end space-x-4 pt-4">
               <Button 
                 variant="outline" 
@@ -428,13 +462,13 @@ export default function Demographics25Plus() {
                 onClick={goToPreviousSection}
                 className="w-32"
               >
-                Previous
+                Previous Level
               </Button>
               <Button 
                 type="submit"
                 className="w-32 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700"
               >
-                Next
+                Level Up!
               </Button>
             </div>
           </form>
