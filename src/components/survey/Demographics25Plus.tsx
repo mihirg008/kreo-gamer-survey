@@ -432,7 +432,7 @@ export default function Demographics25Plus() {
 
             <FormField
               control={form.control}
-              name="occupation"
+              name="igfr"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Have you met your in-game friends? (Occupation)</FormLabel>
