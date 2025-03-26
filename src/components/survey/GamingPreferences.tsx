@@ -33,6 +33,7 @@ const platforms = [
   { id: 'xbox', label: 'Xbox' },
   { id: 'nintendo', label: 'Nintendo Switch' },
   { id: 'mobile', label: 'Mobile Gaming' },
+  { id: 'other', label: 'Anything else?' },
 ];
 
 const genres = [
@@ -171,7 +172,7 @@ export default function GamingPreferences() {
           transition={{ delay: 0.2 }}
         >
           <h2 className="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-pink-600">
-            Gaming Preferences
+            Level 2
           </h2>
           <p className="text-muted-foreground mt-2">
             Tell us about your gaming setup and preferences
@@ -185,7 +186,7 @@ export default function GamingPreferences() {
               name="platforms"
               render={() => (
                 <FormItem>
-                  <FormLabel>Gaming Platforms</FormLabel>
+                  <FormLabel>Which platform(s) do you play on? (Select all that apply)</FormLabel>
                   <div className="grid grid-cols-2 gap-4 mt-2">
                     {platforms.map((platform) => (
                       <FormField
