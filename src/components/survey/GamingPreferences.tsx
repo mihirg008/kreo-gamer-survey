@@ -56,18 +56,7 @@ const spendingOptions = [
   { value: 'above_5000', label: 'Above ₹5,000' },
 ];
 
-const popularGames = [
-  { id: 'valorant', label: 'Valorant' },
-  { id: 'csgo', label: 'CS:GO' },
-  { id: 'gta5', label: 'GTA V' },
-  { id: 'minecraft', label: 'Minecraft' },
-  { id: 'fortnite', label: 'Fortnite' },
-  { id: 'cod', label: 'Call of Duty' },
-  { id: 'pubg', label: 'PUBG' },
-  { id: 'league', label: 'League of Legends' },
-  { id: 'roblox', label: 'Roblox' },
-  { id: 'apex', label: 'Apex Legends' },
-];
+
 
 const popularGames2 = [
  {id:'bgmi',label:'BGMI'},
@@ -102,8 +91,8 @@ const popularGames2 = [
 {id:'into_the_dead_2',label:'Into the Dead 2'},
 {id:'mini_militia_-_doodle_army_2',label:'Mini Militia - Doodle Army 2'},
 {id:'angry_birds_2',label:'Angry Birds 2'},
-{id:'alto’s_adventure',label:'Alto’s Adventure'},
-{id:'alto’s_odyssey',label:'Alto’s Odyssey'},
+{id:'altos_adventure',label:'Alto\'s Adventure'},
+{id:'altos_odyssey',label:'Alto\'s Odyssey'},
 {id:'badland',label:'Badland'},
 {id:'monument_valley',label:'Monument Valley'},
 {id:'shadowgun_legends',label:'Shadowgun Legends'},
@@ -115,11 +104,11 @@ const popularGames2 = [
 {id:'t3_arena',label:'T3 Arena'},
 {id:'archero',label:'Archero'},
 {id:'sky_children_of_the_light',label:'Sky: Children of the Light'},
-{id:'pascal’s_wager',label:'Pascal’s Wager'},
+{id:'pascals_wager',label:'Pascal\'s Wager'},
 {id:'dead_trigger_2',label:'Dead Trigger 2'},
 {id:'vainglory',label:'Vainglory'},
 {id:'lifeafter',label:'LifeAfter'},
-{id:'don’t_starve_pocket_edition',label:'Don’t Starve: Pocket Edition'},
+{id:'dont_starve_pocket_edition',label:'Don\'t Starve: Pocket Edition'},
 {id:'counter-strike_2_(cs2)',label:'Counter-Strike 2 (CS2)'},
 {id:'dota_2',label:'Dota 2'},
 {id:'league_of_legends',label:'League of Legends'},
@@ -139,7 +128,7 @@ const popularGames2 = [
 {id:'celeste',label:'Celeste'},
 {id:'doom_eternal',label:'Doom Eternal'},
 {id:'monster_hunter_world',label:'Monster Hunter: World'},
-{id:'no_man’s_sky',label:'No Man’s Sky'},
+{id:'no_mans_sky',label:'No Man\'s Sky'},
 {id:'hitman_3',label:'Hitman 3'},
 {id:'metro_exodus',label:'Metro Exodus'},
 {id:'far_cry_6',label:'Far Cry 6'},
@@ -167,18 +156,18 @@ const popularGames2 = [
 {id:'crysis_remastered',label:'Crysis Remastered'},
 {id:'half-life_alyx',label:'Half-Life: Alyx'},
 {id:'god_of_war_ragnarok',label:'God of War Ragnarok'},
-{id:'marvel’s_spider-man_2',label:'Marvel’s Spider-Man 2'},
+{id:'marvels_spider_man_2',label:'Marvel\'s Spider-Man 2'},
 {id:'horizon_forbidden_west',label:'Horizon Forbidden West'},
 {id:'gran_turismo_7',label:'Gran Turismo 7'},
 {id:'the_last_of_us_part_ii',label:'The Last of Us Part II'},
 {id:'ghost_of_tsushima',label:'Ghost of Tsushima'},
 {id:'final_fantasy_vii_remake',label:'Final Fantasy VII Remake'},
 {id:'bloodborne',label:'Bloodborne'},
-{id:'uncharted_4_a_thief’s_end',label:'Uncharted 4: A Thief’s End'},
+{id:'uncharted_4_a_thiefs_end',label:'Uncharted 4: A Thief\'s End'},
 {id:'resident_evil_4_remake',label:'Resident Evil 4 Remake'},
 {id:'ratchet_&_clank_rift_apart',label:'Ratchet & Clank: Rift Apart'},
-{id:'demon’s_souls_remake',label:'Demon’s Souls Remake'},
-{id:'assassin’s_creed_mirage',label:'Assassin’s Creed Mirage'},
+{id:'demons_souls_remake',label:'Demon\'s Souls Remake'},
+{id:'assassins_creed_mirage',label:'Assassin\'s Creed Mirage'},
 {id:'mortal_kombat_1',label:'Mortal Kombat 1'},
 {id:'street_fighter_6',label:'Street Fighter 6'},
 {id:'tekken_7',label:'Tekken 7'},
@@ -214,7 +203,7 @@ const popularGames2 = [
 {id:'microsoft_flight_simulator',label:'Microsoft Flight Simulator'},
 {id:'sea_of_thieves',label:'Sea of Thieves'},
 {id:'fable',label:'Fable'},
-{id:'hellblade_senua’s_saga',label:'Hellblade: Senua’s Saga'},
+{id:'hellblade_senuas_saga',label:'Hellblade: Senua\'s Saga'},
 {id:'grounded',label:'Grounded'},
 {id:'psychonauts_2',label:'Psychonauts 2'},
 {id:'state_of_decay_2',label:'State of Decay 2'},
@@ -229,7 +218,7 @@ const popularGames2 = [
 {id:'the_medium',label:'The Medium'},
 {id:'factorio',label:'Factorio'},
 {id:'subnautica',label:'Subnautica'},
-{id:'baldur’s_gate_3',label:'Baldur’s Gate 3'},
+{id:'baldurs_gate_3',label:'Baldur\'s Gate 3'},
 {id:'the_elder_scrolls_online',label:'The Elder Scrolls Online'},
 {id:'world_of_warcraft',label:'World of Warcraft'},
 {id:'rust',label:'Rust'},
@@ -261,7 +250,7 @@ const popularGames2 = [
 {id:'fire_emblem_engage',label:'Fire Emblem Engage'},
 {id:'xenoblade_chronicles_3',label:'Xenoblade Chronicles 3'},
 {id:'metroid_dread',label:'Metroid Dread'},
-{id:'luigi’s_mansion_3',label:'Luigi’s Mansion 3'},
+{id:'luigis_mansion_3',label:'Luigi\'s Mansion 3'},
 {id:'paper_mario_the_origami_king',label:'Paper Mario: The Origami King'},
 {id:'pikmin_4',label:'Pikmin 4'},
 {id:'triangle_strategy',label:'Triangle Strategy'},
@@ -282,7 +271,7 @@ const popularGames2 = [
 {id:'metro_last_light_redux',label:'Metro Last Light Redux'},
 {id:'south_park_the_stick_of_truth',label:'South Park: The Stick of Truth'},
 {id:'dying_light_2',label:'Dying Light 2'},
-{id:'assassin’s_creed_valhalla',label:'Assassin’s Creed Valhalla'},
+{id:'assassins_creed_valhalla',label:'Assassin\'s Creed Valhalla'},
 {id:'ghostrunner',label:'Ghostrunner'},
 {id:'immortals_fenyx_rising',label:'Immortals Fenyx Rising'},
 {id:'bioshock_infinite',label:'Bioshock Infinite'},
@@ -575,14 +564,14 @@ export default function GamingPreferences() {
               )}
             />
 
-{/*             <FormField
+            <FormField
               control={form.control}
               name="favorite_games"
               render={() => (
                 <FormItem>
-                  <FormLabel>Favorite Games</FormLabel>
+                  <FormLabel>What are your Favorite Games?</FormLabel>
                   <div className="grid grid-cols-2 gap-4 mt-2">
-                    {popularGames.map((game) => (
+                    {popularGames2.map((game) => (
                       <FormField
                         key={game.id}
                         control={form.control}
@@ -610,31 +599,6 @@ export default function GamingPreferences() {
                       />
                     ))}
                   </div>
-                  <FormMessage />
-                </FormItem>
-              )}
-            /> */}
-
-            <FormField
-              control={form.control}
-              name="favorite_games"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>What is your Favourite Game?</FormLabel>
-                  <Select onValueChange={field.onChange} defaultValue={field.value}>
-                    <FormControl>
-                      <SelectTrigger className="bg-background/50">
-                        <SelectValue placeholder="Select your age" />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      {popularGames2.map((option) => (
-                        <SelectItem key={option.value} value={option.value}>
-                          {option.label}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
                   <FormMessage />
                 </FormItem>
               )}

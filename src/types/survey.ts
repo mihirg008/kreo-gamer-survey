@@ -47,6 +47,11 @@ export interface SurveyData {
     preferred_genre: string[];
     spending_monthly: string;
     gaming_setup: string;
+    device_ownership: string[];
+    gaming_peripherals: string[];
+    internet_speed: string;
+    favorite_developers: string[];
+    payment_methods: string[];
   };
   gaming_habits: {
     hours_weekly: string;
