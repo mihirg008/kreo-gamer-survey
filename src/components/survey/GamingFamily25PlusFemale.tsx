@@ -281,7 +281,7 @@ export default function GamingFamily25PlusFemale() {
               name="perspective_change"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>How has your perspective on gaming changed as you've grown older?</FormLabel>
+                  <FormLabel>How has your perspective on gaming changed as you&apos;ve grown older?</FormLabel>
                   <FormControl>
                     <Textarea
                       placeholder="Describe how your gaming interests, habits, or community engagement have evolved..."

@@ -254,7 +254,7 @@ export default function GamingFamily25PlusMale() {
               name="parenting_approach"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>If you have children, what's your approach to managing their gaming?</FormLabel>
+                  <FormLabel>If you have children, what&apos;s your approach to managing their gaming?</FormLabel>
                   <Select onValueChange={field.onChange} defaultValue={field.value}>
                     <FormControl>
                       <SelectTrigger className="bg-background/50">
@@ -279,7 +279,7 @@ export default function GamingFamily25PlusMale() {
               name="pattern_changes"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>How have your gaming patterns changed as you've gotten older?</FormLabel>
+                  <FormLabel>How have your gaming patterns changed as you&apos;ve gotten older?</FormLabel>
                   <Select onValueChange={field.onChange} defaultValue={field.value}>
                     <FormControl>
                       <SelectTrigger className="bg-background/50">

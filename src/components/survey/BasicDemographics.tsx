@@ -87,7 +87,7 @@ export default function BasicDemographics() {
           transition={{ delay: 0.2 }}
         >
           <h2 className="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-pink-600">
-            Hey! Thanks for taking out a few mins.. Let's dive into this
+            Hey! Thanks for taking out a few mins.. Let&apos;s dive into this
           </h2>
           <p className="text-muted-foreground mt-2">
             Meet and Greet
