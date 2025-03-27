@@ -287,7 +287,7 @@ export default function GamingFamilyUnder18Male() {
               name="friends_parents_rules"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Do your friends' parents have different gaming rules?</FormLabel>
+                  <FormLabel>Do your friends&apos; parents have different gaming rules?</FormLabel>
                   <Select onValueChange={field.onChange} defaultValue={field.value}>
                     <FormControl>
                       <SelectTrigger className="bg-background/50">
