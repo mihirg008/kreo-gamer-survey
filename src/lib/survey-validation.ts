@@ -48,7 +48,8 @@ export const demographics25PlusSchema = z.object({
 
 export const gamingPreferencesSchema = z.object({
   platforms: z.array(z.string()).min(1, { message: 'Select at least one platform' }),
-  favorite_games: z.array(z.string()).min(1, { message: 'Select at least one game' }),
+  favorite_games: z.string({ required_error: 'Please select your favorite game' }),
+  favorite_game_other: z.string().optional(),
   preferred_genre: z.array(z.string()).min(1, { message: 'Select at least one genre' }),
   spending_monthly: z.string({ required_error: 'Please select your monthly spending' }),
   gaming_setup: z.string().min(10, { message: 'Please describe your gaming setup' }),

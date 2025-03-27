@@ -56,8 +56,6 @@ const spendingOptions = [
   { value: 'above_5000', label: 'Above ₹5,000' },
 ];
 
-
-
 const popularGames2 = [
  {id:'bgmi',label:'BGMI'},
 {id:'call_of_duty_mobile',label:'Call of Duty: Mobile'},
@@ -385,10 +383,12 @@ const paymentMethodOptions = [
 
 export default function GamingPreferences() {
   const { updateResponses, goToNextSection, goToPreviousSection, responses } = useSurvey();
+  const [filteredGames, setFilteredGames] = React.useState(popularGames2);
   
   const savedData = (responses.gaming_preferences || {}) as {
     platforms?: string[];
     favorite_games?: string[];
+    favorite_game_other?: string;
     preferred_genre?: string[];
     spending_monthly?: string;
     gaming_setup?: string;
@@ -403,7 +403,8 @@ export default function GamingPreferences() {
     resolver: zodResolver(gamingPreferencesSchema),
     defaultValues: {
       platforms: savedData.platforms || [],
-      favorite_games: savedData.favorite_games || [],
+      favorite_games: typeof savedData.favorite_games === 'string' ? savedData.favorite_games : '',
+      favorite_game_other: savedData.favorite_game_other || '',
       preferred_genre: savedData.preferred_genre || [],
       spending_monthly: savedData.spending_monthly || '',
       gaming_setup: savedData.gaming_setup || '',
@@ -567,38 +568,58 @@ export default function GamingPreferences() {
             <FormField
               control={form.control}
               name="favorite_games"
-              render={() => (
+              render={({ field }) => (
                 <FormItem>
-                  <FormLabel>What are your Favorite Games?</FormLabel>
-                  <div className="grid grid-cols-2 gap-4 mt-2">
-                    {popularGames2.map((game) => (
-                      <FormField
-                        key={game.id}
-                        control={form.control}
-                        name="favorite_games"
-                        render={({ field }) => (
-                          <FormItem className="flex items-center space-x-3">
-                            <FormControl>
-                              <Checkbox
-                                checked={field.value?.includes(game.id)}
-                                onCheckedChange={(checked) => {
-                                  const value = field.value || [];
-                                  if (checked) {
-                                    field.onChange([...value, game.id]);
-                                  } else {
-                                    field.onChange(value.filter((val) => val !== game.id));
-                                  }
-                                }}
-                              />
-                            </FormControl>
-                            <FormLabel className="font-normal">
-                              {game.label}
-                            </FormLabel>
-                          </FormItem>
-                        )}
-                      />
-                    ))}
-                  </div>
+                  <FormLabel>What is your Favorite Game?</FormLabel>
+                  <Select onValueChange={field.onChange} defaultValue={field.value}>
+                    <FormControl>
+                      <SelectTrigger className="bg-background/50">
+                        <SelectValue placeholder="Search or select your favorite game" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      <div className="flex items-center px-2 pb-2">
+                        <input
+                          type="text"
+                          placeholder="Search games..."
+                          className="w-full px-2 py-1 text-sm border rounded-md"
+                          onChange={(e) => {
+                            const searchTerm = e.target.value.toLowerCase();
+                            const filtered = popularGames2.filter(game => 
+                              game.label.toLowerCase().includes(searchTerm)
+                            );
+                            setFilteredGames(filtered);
+                          }}
+                        />
+                      </div>
+                      <div className="max-h-[300px] overflow-y-auto">
+                        {filteredGames.map((game) => (
+                          <SelectItem key={game.id} value={game.id}>
+                            {game.label}
+                          </SelectItem>
+                        ))}
+                      </div>
+                      <SelectItem value="other">Other (Please specify)</SelectItem>
+                    </SelectContent>
+                  </Select>
+                  {field.value === 'other' && (
+                    <FormField
+                      control={form.control}
+                      name="favorite_game_other"
+                      render={({ field: otherField }) => (
+                        <FormItem className="mt-2">
+                          <FormControl>
+                            <input
+                              type="text"
+                              placeholder="Enter your favorite game"
+                              className="w-full px-3 py-2 text-sm border rounded-md bg-background/50"
+                              {...otherField}
+                            />
+                          </FormControl>
+                        </FormItem>
+                      )}
+                    />
+                  )}
                   <FormMessage />
                 </FormItem>
               )}
@@ -733,6 +754,7 @@ export default function GamingPreferences() {
                 </FormItem>
               )}
             />
+            
 
             <FormField
               control={form.control}
