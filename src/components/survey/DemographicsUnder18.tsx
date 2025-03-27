@@ -87,6 +87,14 @@ const studyHoursOptions = [
   { value: 'more_than_4', label: 'More than 4 hours' },
 ];
 
+const igfriends = [
+  { value: 'solo', label: 'I ride solo. No random folks' },
+  { value: 'in_game_only', label: 'No. In-Game only!' },
+  { value: 'online', label: 'Online - Off Game' },
+  { value: 'acqintance', label: 'I know who they are..' },
+  { value: 'met_them', label: 'Of Course - have met them offline' },
+];
+
 const parentControlOptions = [
   { value: 'strict', label: 'Yes, strictly' },
   { value: 'flexible', label: 'Yes, but flexible' },
@@ -369,6 +377,31 @@ export default function DemographicsUnder18() {
                       ))}
                     </RadioGroup>
                   </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+             <FormField
+              control={form.control}
+              name="igfr"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Have you met your in-game friends? (Occupation)</FormLabel>
+                  <Select onValueChange={field.onChange} defaultValue={field.value}>
+                    <FormControl>
+                      <SelectTrigger className="bg-background/50">
+                        <SelectValue placeholder="Vibe check" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {igfriends.map((option) => (
+                        <SelectItem key={option.value} value={option.value}>
+                          {option.label}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
                   <FormMessage />
                 </FormItem>
               )}
