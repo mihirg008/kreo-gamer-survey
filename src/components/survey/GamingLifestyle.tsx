@@ -27,12 +27,46 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 
+const activityOptions = [
+  {id:'anime',label:'Anime'},
+{id:'esports',label:'Esports'},
+{id:'streaming',label:'Streaming'},
+{id:'fitness',label:'Fitness'},
+{id:'technology',label:'Technology'},
+{id:'music',label:'Music'},
+{id:'cosplay',label:'Cosplay'},
+{id:'collectibles',label:'Collectibles'},
+{id:'board_games',label:'Board Games'},
+{id:'fantasy_sports',label:'Fantasy Sports'},
+{id:'coding',label:'Coding'},
+{id:'movies',label:'Movies'},
+{id:'tv_shows',label:'TV Shows'},
+{id:'fashion',label:'Fashion'},
+{id:'travel',label:'Travel'},
+{id:'photography',label:'Photography'},
+];
+
+
+const custopmPerOptions = [
+  { id: 'ninja', label: 'Yes, already use' },
+  { id: 'shroud', label: 'Would like to try' },
+  { id: 'pokimane', label: '' },
+  { id: 'pewdiepie', label: 'PewDiePie' },
+  { id: 'drlupo', label: 'DrLupo' },
+  { id: 'tfue', label: 'Tfue' },
+  { id: 'indian_streamers', label: 'Indian Streamers' },
+  { id: 'none', label: 'Don\'t follow influencers' },
+];
+
+
 const spendingOptions = [
   { value: 'none', label: 'No spending' },
   { value: 'under_500', label: 'Under ₹500' },
   { value: '500_2000', label: '₹500 - ₹2,000' },
   { value: 'above_2000', label: 'Above ₹2,000' },
 ];
+
+
 
 const eventTypes = [
   { id: 'tournaments', label: 'Gaming Tournaments' },
@@ -155,7 +189,111 @@ export default function GamingLifestyle() {
 
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+           
+            <div className="space-y-6">
+              <h3 className="text-lg font-semibold text-white">Apart from gaming, what do you follow?</h3>
+              <FormField
+                control={form.control}
+                name="interest"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="text-white">Select one of the options!</FormLabel>
+                    <Select onValueChange={field.onChange} defaultValue={field.value}>
+                      <FormControl>
+                        <SelectTrigger className="bg-[#1A1A1A] border-[#333333] text-white">
+                          <SelectValue placeholder="Select your first favorite game" />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent className="bg-[#1A1A1A] border-[#333333]">
+                        <div className="p-2">
+                          <Input
+                            placeholder="Search themes..."
+                            className="mb-2 bg-[#2A2A2A] border-[#333333] text-white"
+                            onChange={(e) => {
+                              const searchTerm = e.target.value.toLowerCase();
+                              setFilteredActivity(
+                                activityOptions.filter(activity => 
+                                  activity.label.toLowerCase().includes(searchTerm)
+                                )
+                              );
+                            }}
+                          />
+                        </div>
+                        {filteredActivity.map((option) => (
+                          <SelectItem key={option.id} value={option.id} className="text-white hover:bg-[#2A2A2A]">
+                            {option.label}
+                          </SelectItem>
+                        ))}
+                        <SelectItem value="other" className="text-white hover:bg-[#2A2A2A]">
+                          Other
+                        </SelectItem>
+                      </SelectContent>
+                    </Select>
+                    {field.value === 'other' && (
+                      <FormField
+                        control={form.control}
+                        name="interest"
+                        render={({ field: otherField }) => (
+                          <FormItem className="mt-2">
+                            <FormControl>
+                              <Input
+                                {...otherField}
+                                placeholder="Enter your favorite activity"
+                                className="bg-[#1A1A1A] border-[#333333] text-white"
+                              />
+                            </FormControl>
+                          </FormItem>
+                        )}
+                      />
+                    )}
+                    <FormMessage className="text-red-500" />
+                  </FormItem>
+                )}
+              />            
+            </div>
+            
             <FormField
+              control={form.control}
+              name="customised_peripherals"
+              render={() => (
+                <FormItem>
+                  <FormLabel>Do you use customised peripherals of topics you are interested in? Would you like to?</FormLabel>
+                  <div className="grid grid-cols-2 gap-4 mt-2">
+                    {customPerOptions.map((customize) => (
+                      <FormField
+                        key={customize.id}
+                        control={form.control}
+                        name="customised_peripherals"
+                        render={({ field }) => (
+                          <FormItem className="flex items-center space-x-3">
+                            <FormControl>
+                              <Checkbox
+                                checked={field.value?.includes(customize.id)}
+                                onCheckedChange={(checked) => {
+                                  const value = field.value || [];
+                                  if (checked) {
+                                    field.onChange([...value, customize.id]);
+                                  } else {
+                                    field.onChange(value.filter((val) => val !== customize.id));
+                                  }
+                                }}
+                              />
+                            </FormControl>
+                            <FormLabel className="font-normal">
+                              {customize.label}
+                            </FormLabel>
+                          </FormItem>
+                        )}
+                      />
+                    ))}
+                  </div>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            
+{/*             <FormField
               control={form.control}
               name="streams_content"
               render={({ field }) => (
@@ -481,7 +619,7 @@ export default function GamingLifestyle() {
                   <FormMessage />
                 </FormItem>
               )}
-            />
+            /> */}
 
             <div className="flex justify-end space-x-4 pt-4">
               <Button 
@@ -490,13 +628,13 @@ export default function GamingLifestyle() {
                 onClick={goToPreviousSection}
                 className="w-32"
               >
-                Previous
+                Previous Level
               </Button>
               <Button 
                 type="submit"
                 className="w-32 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700"
               >
-                Next
+                Level Up!
               </Button>
             </div>
           </form>
