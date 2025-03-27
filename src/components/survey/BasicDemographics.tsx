@@ -87,10 +87,10 @@ export default function BasicDemographics() {
           transition={{ delay: 0.2 }}
         >
           <h2 className="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-pink-600">
-            Basic Demographics
+            Hey! Thanks for taking out a few mins.. Let's dive into this
           </h2>
           <p className="text-muted-foreground mt-2">
-            Help us understand our gaming community better
+            Meet and Greet
           </p>
         </motion.div>
 
@@ -101,7 +101,7 @@ export default function BasicDemographics() {
               name="ign"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>In-Game Name (IGN)</FormLabel>
+                  <FormLabel>What’s your IGN (In-Game Name)</FormLabel>
                   <FormControl>
                     <Input placeholder="Your gaming nickname" {...field} className="bg-background/50" />
                   </FormControl>
@@ -115,7 +115,7 @@ export default function BasicDemographics() {
               name="email"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Email</FormLabel>
+                  <FormLabel>What’s your email? (A Surprise for a valid email 😉)</FormLabel>
                   <FormControl>
                     <Input placeholder="your.email@example.com" {...field} className="bg-background/50" />
                   </FormControl>
@@ -129,7 +129,7 @@ export default function BasicDemographics() {
               name="age"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Age</FormLabel>
+                  <FormLabel>How old are you?</FormLabel>
                   <Select onValueChange={field.onChange} defaultValue={field.value}>
                     <FormControl>
                       <SelectTrigger className="bg-background/50">
@@ -154,7 +154,7 @@ export default function BasicDemographics() {
               name="gender"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Gender</FormLabel>
+                  <FormLabel>What’s your gender?</FormLabel>
                   <Select onValueChange={field.onChange} defaultValue={field.value}>
                     <FormControl>
                       <SelectTrigger className="bg-background/50">
@@ -179,7 +179,7 @@ export default function BasicDemographics() {
               name="location"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Location</FormLabel>
+                  <FormLabel>Where do you respawn IRL? (City)</FormLabel>
                   <FormControl>
                     <Input placeholder="City, State" {...field} className="bg-background/50" />
                   </FormControl>
@@ -195,14 +195,14 @@ export default function BasicDemographics() {
                 onClick={goToPreviousSection}
                 className="w-32"
               >
-                Previous
+                Previous Level
               </Button>
               <Button 
                 type="submit"
                 onClick={form.handleSubmit(onSubmit)}
                 className="w-32 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700"
               >
-                Next
+                Level Up!
               </Button>
             </div>
           </form>

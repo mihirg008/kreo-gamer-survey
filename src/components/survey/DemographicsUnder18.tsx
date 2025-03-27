@@ -87,6 +87,14 @@ const studyHoursOptions = [
   { value: 'more_than_4', label: 'More than 4 hours' },
 ];
 
+const igfriends = [
+  { value: 'solo', label: 'I ride solo. No random folks' },
+  { value: 'in_game_only', label: 'No. In-Game only!' },
+  { value: 'online', label: 'Online - Off Game' },
+  { value: 'acqintance', label: 'I know who they are..' },
+  { value: 'met_them', label: 'Of Course - have met them offline' },
+];
+
 const parentControlOptions = [
   { value: 'strict', label: 'Yes, strictly' },
   { value: 'flexible', label: 'Yes, but flexible' },
@@ -140,10 +148,10 @@ export default function DemographicsUnder18() {
           transition={{ delay: 0.2 }}
         >
           <h2 className="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-pink-600">
-            Tell Us About School
+            Level 2
           </h2>
           <p className="text-muted-foreground mt-2">
-            A few questions about your school life and gaming balance
+            Ice-Breaker
           </p>
         </motion.div>
 
@@ -174,7 +182,7 @@ export default function DemographicsUnder18() {
               )}
             />
 
-            <FormField
+{/*             <FormField
               control={form.control}
               name="school_type"
               render={({ field }) => (
@@ -197,9 +205,9 @@ export default function DemographicsUnder18() {
                   <FormMessage />
                 </FormItem>
               )}
-            />
+            /> */}
 
-            <FormField
+{/*             <FormField
               control={form.control}
               name="extracurricular"
               render={({ field }) => (
@@ -222,9 +230,9 @@ export default function DemographicsUnder18() {
                   <FormMessage />
                 </FormItem>
               )}
-            />
+            /> */}
 
-            <FormField
+{/*             <FormField
               control={form.control}
               name="pocket_money"
               render={({ field }) => (
@@ -247,9 +255,9 @@ export default function DemographicsUnder18() {
                   <FormMessage />
                 </FormItem>
               )}
-            />
+            /> */}
 
-            <FormField
+{/*             <FormField
               control={form.control}
               name="travel_to_school"
               render={({ field }) => (
@@ -272,9 +280,9 @@ export default function DemographicsUnder18() {
                   <FormMessage />
                 </FormItem>
               )}
-            />
+            /> */}
 
-            <FormField
+{/*             <FormField
               control={form.control}
               name="favorite_subjects"
               render={() => (
@@ -320,9 +328,9 @@ export default function DemographicsUnder18() {
                   <FormMessage />
                 </FormItem>
               )}
-            />
+            /> */}
 
-            <FormField
+{/*             <FormField
               control={form.control}
               name="study_hours"
               render={({ field }) => (
@@ -346,7 +354,7 @@ export default function DemographicsUnder18() {
                 </FormItem>
               )}
             />
-
+ */}
             <FormField
               control={form.control}
               name="parent_control"
@@ -374,6 +382,31 @@ export default function DemographicsUnder18() {
               )}
             />
 
+             <FormField
+              control={form.control}
+              name="igfr"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Have you met your in-game friends? (Occupation)</FormLabel>
+                  <Select onValueChange={field.onChange} defaultValue={field.value}>
+                    <FormControl>
+                      <SelectTrigger className="bg-background/50">
+                        <SelectValue placeholder="Vibe check" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {igfriends.map((option) => (
+                        <SelectItem key={option.value} value={option.value}>
+                          {option.label}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
             <div className="flex justify-end space-x-4 pt-4">
               <Button 
                 variant="outline" 
@@ -381,13 +414,13 @@ export default function DemographicsUnder18() {
                 onClick={goToPreviousSection}
                 className="w-32"
               >
-                Previous
+                Previous Level
               </Button>
               <Button 
                 type="submit"
                 className="w-32 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700"
               >
-                Next
+                Level Up!
               </Button>
             </div>
           </form>

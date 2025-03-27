@@ -10,37 +10,40 @@ export const demographicsSchema = z.object({
 
 export const demographicsUnder18Schema = z.object({
   grade: z.string({ required_error: 'Please select your grade/class' }),
-  school_type: z.string({ required_error: 'Please select your school type' }),
-  extracurricular: z.string({ required_error: 'Please select an option' }),
-  pocket_money: z.string({ required_error: 'Please select an amount' }),
-  travel_to_school: z.string({ required_error: 'Please select an option' }),
-  favorite_subjects: z.array(z.string()).min(1, { message: 'Select at least one subject' }),
-  study_hours: z.string({ required_error: 'Please select your study hours' }),
-  parent_control: z.string({ required_error: 'Please select an option' }),
+  //school_type: z.string({ required_error: 'Please select your school type' }),
+  //extracurricular: z.string({ required_error: 'Please select an option' }),
+  //pocket_money: z.string({ required_error: 'Please select an amount' }),
+  //travel_to_school: z.string({ required_error: 'Please select an option' }),
+  //favorite_subjects: z.array(z.string()).min(1, { message: 'Select at least one subject' }),
+  //study_hours: z.string({ required_error: 'Please select your study hours' }),
+  //parent_control: z.string({ required_error: 'Please select an option' }),
+  igfr: z.string({ required_error: 'Please select an option' }),
 });
 
 export const demographics18to24Schema = z.object({
-  education_level: z.string({ required_error: 'Please select your education level' }),
-  field_of_study: z.string({ required_error: 'Please select your field of study' }),
-  current_status: z.string({ required_error: 'Please select your current status' }),
-  living_situation: z.string({ required_error: 'Please select your living situation' }),
-  monthly_income: z.string({ required_error: 'Please select your monthly income' }),
-  income_source: z.string({ required_error: 'Please select your income source' }),
-  relationship_status: z.string({ required_error: 'Please select your relationship status' }),
-  career_aspirations: z.string({ required_error: 'Please select your career aspirations' }),
+  //education_level: z.string({ required_error: 'Please select your education level' }),
+  //field_of_study: z.string({ required_error: 'Please select your field of study' }),
+  //current_status: z.string({ required_error: 'Please select your current status' }),
+  //living_situation: z.string({ required_error: 'Please select your living situation' }),
+  //monthly_income: z.string({ required_error: 'Please select your monthly income' }),
+  //income_source: z.string({ required_error: 'Please select your income source' }),
+  //relationship_status: z.string({ required_error: 'Please select your relationship status' }),
+  //career_aspirations: z.string({ required_error: 'Please select your career aspirations' }),
   occupation: z.string({ required_error: 'Please select your occupation' }),
+  igfr: z.string({ required_error: 'Please select an option' }),
 });
 
 export const demographics25PlusSchema = z.object({
-  education_level: z.string({ required_error: 'Please select your education level' }),
-  employment_status: z.string({ required_error: 'Please select your employment status' }),
-  industry_sector: z.string({ required_error: 'Please select your industry sector' }),
-  annual_income: z.string({ required_error: 'Please select your annual income' }),
+  //education_level: z.string({ required_error: 'Please select your education level' }),
+  //employment_status: z.string({ required_error: 'Please select your employment status' }),
+  //industry_sector: z.string({ required_error: 'Please select your industry sector' }),
+  //annual_income: z.string({ required_error: 'Please select your annual income' }),
   marital_status: z.string({ required_error: 'Please select your marital status' }),
-  number_of_children: z.string({ required_error: 'Please select the number of children' }),
-  housing_type: z.string({ required_error: 'Please select your housing type' }),
-  financial_responsibilities: z.array(z.string()).min(1, { message: 'Select at least one responsibility' }),
+  //number_of_children: z.string({ required_error: 'Please select the number of children' }),
+  //housing_type: z.string({ required_error: 'Please select your housing type' }),
+  //financial_responsibilities: z.array(z.string()).min(1, { message: 'Select at least one responsibility' }),
   occupation: z.string({ required_error: 'Please select your occupation' }),
+  igfr: z.string({ required_error: 'Please select an option' }),
 });
 
 export const gamingPreferencesSchema = z.object({
