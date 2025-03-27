@@ -48,16 +48,20 @@ export const demographics25PlusSchema = z.object({
 
 export const gamingPreferencesSchema = z.object({
   platforms: z.array(z.string()).min(1, { message: 'Select at least one platform' }),
-  favorite_games: z.string({ required_error: 'Please select your favorite game' }),
-  favorite_game_other: z.string().optional(),
+  favorite_game_1: z.string({ required_error: 'Please select your first favorite game' }),
+  favorite_game_2: z.string({ required_error: 'Please select your second favorite game' }),
+  favorite_game_3: z.string({ required_error: 'Please select your third favorite game' }),
+  favorite_game_1_other: z.string().optional(),
+  favorite_game_2_other: z.string().optional(),
+  favorite_game_3_other: z.string().optional(),
   preferred_genre: z.array(z.string()).min(1, { message: 'Select at least one genre' }),
   spending_monthly: z.string({ required_error: 'Please select your monthly spending' }),
-  gaming_setup: z.string().min(10, { message: 'Please describe your gaming setup' }),
+  gaming_setup: z.string({ required_error: 'Please select your gaming setup' }),
   device_ownership: z.array(z.string()).min(1, { message: 'Select at least one device' }),
   gaming_peripherals: z.array(z.string()).min(1, { message: 'Select at least one peripheral' }),
   internet_speed: z.string({ required_error: 'Please select your internet speed' }),
-  favorite_developers: z.array(z.string()),
-  payment_methods: z.array(z.string()).min(1, { message: 'Select at least one payment method' }),
+  favorite_developers: z.array(z.string()).min(1, { message: 'Select at least one developer' }),
+  payment_methods: z.array(z.string()).min(1, { message: 'Select at least one payment method' })
 });
 
 export const gamingHabitsSchema = z.object({
