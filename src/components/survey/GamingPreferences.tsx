@@ -26,7 +26,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { Input } from '@/components/ui/input';
 
 const platforms = [
   { id: 'pc', label: 'PC Gaming' },
