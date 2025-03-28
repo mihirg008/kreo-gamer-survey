@@ -65,16 +65,11 @@ export const gamingPreferencesSchema = z.object({
 });
 
 export const gamingHabitsSchema = z.object({
-  hours_weekly: z.string({ required_error: 'Please select your weekly gaming hours' }),
-  play_time: z.array(z.string()).min(1, { message: 'Select at least one time slot' }),
-  multiplayer_preference: z.string({ required_error: 'Please select your preference' }),
-  skill_level: z.string({ required_error: 'Please select your skill level' }),
-  years_gaming: z.string({ required_error: 'Please select your gaming experience' }),
-  gaming_frequency: z.string({ required_error: 'Please select how often you play' }),
-  gaming_sessions: z.string({ required_error: 'Please select your average session length' }),
-  competitive_play: z.boolean(),
-  rage_quit_frequency: z.string({ required_error: 'Please select how often you rage quit' }),
-  gaming_breaks: z.string({ required_error: 'Please select your break frequency' }),
+  gaming_start: z.array(z.string()).min(1, { message: 'Select when you started gaming' }),
+  gaming_frequency: z.array(z.string()).min(1, { message: 'Select how often you play' }),
+  game_type: z.array(z.string()).min(1, { message: 'Select your preferred game type' }),
+  game_buy: z.array(z.string()).min(1, { message: 'Select your preferred way to get games' }),
+  mod_controller: z.array(z.string()).min(1, { message: 'Select if you use modified controllers' }),
 });
 
 export const gamingLifestyleSchema = z.object({
