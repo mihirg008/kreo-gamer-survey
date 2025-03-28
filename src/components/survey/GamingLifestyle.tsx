@@ -47,6 +47,15 @@ const activityOptions = [
 ];
 
 
+
+const contentcreatorOptions = [
+  { id: 'full_time', label: 'Yes, full-time' },
+  { id: 'part_time', label: 'Yes, part-time' },
+  { id: 'no_but_want_to', label: 'No, but I want to' },
+  { id: 'not_interested', label: 'No, not interested' },
+];
+
+
 const custopmPerOptions = [
   { id: 'ninja', label: 'Yes, already use' },
   { id: 'shroud', label: 'Would like to try' },
@@ -67,6 +76,18 @@ const spendingOptions = [
 ];
 
 
+const esportpartOptions = [
+  { value: 'none', label: 'Yes, regularly' },
+  { value: 'under_500', label: 'Occasionally' },
+  { value: '500_2000', label: 'No, but I want to' },
+  { value: 'above_2000', label: ' No, not interested' },
+];
+
+const contentwatchOptions = [
+  { id: 'daily', label: 'Daily' },
+  { id: 'few_times_a_week', label: 'Few times a week' },
+  { id: 'rarely', label: 'Rarely' },
+];
 
 const eventTypes = [
   { id: 'tournaments', label: 'Gaming Tournaments' },
@@ -84,6 +105,20 @@ const esportsOptions = [
   { id: 'pubg', label: 'PUBG' },
   { id: 'fortnite', label: 'Fortnite' },
   { id: 'rocket_league', label: 'Rocket League' },
+];
+
+
+const foodOptions = [
+  { id: 'fast_food', label: 'Fast food (McDonald’s, KFC, Dominos...)' },
+  { id: 'snacks', label: 'Snacks (Lays, Kurkure, Pringles..)' },
+  { id: 'healthy', label: 'Healthy options (Nuts, Protein bars, Fruits...)' },
+];
+
+const drinksOptions = [
+  { id: 'energy', label: 'Energy drinks (Redbull, Monster.. even Sting counts' },
+  { id: 'homemade', label: ' (Hot/Cold) Tea, Coffee, Lassi, Buttermilk...' },
+  { id: 'water', label: 'Water' },
+  { id: 'others', label: 'Coke, Mazza, Frooti, Paperboat...' },
 ];
 
 const influencerOptions = [
@@ -107,6 +142,14 @@ const communityOptions = [
   { id: 'telegram', label: 'Telegram Channels' },
 ];
 
+
+const merchspendsOptions = [
+  { id: 'zero', label: '₹0 - I don’t buy merch' },
+  { id: '500_to_2000', label: '₹500-2000 - Occasional buyer ' },
+  { id: '2000_to_5000', label: '₹2000-5000 - Enthusiast' },
+  { id: '5000_plus', label: ' ₹5000+ - Hardcore collector' },
+];
+
 const subscriptionOptions = [
   { id: 'game_pass', label: 'Xbox Game Pass' },
   { id: 'ps_plus', label: 'PlayStation Plus' },
@@ -117,6 +160,34 @@ const subscriptionOptions = [
   { id: 'youtube_premium', label: 'YouTube Premium' },
   { id: 'none', label: 'No subscriptions' },
 ];
+
+
+const contentconsumeOptions = [
+  { id: 'yt', label: 'YouTube' },
+  { id: 'twitch', label: 'Twitch' },
+  { id: 'fb_insta', label: ' Facebook/Instagram' },
+  { id: 'rooter', label: 'Rooter' },
+  { id: 'loco', label: 'Loco' },
+  { id: 'other', label: 'Other' },
+];
+
+
+
+const igsOptions = [
+  { id: 'zero', label: '₹0 - I’m strictly F2P ' },
+  { id: '100_to_500', label: '₹100-500 - Casual spender' },
+  { id: '500_to_2000', label: '₹500-2000 - Invested in the grind' },
+  { id: '2000_plus', label: ' ₹2000+ - Take my money, devs!' },
+];
+
+
+const collectOptions = [
+  { id: 'yes', label: 'Yes, actively' },
+  { id: 'occasionally', label: 'Occasionally' },
+  { id: 'not_interested', label: 'No, not interested'},
+];
+
+
 
 const newsSourceOptions = [
   { id: 'ign', label: 'IGN' },
@@ -264,6 +335,354 @@ export default function GamingLifestyle() {
                         key={customize.id}
                         control={form.control}
                         name="customised_peripherals"
+                        render={({ field }) => (
+                          <FormItem className="flex items-center space-x-3">
+                            <FormControl>
+                              <Checkbox
+                                checked={field.value?.includes(customize.id)}
+                                onCheckedChange={(checked) => {
+                                  const value = field.value || [];
+                                  if (checked) {
+                                    field.onChange([...value, customize.id]);
+                                  } else {
+                                    field.onChange(value.filter((val) => val !== customize.id));
+                                  }
+                                }}
+                              />
+                            </FormControl>
+                            <FormLabel className="font-normal">
+                              {customize.label}
+                            </FormLabel>
+                          </FormItem>
+                        )}
+                      />
+                    ))}
+                  </div>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+             <FormField
+              control={form.control}
+              name="gaming_food"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Guilty gaming food?</FormLabel>
+                  <Select onValueChange={field.onChange} defaultValue={field.value}>
+                    <FormControl>
+                      <SelectTrigger className="bg-background/50">
+                        <SelectValue placeholder="Select spending range" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {foodOptions.map((option) => (
+                        <SelectItem key={option.value} value={option.value}>
+                          {option.label}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="gaming_drink"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Guilty gaming drink?</FormLabel>
+                  <Select onValueChange={field.onChange} defaultValue={field.value}>
+                    <FormControl>
+                      <SelectTrigger className="bg-background/50">
+                        <SelectValue placeholder="Select spending range" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {drinkOptions.map((option) => (
+                        <SelectItem key={option.value} value={option.value}>
+                          {option.label}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="watch_content"
+              render={() => (
+                <FormItem>
+                  <FormLabel>How much time do you spend watching gaming content?</FormLabel>
+                  <div className="grid grid-cols-2 gap-4 mt-2">
+                    {contentwatchOptions.map((customize) => (
+                      <FormField
+                        key={customize.id}
+                        control={form.control}
+                        name="watch_content"
+                        render={({ field }) => (
+                          <FormItem className="flex items-center space-x-3">
+                            <FormControl>
+                              <Checkbox
+                                checked={field.value?.includes(customize.id)}
+                                onCheckedChange={(checked) => {
+                                  const value = field.value || [];
+                                  if (checked) {
+                                    field.onChange([...value, customize.id]);
+                                  } else {
+                                    field.onChange(value.filter((val) => val !== customize.id));
+                                  }
+                                }}
+                              />
+                            </FormControl>
+                            <FormLabel className="font-normal">
+                              {customize.label}
+                            </FormLabel>
+                          </FormItem>
+                        )}
+                      />
+                    ))}
+                  </div>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="fav_creator"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Favorite gaming creator, streamer?</FormLabel>
+                  <FormControl>
+                    <Textarea
+                      placeholder="Enter names of the top creators, streamers you follow!"
+                      className="bg-background/50 min-h-[20px]"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />  
+
+            <FormField
+              control={form.control}
+              name="esp_participation"
+              render={() => (
+                <FormItem>
+                  <FormLabel>Have you ever participated in an eSports tournament?</FormLabel>
+                  <div className="grid grid-cols-2 gap-4 mt-2">
+                    {esportpartOptions.map((customize) => (
+                      <FormField
+                        key={customize.id}
+                        control={form.control}
+                        name="esp_participation"
+                        render={({ field }) => (
+                          <FormItem className="flex items-center space-x-3">
+                            <FormControl>
+                              <Checkbox
+                                checked={field.value?.includes(customize.id)}
+                                onCheckedChange={(checked) => {
+                                  const value = field.value || [];
+                                  if (checked) {
+                                    field.onChange([...value, customize.id]);
+                                  } else {
+                                    field.onChange(value.filter((val) => val !== customize.id));
+                                  }
+                                }}
+                              />
+                            </FormControl>
+                            <FormLabel className="font-normal">
+                              {customize.label}
+                            </FormLabel>
+                          </FormItem>
+                        )}
+                      />
+                    ))}
+                  </div>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="is_content_c"
+              render={() => (
+                <FormItem>
+                  <FormLabel>Do you stream or create gaming content?</FormLabel>
+                  <div className="grid grid-cols-2 gap-4 mt-2">
+                    {contentcreatorOptions.map((customize) => (
+                      <FormField
+                        key={customize.id}
+                        control={form.control}
+                        name="is_content_c"
+                        render={({ field }) => (
+                          <FormItem className="flex items-center space-x-3">
+                            <FormControl>
+                              <Checkbox
+                                checked={field.value?.includes(customize.id)}
+                                onCheckedChange={(checked) => {
+                                  const value = field.value || [];
+                                  if (checked) {
+                                    field.onChange([...value, customize.id]);
+                                  } else {
+                                    field.onChange(value.filter((val) => val !== customize.id));
+                                  }
+                                }}
+                              />
+                            </FormControl>
+                            <FormLabel className="font-normal">
+                              {customize.label}
+                            </FormLabel>
+                          </FormItem>
+                        )}
+                      />
+                    ))}
+                  </div>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="watch_content"
+              render={() => (
+                <FormItem>
+                  <FormLabel>Which platforms do you use for streaming/watching gaming content?</FormLabel>
+                  <div className="grid grid-cols-2 gap-4 mt-2">
+                    {contentconsumeOptions.map((customize) => (
+                      <FormField
+                        key={customize.id}
+                        control={form.control}
+                        name="watch_content"
+                        render={({ field }) => (
+                          <FormItem className="flex items-center space-x-3">
+                            <FormControl>
+                              <Checkbox
+                                checked={field.value?.includes(customize.id)}
+                                onCheckedChange={(checked) => {
+                                  const value = field.value || [];
+                                  if (checked) {
+                                    field.onChange([...value, customize.id]);
+                                  } else {
+                                    field.onChange(value.filter((val) => val !== customize.id));
+                                  }
+                                }}
+                              />
+                            </FormControl>
+                            <FormLabel className="font-normal">
+                              {customize.label}
+                            </FormLabel>
+                          </FormItem>
+                        )}
+                      />
+                    ))}
+                  </div>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="in_game_spends"
+              render={() => (
+                <FormItem>
+                  <FormLabel>How much do you spend on in-game purchases per month?</FormLabel>
+                  <div className="grid grid-cols-2 gap-4 mt-2">
+                    {igsOptions.map((customize) => (
+                      <FormField
+                        key={customize.id}
+                        control={form.control}
+                        name="in_game_spends"
+                        render={({ field }) => (
+                          <FormItem className="flex items-center space-x-3">
+                            <FormControl>
+                              <Checkbox
+                                checked={field.value?.includes(customize.id)}
+                                onCheckedChange={(checked) => {
+                                  const value = field.value || [];
+                                  if (checked) {
+                                    field.onChange([...value, customize.id]);
+                                  } else {
+                                    field.onChange(value.filter((val) => val !== customize.id));
+                                  }
+                                }}
+                              />
+                            </FormControl>
+                            <FormLabel className="font-normal">
+                              {customize.label}
+                            </FormLabel>
+                          </FormItem>
+                        )}
+                      />
+                    ))}
+                  </div>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            
+            <FormField
+              control={form.control}
+              name="merch_spends"
+              render={() => (
+                <FormItem>
+                  <FormLabel>How much do you spend on gaming merchandise (apparel, collectibles, accessories) per month or 2 months?</FormLabel>
+                  <div className="grid grid-cols-2 gap-4 mt-2">
+                    {merchspendsOptions.map((customize) => (
+                      <FormField
+                        key={customize.id}
+                        control={form.control}
+                        name="merch_spends"
+                        render={({ field }) => (
+                          <FormItem className="flex items-center space-x-3">
+                            <FormControl>
+                              <Checkbox
+                                checked={field.value?.includes(customize.id)}
+                                onCheckedChange={(checked) => {
+                                  const value = field.value || [];
+                                  if (checked) {
+                                    field.onChange([...value, customize.id]);
+                                  } else {
+                                    field.onChange(value.filter((val) => val !== customize.id));
+                                  }
+                                }}
+                              />
+                            </FormControl>
+                            <FormLabel className="font-normal">
+                              {customize.label}
+                            </FormLabel>
+                          </FormItem>
+                        )}
+                      />
+                    ))}
+                  </div>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+{/* collectibles */}
+            <FormField
+              control={form.control}
+              name="collectibles"
+              render={() => (
+                <FormItem>
+                  <FormLabel>Do you collect gaming-related items (cards, figurines, posters, in-game collectibles)?</FormLabel>
+                  <div className="grid grid-cols-2 gap-4 mt-2">
+                    {collectOptions.map((customize) => (
+                      <FormField
+                        key={customize.id}
+                        control={form.control}
+                        name="collectibles"
                         render={({ field }) => (
                           <FormItem className="flex items-center space-x-3">
                             <FormControl>
