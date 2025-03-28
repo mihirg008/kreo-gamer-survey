@@ -817,7 +817,7 @@ export default function GamingPreferences() {
                         name="preferred_genre"
                         render={({ field }) => (
                           <FormItem className="flex items-center space-x-3">
-                            <FormControl></FormControl>
+                            <FormControl>
                               <Checkbox
                                 checked={field.value?.includes(genre.id)}
                                 onCheckedChange={(checked) => {
