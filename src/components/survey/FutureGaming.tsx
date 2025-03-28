@@ -70,12 +70,29 @@ const blockchainOptions = [
   { value: 'opposed', label: 'Opposed to blockchain in gaming' },
 ];
 
+
+const sustainableOptions = [
+  { value: 'yes', label: 'Yes' },
+  { value: 'no', label: 'No' },
+];
+
 const subscriptionOptions = [
   { value: 'prefer_subscription', label: 'Prefer subscription services (Game Pass, etc.)' },
   { value: 'prefer_ownership', label: 'Prefer to own individual games' },
   { value: 'mix', label: 'Prefer a mix of both' },
   { value: 'undecided', label: 'Undecided' },
 ];
+
+
+
+const futuregamingOptions = [
+  { value: 'VR/AR', label: 'VR/AR gaming' },
+  { value: 'cloud', label: 'Cloud gaming' },
+  { value: 'blockchain', label: 'Blockchain gaming' },
+  { value: 'esports', label: 'Esports going mainstream' },
+  { value: 'india_based', label: 'More India-based game development' },
+];
+
 
 const spendingOptions = [
   { value: 'increase', label: 'Likely to increase spending on gaming' },
@@ -138,21 +155,63 @@ export default function FutureGaming() {
           transition={{ delay: 0.2 }}
         >
           <h2 className="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-pink-600">
-            The Future of Gaming
+            The Promised Land
           </h2>
           <p className="text-muted-foreground mt-2">
-            Share your thoughts on upcoming gaming trends
+            Looking ahead into the future!
           </p>
         </motion.div>
 
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+           
             <FormField
               control={form.control}
-              name="metaverse_interest"
+              name="future_gaming"
+              render={() => (
+                <FormItem>
+                  <FormLabel>What excites you most about the future of gaming?</FormLabel>
+                  <div className="grid grid-cols-2 gap-4 mt-2">
+                    {futuregamingOptions.map((method) => (
+                      <FormField
+                        key={method.id}
+                        control={form.control}
+                        name="future_gaming"
+                        render={({ field }) => (
+                          <FormItem className="flex items-center space-x-3">
+                            <FormControl>
+                              <Checkbox
+                                checked={field.value?.includes(method.id)}
+                                onCheckedChange={(checked) => {
+                                  const value = field.value || [];
+                                  if (checked) {
+                                    field.onChange([...value, method.id]);
+                                  } else {
+                                    field.onChange(value.filter((val) => val !== method.id));
+                                  }
+                                }}
+                              />
+                            </FormControl>
+                            <FormLabel className="font-normal">
+                              {method.label}
+                            </FormLabel>
+                          </FormItem>
+                        )}
+                      />
+                    ))}
+                  </div>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            
+            
+            <FormField
+              control={form.control}
+              name="sustainable_interest"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Interest in Metaverse Gaming</FormLabel>
+                  <FormLabel>Would you support sustainable and eco-friendly gaming gear if available?</FormLabel>
                   <Select onValueChange={field.onChange} defaultValue={field.value}>
                     <FormControl>
                       <SelectTrigger className="bg-background/50">
@@ -160,7 +219,7 @@ export default function FutureGaming() {
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
-                      {interestOptions.map((option) => (
+                      {sustainableOptions.map((option) => (
                         <SelectItem key={option.value} value={option.value}>
                           {option.label}
                         </SelectItem>
@@ -172,7 +231,7 @@ export default function FutureGaming() {
               )}
             />
 
-            <FormField
+{/*             <FormField
               control={form.control}
               name="ai_in_games"
               render={({ field }) => (
@@ -345,7 +404,7 @@ export default function FutureGaming() {
                   <FormMessage />
                 </FormItem>
               )}
-            />
+            /> */}
 
             <div className="flex justify-end space-x-4 pt-4">
               <Button 
@@ -354,13 +413,13 @@ export default function FutureGaming() {
                 onClick={goToPreviousSection}
                 className="w-32"
               >
-                Previous
+                Previous Level
               </Button>
               <Button 
                 type="submit"
                 className="w-32 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700"
               >
-                Submit
+                Submit! (Surprise ahead 😉)
               </Button>
             </div>
           </form>

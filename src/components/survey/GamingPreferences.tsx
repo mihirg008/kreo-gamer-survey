@@ -28,11 +28,11 @@ import {
 } from '@/components/ui/select';
 
 const platforms = [
-  { id: 'pc', label: 'PC Gaming' },
-  { id: 'playstation', label: 'PlayStation' },
-  { id: 'xbox', label: 'Xbox' },
-  { id: 'nintendo', label: 'Nintendo Switch' },
-  { id: 'mobile', label: 'Mobile Gaming' },
+  { id: 'pc', label: 'PC 🖥️  ' },
+  { id: 'playstation', label: 'PlayStation 🎮' },
+  { id: 'xbox', label: 'Xbox 🎮' },
+  { id: 'laptop', label: 'Laptop 💻' },
+  { id: 'mobile', label: 'Mobile 📱' },
   { id: 'other', label: 'Anything else?' },
 ];
 
@@ -50,10 +50,10 @@ const genres = [
 ];
 
 const spendingOptions = [
-  { value: 'none', label: 'No spending' },
-  { value: 'under_1000', label: 'Under ₹1,000' },
-  { value: '1000_5000', label: '₹1,000 - ₹5,000' },
-  { value: 'above_5000', label: 'Above ₹5,000' },
+  { value: 'none', label: '₹0 - I use what I have' },
+  { value: 'under_1000', label: '₹5,000-20,000 - Basic setup upgrades' },
+  { value: '1000_5000', label: '₹20,000-50,000 - Serious investment' },
+  { value: 'above_5000', label: '₹50,000+ - Pro-level rig' },
 ];
 
 const popularGames2 = [
@@ -339,16 +339,37 @@ const deviceOptions = [
   { id: 'handheld_console', label: 'Handheld Console' },
 ];
 
-const peripheralOptions = [
-  { id: 'gaming_mouse', label: 'Gaming Mouse' },
-  { id: 'mechanical_keyboard', label: 'Mechanical Keyboard' },
-  { id: 'gaming_headset', label: 'Gaming Headset' },
-  { id: 'controller', label: 'Controller' },
-  { id: 'gaming_chair', label: 'Gaming Chair' },
-  { id: 'vr_headset', label: 'VR Headset' },
-  { id: 'gaming_monitor', label: 'Gaming Monitor' },
-  { id: 'streaming_equipment', label: 'Streaming Equipment' },
+
+const gearupgradeOptions = [
+  { id: 'gaming_mouse', label: 'Every year' },
+  { id: 'mechanical_keyboard', label: 'Every 2-3 years' },
+  { id: 'gaming_headset', label: 'Rarely' },
+  { id: 'controller', label: 'Only when necessary' },
 ];
+
+const peripheralOptions = [
+  { id: 'mechanical_keyboard', label: 'Mechanical Keyboard' },
+  { id: 'gaming_mouse', label: 'Gaming Mouse' },
+ { id: 'gaming_monitor', label: 'High-refresh-rate Gaming Monitor' },
+  { id: 'custom_pc', label: 'Custom built PC' },
+  { id: 'gaming_chair', label: 'Gaming Chair' },
+  { id: 'gaming_headset', label: 'Gaming Headset' },
+  { id: 'vr_headset', label: 'VR Headset' },
+  { id: 'cooling_pad', label: 'External Cooling Pad' },
+  { id: 'controller', label: 'Controller' },
+  { id: 'webcam', label: 'Webcam' },
+  { id: 'backpack', label: 'Backpack' },
+  { id: 'lights', label: 'Lights' },
+];
+
+const ecomOptions = [
+  { value: 'quick_commerce', label: 'Blinkit, Instamart, Zepto - I want it super quick!' },
+  { value: 'retailers', label: ' Local retailers - Need to feel it' },
+  { value: 'second_hand', label: 'Second-hand market - Need it cheap' },
+  { value: 'online', label: 'Online Marketplace' },
+  { value: 'brand', label: 'Brand website - Genuine stuff only!' },
+];
+
 
 const internetSpeedOptions = [
   { value: 'below_50mbps', label: 'Below 50 Mbps' },
@@ -356,6 +377,11 @@ const internetSpeedOptions = [
   { value: '100_300mbps', label: '100-300 Mbps' },
   { value: 'above_300mbps', label: 'Above 300 Mbps' },
   { value: 'unsure', label: 'Not sure' },
+];
+
+const kreoFam = [
+  { value: 'yes', label: 'Yes' },
+  { value: 'no', label: 'No' },
 ];
 
 const developerOptions = [
@@ -371,14 +397,10 @@ const developerOptions = [
   { id: 'cdpr', label: 'CD Projekt Red' },
 ];
 
-const paymentMethodOptions = [
-  { id: 'credit_card', label: 'Credit Card' },
-  { id: 'debit_card', label: 'Debit Card' },
-  { id: 'upi', label: 'UPI' },
-  { id: 'netbanking', label: 'Net Banking' },
-  { id: 'wallet', label: 'Digital Wallet' },
-  { id: 'gift_cards', label: 'Gift Cards' },
-  { id: 'cod', label: 'Cash on Delivery' },
+const sptypeOptions = [
+  { id: 'regularly', label: 'Yes, regularly' },
+  { id: 'occasionally', label: ' Occasionally' },
+  { id: 'free', label: ' No, I play free games only' },
 ];
 
 export default function GamingPreferences() {
@@ -395,12 +417,12 @@ export default function GamingPreferences() {
     favorite_game_3_other?: string;
     preferred_genre?: string[];
     spending_monthly?: string;
-    gaming_setup?: string;
+    next_game?: string;
     device_ownership?: string[];
     gaming_peripherals?: string[];
     internet_speed?: string;
     favorite_developers?: string[];
-    payment_methods?: string[];
+    gaming_spends?: string[];
   };
 
   const form = useForm<z.infer<typeof gamingPreferencesSchema>>({
@@ -415,12 +437,12 @@ export default function GamingPreferences() {
       favorite_game_3_other: savedData.favorite_game_3_other || '',
       preferred_genre: savedData.preferred_genre || [],
       spending_monthly: savedData.spending_monthly || '',
-      gaming_setup: savedData.gaming_setup || '',
+      next_game: savedData.next_game || '',
       device_ownership: savedData.device_ownership || [],
       gaming_peripherals: savedData.gaming_peripherals || [],
       internet_speed: savedData.internet_speed || '',
       favorite_developers: savedData.favorite_developers || [],
-      payment_methods: savedData.payment_methods || []
+      gaming_spends: savedData.gaming_spends || []
     }
   });
 
@@ -492,7 +514,7 @@ export default function GamingPreferences() {
               )}
             />
 
-            <FormField
+{/*             <FormField
               control={form.control}
               name="device_ownership"
               render={() => (
@@ -531,46 +553,7 @@ export default function GamingPreferences() {
                 </FormItem>
               )}
             />
-
-            <FormField
-              control={form.control}
-              name="gaming_peripherals"
-              render={() => (
-                <FormItem>
-                  <FormLabel>Gaming Peripherals You Own</FormLabel>
-                  <div className="grid grid-cols-2 gap-4 mt-2">
-                    {peripheralOptions.map((peripheral) => (
-                      <FormField
-                        key={peripheral.id}
-                        control={form.control}
-                        name="gaming_peripherals"
-                        render={({ field }) => (
-                          <FormItem className="flex items-center space-x-3">
-                            <FormControl>
-                              <Checkbox
-                                checked={field.value?.includes(peripheral.id)}
-                                onCheckedChange={(checked) => {
-                                  const value = field.value || [];
-                                  if (checked) {
-                                    field.onChange([...value, peripheral.id]);
-                                  } else {
-                                    field.onChange(value.filter((val) => val !== peripheral.id));
-                                  }
-                                }}
-                              />
-                            </FormControl>
-                            <FormLabel className="font-normal">
-                              {peripheral.label}
-                            </FormLabel>
-                          </FormItem>
-                        )}
-                      />
-                    ))}
-                  </div>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+ */}
 
             <div className="space-y-6">
               <h3 className="text-lg font-semibold">Favorite Games</h3>
@@ -774,7 +757,7 @@ export default function GamingPreferences() {
               />
             </div>
 
-            <FormField
+{/*             <FormField
               control={form.control}
               name="favorite_developers"
               render={() => (
@@ -813,8 +796,8 @@ export default function GamingPreferences() {
                 </FormItem>
               )}
             />
-
-            <FormField
+ */}
+{/*             <FormField
               control={form.control}
               name="preferred_genre"
               render={() => (
@@ -853,70 +836,64 @@ export default function GamingPreferences() {
                 </FormItem>
               )}
             />
+ */}
+            // <FormField
+            //   control={form.control}
+            //   name="internet_speed"
+            //   render={({ field }) => (
+            //     <FormItem>
+            //       <FormLabel>Your Internet Speed</FormLabel>
+            //       <Select onValueChange={field.onChange} defaultValue={field.value}>
+            //         <FormControl>
+            //           <SelectTrigger className="bg-background/50">
+            //             <SelectValue placeholder="Select your internet speed" />
+            //           </SelectTrigger>
+            //         </FormControl>
+            //         <SelectContent>
+            //           {internetSpeedOptions.map((option) => (
+            //             <SelectItem key={option.value} value={option.value}>
+            //               {option.label}
+            //             </SelectItem>
+            //           ))}
+            //         </SelectContent>
+            //       </Select>
+            //       <FormMessage />
+            //     </FormItem>
+            //   )}
+            // />
 
             <FormField
               control={form.control}
-              name="internet_speed"
+              name="next_game"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Your Internet Speed</FormLabel>
-                  <Select onValueChange={field.onChange} defaultValue={field.value}>
-                    <FormControl>
-                      <SelectTrigger className="bg-background/50">
-                        <SelectValue placeholder="Select your internet speed" />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      {internetSpeedOptions.map((option) => (
-                        <SelectItem key={option.value} value={option.value}>
-                          {option.label}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
+                  <FormLabel>Next game you are excited about?</FormLabel>
+                  <FormControl>
+                    <Textarea
+                      placeholder="Tell us about anything new you are excited about!"
+                      className="bg-background/50 min-h-[20px]"
+                      {...field}
+                    />
+                  </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
-            />
+            />  
+  
+           
 
             <FormField
               control={form.control}
-              name="spending_monthly"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Monthly Gaming Spending</FormLabel>
-                  <Select onValueChange={field.onChange} defaultValue={field.value}>
-                    <FormControl>
-                      <SelectTrigger className="bg-background/50">
-                        <SelectValue placeholder="Select your monthly spending" />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      {spendingOptions.map((option) => (
-                        <SelectItem key={option.value} value={option.value}>
-                          {option.label}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            
-
-            <FormField
-              control={form.control}
-              name="payment_methods"
+              name="gaming_spends"
               render={() => (
                 <FormItem>
-                  <FormLabel>Preferred Payment Methods for Gaming</FormLabel>
+                  <FormLabel>Do you spend money on games?</FormLabel>
                   <div className="grid grid-cols-2 gap-4 mt-2">
-                    {paymentMethodOptions.map((method) => (
+                    {sptypeOptions.map((method) => (
                       <FormField
                         key={method.id}
                         control={form.control}
-                        name="payment_methods"
+                        name="gaming_spends"
                         render={({ field }) => (
                           <FormItem className="flex items-center space-x-3">
                             <FormControl>
@@ -945,23 +922,233 @@ export default function GamingPreferences() {
               )}
             />
 
-            <FormField
+
+                       <FormField
               control={form.control}
-              name="gaming_setup"
+              name="gaming_peripherals"
+              render={() => (
+                <FormItem>
+                  <FormLabel>Gaming Peripherals You Own/Use</FormLabel>
+                  <div className="grid grid-cols-2 gap-4 mt-2">
+                    {peripheralOptions.map((peripheral) => (
+                      <FormField
+                        key={peripheral.id}
+                        control={form.control}
+                        name="gaming_peripherals"
+                        render={({ field }) => (
+                          <FormItem className="flex items-center space-x-3">
+                            <FormControl>
+                              <Checkbox
+                                checked={field.value?.includes(peripheral.id)}
+                                onCheckedChange={(checked) => {
+                                  const value = field.value || [];
+                                  if (checked) {
+                                    field.onChange([...value, peripheral.id]);
+                                  } else {
+                                    field.onChange(value.filter((val) => val !== peripheral.id));
+                                  }
+                                }}
+                              />
+                            </FormControl>
+                            <FormLabel className="font-normal">
+                              {peripheral.label}
+                            </FormLabel>
+                          </FormItem>
+                        )}
+                      />
+                    ))}
+                  </div>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+ <FormField
+              control={form.control}
+              name="gear_upgrade"
+              render={() => (
+                <FormItem>
+                  <FormLabel>How often do you upgrade your gaming gear? </FormLabel>
+                  <div className="grid grid-cols-2 gap-4 mt-2">
+                    {gearupgradeOptions.map((method) => (
+                      <FormField
+                        key={method.id}
+                        control={form.control}
+                        name="gear_upgrade"
+                        render={({ field }) => (
+                          <FormItem className="flex items-center space-x-3">
+                            <FormControl>
+                              <Checkbox
+                                checked={field.value?.includes(method.id)}
+                                onCheckedChange={(checked) => {
+                                  const value = field.value || [];
+                                  if (checked) {
+                                    field.onChange([...value, method.id]);
+                                  } else {
+                                    field.onChange(value.filter((val) => val !== method.id));
+                                  }
+                                }}
+                              />
+                            </FormControl>
+                            <FormLabel className="font-normal">
+                              {method.label}
+                            </FormLabel>
+                          </FormItem>
+                        )}
+                      />
+                    ))}
+                  </div>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+          
+ <FormField
+              control={form.control}
+              name="purchase_platforms"
+              render={() => (
+                <FormItem>
+                  <FormLabel>Where do you purchase your gaming gear from?</FormLabel>
+                  <div className="grid grid-cols-2 gap-4 mt-2">
+                    {ecomOptions.map((method) => (
+                      <FormField
+                        key={method.id}
+                        control={form.control}
+                        name="purchase_platform"
+                        render={({ field }) => (
+                          <FormItem className="flex items-center space-x-3">
+                            <FormControl>
+                              <Checkbox
+                                checked={field.value?.includes(method.id)}
+                                onCheckedChange={(checked) => {
+                                  const value = field.value || [];
+                                  if (checked) {
+                                    field.onChange([...value, method.id]);
+                                  } else {
+                                    field.onChange(value.filter((val) => val !== method.id));
+                                  }
+                                }}
+                              />
+                            </FormControl>
+                            <FormLabel className="font-normal">
+                              {method.label}
+                            </FormLabel>
+                          </FormItem>
+                        )}
+                      />
+                    ))}
+                  </div>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+
+          
+ <FormField
+              control={form.control}
+              name="kreo_familiarity"
+              render={() => (
+                <FormItem>
+                  <FormLabel>Are you familiar with Kreo products?</FormLabel>
+                  <div className="grid grid-cols-2 gap-4 mt-2">
+                    {kreoFam.map((method) => (
+                      <FormField
+                        key={method.id}
+                        control={form.control}
+                        name="kreo_familiarity"
+                        render={({ field }) => (
+                          <FormItem className="flex items-center space-x-3">
+                            <FormControl>
+                              <Checkbox
+                                checked={field.value?.includes(method.id)}
+                                onCheckedChange={(checked) => {
+                                  const value = field.value || [];
+                                  if (checked) {
+                                    field.onChange([...value, method.id]);
+                                  } else {
+                                    field.onChange(value.filter((val) => val !== method.id));
+                                  }
+                                }}
+                              />
+                            </FormControl>
+                            <FormLabel className="font-normal">
+                              {method.label}
+                            </FormLabel>
+                          </FormItem>
+                        )}
+                      />
+                    ))}
+                  </div>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          
+
+        <FormField
+              control={form.control}
+              name="spending_monthly"
+              render={() => (
+                <FormItem>
+                  <FormLabel>How much do you spend on your gaming setup (PC, console, accessories) per year?</FormLabel>
+                  <div className="grid grid-cols-2 gap-4 mt-2">
+                    {spendingOptions.map((method) => (
+                      <FormField
+                        key={method.id}
+                        control={form.control}
+                        name="spending_monthly"
+                        render={({ field }) => (
+                          <FormItem className="flex items-center space-x-3">
+                            <FormControl>
+                              <Checkbox
+                                checked={field.value?.includes(method.id)}
+                                onCheckedChange={(checked) => {
+                                  const value = field.value || [];
+                                  if (checked) {
+                                    field.onChange([...value, method.id]);
+                                  } else {
+                                    field.onChange(value.filter((val) => val !== method.id));
+                                  }
+                                }}
+                              />
+                            </FormControl>
+                            <FormLabel className="font-normal">
+                              {method.label}
+                            </FormLabel>
+                          </FormItem>
+                        )}
+                      />
+                    ))}
+                  </div>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+          {/* Add a question here -  What features matter most in gaming gear?** (Rank 1 to 5 most to least important) 
+          Rank out of these options - Performance, Aesthetics, Durability, Price, Brand.
+          List these 5 options as text and besides them give a dropdown or radio button to select rating.
+          */}   
+
+{/*             <FormField
+              control={form.control}
+              name="next_game"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Describe Your Gaming Setup</FormLabel>
                   <FormControl>
                     <Textarea
                       placeholder="Tell us about your gaming setup, including hardware, peripherals, and environment..."
-                      className="bg-background/50 min-h-[100px]"
+                      className="bg-background/50 min-h-[20px]"
                       {...field}
                     />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
-            />
+            /> */}
 
             <div className="flex justify-end space-x-4 pt-4">
               <Button 
@@ -970,13 +1157,13 @@ export default function GamingPreferences() {
                 onClick={goToPreviousSection}
                 className="w-32"
               >
-                Previous
+                Previous Level
               </Button>
               <Button 
                 type="submit"
                 className="w-32 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700"
               >
-                Next
+                Level Up!
               </Button>
             </div>
           </form>
