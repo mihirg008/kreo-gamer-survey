@@ -9,7 +9,6 @@ import { useSurvey } from '@/context/SurveyContext';
 import { gamingFamilyUnder18FemaleSchema } from '@/lib/survey-validation';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Checkbox } from '@/components/ui/checkbox';
 import { Textarea } from '@/components/ui/textarea';
 import {
   Form,
@@ -26,7 +25,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
+
 const oldgenOptions = [
   { value: 'yes', label: 'Yes' },
   { value: 'no', label: 'No' },
@@ -65,36 +64,6 @@ const yesNoOptions = [
   { value: 'sometimes', label: 'Sometimes' },
 ];
 
-
-const supportiveOptions = [
-  { value: 'very_supportive', label: 'Very supportive' },
-  { value: 'somewhat_supportive', label: 'Somewhat supportive' },
-  { value: 'neutral', label: 'Neutral' },
-  { value: 'somewhat_discouraging', label: 'Somewhat discouraging' },
-  { value: 'very_discouraging', label: 'Very discouraging' },
-];
-
-const yesNoNotApplicableOptions = [
-  { value: 'yes', label: 'Yes' },
-  { value: 'no', label: 'No' },
-  { value: 'na', label: 'Not applicable' },
-];
-
-const frequencyOptions = [
-  { value: 'always', label: 'Always' },
-  { value: 'often', label: 'Often' },
-  { value: 'sometimes', label: 'Sometimes' },
-  { value: 'rarely', label: 'Rarely' },
-  { value: 'never', label: 'Never' },
-];
-
-const encouragementOptions = [
-  { value: 'strongly_encourage', label: 'Strongly encourage' },
-  { value: 'somewhat_encourage', label: 'Somewhat encourage' },
-  { value: 'neutral', label: 'Neither encourage nor discourage' },
-  { value: 'somewhat_discourage', label: 'Somewhat discourage' },
-  { value: 'strongly_discourage', label: 'Strongly discourage' },
-];
 
 export default function GamingFamilyUnder18Female() {
   const { updateResponses, goToNextSection, goToPreviousSection, responses } = useSurvey();
@@ -164,7 +133,7 @@ export default function GamingFamilyUnder18Female() {
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
 <FormField
               control={form.control}
-              name="old_generation"
+              name="family_perception"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Do you feel gaming is misunderstood by older generations?</FormLabel>
@@ -240,7 +209,7 @@ export default function GamingFamilyUnder18Female() {
 
 <FormField
               control={form.control}
-              name="academic_networking"
+              name="gaming_impact"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>How has gaming affected your life?</FormLabel>
@@ -309,7 +278,7 @@ export default function GamingFamilyUnder18Female() {
 
             <FormField
               control={form.control}
-              name="women_communities"
+              name="parents_supportive"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Do you participate in gaming communities specifically for women?</FormLabel>

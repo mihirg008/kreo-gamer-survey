@@ -55,13 +55,16 @@ export const gamingPreferencesSchema = z.object({
   favorite_game_2_other: z.string().optional(),
   favorite_game_3_other: z.string().optional(),
   preferred_genre: z.array(z.string()).min(1, { message: 'Select at least one genre' }),
-  spending_monthly: z.string({ required_error: 'Please select your monthly spending' }),
-  gaming_setup: z.string({ required_error: 'Please select your gaming setup' }),
+  spending_monthly: z.array(z.string()).min(1, { message: 'Select your spending range' }),
+  next_game: z.string().optional(),
   device_ownership: z.array(z.string()).min(1, { message: 'Select at least one device' }),
   gaming_peripherals: z.array(z.string()).min(1, { message: 'Select at least one peripheral' }),
-  internet_speed: z.string({ required_error: 'Please select your internet speed' }),
+  internet_speed: z.string().optional(),
   favorite_developers: z.array(z.string()).min(1, { message: 'Select at least one developer' }),
-  payment_methods: z.array(z.string()).min(1, { message: 'Select at least one payment method' })
+  gaming_spends: z.array(z.string()).min(1, { message: 'Select your spending preference' }),
+  gear_upgrade: z.array(z.string()).min(1, { message: 'Select your upgrade frequency' }),
+  purchase_platforms: z.array(z.string()).min(1, { message: 'Select at least one platform' }),
+  kreo_familiarity: z.array(z.string()).min(1, { message: 'Select your familiarity' })
 });
 
 export const gamingHabitsSchema = z.object({
@@ -83,6 +86,17 @@ export const gamingLifestyleSchema = z.object({
   gaming_communities: z.array(z.string()),
   gaming_subscriptions: z.array(z.string()),
   gaming_news_sources: z.array(z.string()).min(1, { message: 'Select at least one news source' }),
+  interest: z.string().optional(),
+  customised_peripherals: z.array(z.string()).optional(),
+  gaming_food: z.string().optional(),
+  gaming_drink: z.string().optional(),
+  watch_content: z.array(z.string()).optional(),
+  fav_creator: z.string().optional(),
+  esp_participation: z.array(z.string()).optional(),
+  is_content_c: z.array(z.string()).optional(),
+  in_game_spends: z.array(z.string()).optional(),
+  merch_spends: z.array(z.string()).optional(),
+  collectibles: z.array(z.string()).optional(),
 });
 
 export const gamingFamilyUnder18MaleSchema = z.object({
@@ -200,4 +214,5 @@ export const futureGamingSchema = z.object({
   blockchain_gaming: z.string({ required_error: 'Please rate your interest in blockchain gaming' }),
   subscription_services: z.string({ required_error: 'Please select your preference' }),
   future_spending: z.string({ required_error: 'Please select your future spending plans' }),
+  future_gaming: z.array(z.string()).optional(),
 }); 

@@ -36,18 +36,6 @@ const platforms = [
   { id: 'other', label: 'Anything else?' },
 ];
 
-const genres = [
-  { id: 'action', label: 'Action' },
-  { id: 'rpg', label: 'RPG' },
-  { id: 'fps', label: 'FPS' },
-  { id: 'moba', label: 'MOBA' },
-  { id: 'strategy', label: 'Strategy' },
-  { id: 'sports', label: 'Sports' },
-  { id: 'racing', label: 'Racing' },
-  { id: 'simulation', label: 'Simulation' },
-  { id: 'adventure', label: 'Adventure' },
-  { id: 'puzzle', label: 'Puzzle' },
-];
 
 const spendingOptions = [
   { value: 'none', label: '₹0 - I use what I have' },
@@ -330,15 +318,6 @@ const popularGames2 = [
 {id:'fifa',label:'FIFA'},
 ];
 
-const deviceOptions = [
-  { id: 'gaming_pc', label: 'Gaming PC' },
-  { id: 'laptop', label: 'Gaming Laptop' },
-  { id: 'console', label: 'Console' },
-  { id: 'smartphone', label: 'Smartphone' },
-  { id: 'tablet', label: 'Tablet' },
-  { id: 'handheld_console', label: 'Handheld Console' },
-];
-
 
 const gearupgradeOptions = [
   { id: 'gaming_mouse', label: 'Every year' },
@@ -364,38 +343,19 @@ const peripheralOptions = [
 
 const ecomOptions = [
   { value: 'quick_commerce', label: 'Blinkit, Instamart, Zepto - I want it super quick!' },
-  { value: 'retailers', label: ' Local retailers - Need to feel it' },
+  { value: 'retailers', label: 'Local retailers - Need to feel it' },
   { value: 'second_hand', label: 'Second-hand market - Need it cheap' },
   { value: 'online', label: 'Online Marketplace' },
   { value: 'brand', label: 'Brand website - Genuine stuff only!' },
 ];
 
 
-const internetSpeedOptions = [
-  { value: 'below_50mbps', label: 'Below 50 Mbps' },
-  { value: '50_100mbps', label: '50-100 Mbps' },
-  { value: '100_300mbps', label: '100-300 Mbps' },
-  { value: 'above_300mbps', label: 'Above 300 Mbps' },
-  { value: 'unsure', label: 'Not sure' },
-];
-
 const kreoFam = [
   { value: 'yes', label: 'Yes' },
   { value: 'no', label: 'No' },
 ];
 
-const developerOptions = [
-  { id: 'riot', label: 'Riot Games' },
-  { id: 'valve', label: 'Valve' },
-  { id: 'blizzard', label: 'Blizzard' },
-  { id: 'ea', label: 'Electronic Arts' },
-  { id: 'ubisoft', label: 'Ubisoft' },
-  { id: 'rockstar', label: 'Rockstar Games' },
-  { id: 'nintendo', label: 'Nintendo' },
-  { id: 'epic', label: 'Epic Games' },
-  { id: 'activision', label: 'Activision' },
-  { id: 'cdpr', label: 'CD Projekt Red' },
-];
+
 
 const sptypeOptions = [
   { id: 'regularly', label: 'Yes, regularly' },
@@ -416,13 +376,16 @@ export default function GamingPreferences() {
     favorite_game_2_other?: string;
     favorite_game_3_other?: string;
     preferred_genre?: string[];
-    spending_monthly?: string;
+    spending_monthly?: string[];
     next_game?: string;
     device_ownership?: string[];
     gaming_peripherals?: string[];
     internet_speed?: string;
     favorite_developers?: string[];
     gaming_spends?: string[];
+    gear_upgrade?: string[];
+    purchase_platforms?: string[];
+    kreo_familiarity?: string[];
   };
 
   const form = useForm<z.infer<typeof gamingPreferencesSchema>>({
@@ -436,13 +399,16 @@ export default function GamingPreferences() {
       favorite_game_2_other: savedData.favorite_game_2_other || '',
       favorite_game_3_other: savedData.favorite_game_3_other || '',
       preferred_genre: savedData.preferred_genre || [],
-      spending_monthly: savedData.spending_monthly || '',
+      spending_monthly: savedData.spending_monthly || [],
       next_game: savedData.next_game || '',
       device_ownership: savedData.device_ownership || [],
       gaming_peripherals: savedData.gaming_peripherals || [],
       internet_speed: savedData.internet_speed || '',
       favorite_developers: savedData.favorite_developers || [],
-      gaming_spends: savedData.gaming_spends || []
+      gaming_spends: savedData.gaming_spends || [],
+      gear_upgrade: savedData.gear_upgrade || [],
+      purchase_platforms: savedData.purchase_platforms || [],
+      kreo_familiarity: savedData.kreo_familiarity || []
     }
   });
 
@@ -757,110 +723,6 @@ export default function GamingPreferences() {
               />
             </div>
 
-{/*             <FormField
-              control={form.control}
-              name="favorite_developers"
-              render={() => (
-                <FormItem>
-                  <FormLabel>Favorite Game Developers</FormLabel>
-                  <div className="grid grid-cols-2 gap-4 mt-2">
-                    {developerOptions.map((developer) => (
-                      <FormField
-                        key={developer.id}
-                        control={form.control}
-                        name="favorite_developers"
-                        render={({ field }) => (
-                          <FormItem className="flex items-center space-x-3">
-                            <FormControl>
-                              <Checkbox
-                                checked={field.value?.includes(developer.id)}
-                                onCheckedChange={(checked) => {
-                                  const value = field.value || [];
-                                  if (checked) {
-                                    field.onChange([...value, developer.id]);
-                                  } else {
-                                    field.onChange(value.filter((val) => val !== developer.id));
-                                  }
-                                }}
-                              />
-                            </FormControl>
-                            <FormLabel className="font-normal">
-                              {developer.label}
-                            </FormLabel>
-                          </FormItem>
-                        )}
-                      />
-                    ))}
-                  </div>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
- */}
-{/*             <FormField
-              control={form.control}
-              name="preferred_genre"
-              render={() => (
-                <FormItem>
-                  <FormLabel>Preferred Genres</FormLabel>
-                  <div className="grid grid-cols-2 gap-4 mt-2">
-                    {genres.map((genre) => (
-                      <FormField
-                        key={genre.id}
-                        control={form.control}
-                        name="preferred_genre"
-                        render={({ field }) => (
-                          <FormItem className="flex items-center space-x-3">
-                            <FormControl>
-                              <Checkbox
-                                checked={field.value?.includes(genre.id)}
-                                onCheckedChange={(checked) => {
-                                  const value = field.value || [];
-                                  if (checked) {
-                                    field.onChange([...value, genre.id]);
-                                  } else {
-                                    field.onChange(value.filter((val) => val !== genre.id));
-                                  }
-                                }}
-                              />
-                            </FormControl>
-                            <FormLabel className="font-normal">
-                              {genre.label}
-                            </FormLabel>
-                          </FormItem>
-                        )}
-                      />
-                    ))}
-                  </div>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
- */}
-            // <FormField
-            //   control={form.control}
-            //   name="internet_speed"
-            //   render={({ field }) => (
-            //     <FormItem>
-            //       <FormLabel>Your Internet Speed</FormLabel>
-            //       <Select onValueChange={field.onChange} defaultValue={field.value}>
-            //         <FormControl>
-            //           <SelectTrigger className="bg-background/50">
-            //             <SelectValue placeholder="Select your internet speed" />
-            //           </SelectTrigger>
-            //         </FormControl>
-            //         <SelectContent>
-            //           {internetSpeedOptions.map((option) => (
-            //             <SelectItem key={option.value} value={option.value}>
-            //               {option.label}
-            //             </SelectItem>
-            //           ))}
-            //         </SelectContent>
-            //       </Select>
-            //       <FormMessage />
-            //     </FormItem>
-            //   )}
-            // />
 
             <FormField
               control={form.control}
@@ -878,9 +740,7 @@ export default function GamingPreferences() {
                   <FormMessage />
                 </FormItem>
               )}
-            />  
-  
-           
+            />
 
             <FormField
               control={form.control}
@@ -889,28 +749,28 @@ export default function GamingPreferences() {
                 <FormItem>
                   <FormLabel>Do you spend money on games?</FormLabel>
                   <div className="grid grid-cols-2 gap-4 mt-2">
-                    {sptypeOptions.map((method) => (
+                    {sptypeOptions.map((option) => (
                       <FormField
-                        key={method.id}
+                        key={option.id}
                         control={form.control}
                         name="gaming_spends"
                         render={({ field }) => (
                           <FormItem className="flex items-center space-x-3">
                             <FormControl>
                               <Checkbox
-                                checked={field.value?.includes(method.id)}
+                                checked={field.value?.includes(option.id)}
                                 onCheckedChange={(checked) => {
                                   const value = field.value || [];
                                   if (checked) {
-                                    field.onChange([...value, method.id]);
+                                    field.onChange([...value, option.id]);
                                   } else {
-                                    field.onChange(value.filter((val) => val !== method.id));
+                                    field.onChange(value.filter((val) => val !== option.id));
                                   }
                                 }}
                               />
                             </FormControl>
                             <FormLabel className="font-normal">
-                              {method.label}
+                              {option.label}
                             </FormLabel>
                           </FormItem>
                         )}
@@ -1011,28 +871,28 @@ export default function GamingPreferences() {
                 <FormItem>
                   <FormLabel>Where do you purchase your gaming gear from?</FormLabel>
                   <div className="grid grid-cols-2 gap-4 mt-2">
-                    {ecomOptions.map((method) => (
+                    {ecomOptions.map((option) => (
                       <FormField
-                        key={method.id}
+                        key={option.value}
                         control={form.control}
-                        name="purchase_platform"
+                        name="purchase_platforms"
                         render={({ field }) => (
                           <FormItem className="flex items-center space-x-3">
                             <FormControl>
                               <Checkbox
-                                checked={field.value?.includes(method.id)}
+                                checked={field.value?.includes(option.value)}
                                 onCheckedChange={(checked) => {
                                   const value = field.value || [];
                                   if (checked) {
-                                    field.onChange([...value, method.id]);
+                                    field.onChange([...value, option.value]);
                                   } else {
-                                    field.onChange(value.filter((val) => val !== method.id));
+                                    field.onChange(value.filter((val) => val !== option.value));
                                   }
                                 }}
                               />
                             </FormControl>
                             <FormLabel className="font-normal">
-                              {method.label}
+                              {option.label}
                             </FormLabel>
                           </FormItem>
                         )}
@@ -1053,28 +913,28 @@ export default function GamingPreferences() {
                 <FormItem>
                   <FormLabel>Are you familiar with Kreo products?</FormLabel>
                   <div className="grid grid-cols-2 gap-4 mt-2">
-                    {kreoFam.map((method) => (
+                    {kreoFam.map((option) => (
                       <FormField
-                        key={method.id}
+                        key={option.value}
                         control={form.control}
                         name="kreo_familiarity"
                         render={({ field }) => (
                           <FormItem className="flex items-center space-x-3">
                             <FormControl>
                               <Checkbox
-                                checked={field.value?.includes(method.id)}
+                                checked={field.value?.includes(option.value)}
                                 onCheckedChange={(checked) => {
                                   const value = field.value || [];
                                   if (checked) {
-                                    field.onChange([...value, method.id]);
+                                    field.onChange([...value, option.value]);
                                   } else {
-                                    field.onChange(value.filter((val) => val !== method.id));
+                                    field.onChange(value.filter((val) => val !== option.value));
                                   }
                                 }}
                               />
                             </FormControl>
                             <FormLabel className="font-normal">
-                              {method.label}
+                              {option.label}
                             </FormLabel>
                           </FormItem>
                         )}
@@ -1094,28 +954,28 @@ export default function GamingPreferences() {
                 <FormItem>
                   <FormLabel>How much do you spend on your gaming setup (PC, console, accessories) per year?</FormLabel>
                   <div className="grid grid-cols-2 gap-4 mt-2">
-                    {spendingOptions.map((method) => (
+                    {spendingOptions.map((option) => (
                       <FormField
-                        key={method.id}
+                        key={option.value}
                         control={form.control}
                         name="spending_monthly"
                         render={({ field }) => (
                           <FormItem className="flex items-center space-x-3">
                             <FormControl>
                               <Checkbox
-                                checked={field.value?.includes(method.id)}
+                                checked={field.value?.includes(option.value)}
                                 onCheckedChange={(checked) => {
                                   const value = field.value || [];
                                   if (checked) {
-                                    field.onChange([...value, method.id]);
+                                    field.onChange([...value, option.value]);
                                   } else {
-                                    field.onChange(value.filter((val) => val !== method.id));
+                                    field.onChange(value.filter((val) => val !== option.value));
                                   }
                                 }}
                               />
                             </FormControl>
                             <FormLabel className="font-normal">
-                              {method.label}
+                              {option.label}
                             </FormLabel>
                           </FormItem>
                         )}

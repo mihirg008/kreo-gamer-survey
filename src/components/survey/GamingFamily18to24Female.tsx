@@ -9,7 +9,6 @@ import { useSurvey } from '@/context/SurveyContext';
 import { gamingFamily18to24FemaleSchema } from '@/lib/survey-validation';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Checkbox } from '@/components/ui/checkbox';
 import { Textarea } from '@/components/ui/textarea';
 import {
   Form,
@@ -26,7 +25,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 
 const perceptionOptions = [
   { value: 'waste_of_time', label: 'A waste of time' },
@@ -48,23 +46,6 @@ const reasonOptions = [
   { value: 'competitive', label: 'Competitive gaming' },
 ];
 
-const peerReactionOptions = [
-  { value: 'very_positive', label: 'Very positive/supportive' },
-  { value: 'mostly_positive', label: 'Mostly positive' },
-  { value: 'neutral', label: 'Neutral/indifferent' },
-  { value: 'slightly_negative', label: 'Slightly negative/confused' },
-  { value: 'very_negative', label: 'Very negative/dismissive' },
-  { value: 'mixed', label: 'Mixed reactions' },
-];
-
-const supportOptions = [
-  { value: 'very_supportive', label: 'Very supportive' },
-  { value: 'somewhat_supportive', label: 'Somewhat supportive' },
-  { value: 'neutral', label: 'Neutral' },
-  { value: 'somewhat_unsupportive', label: 'Somewhat unsupportive' },
-  { value: 'very_unsupportive', label: 'Very unsupportive' },
-  { value: 'not_applicable', label: 'Not applicable' },
-];
 
 
 const biasOptions = [
@@ -81,13 +62,6 @@ const oldgenOptions = [
 ];
 
 
-const frequencyOptions = [
-  { value: 'always', label: 'Always' },
-  { value: 'often', label: 'Often' },
-  { value: 'sometimes', label: 'Sometimes' },
-  { value: 'rarely', label: 'Rarely' },
-  { value: 'never', label: 'Never' },
-];
 
 const yesNoOptions = [
   { value: 'yes', label: 'Yes' },
@@ -95,13 +69,7 @@ const yesNoOptions = [
   { value: 'sometimes', label: 'Sometimes' },
 ];
 
-const representationOptions = [
-  { value: 'well_represented', label: 'Well represented' },
-  { value: 'somewhat_represented', label: 'Somewhat represented' },
-  { value: 'neutral', label: 'Neutral' },
-  { value: 'somewhat_underrepresented', label: 'Somewhat underrepresented' },
-  { value: 'very_underrepresented', label: 'Very underrepresented' },
-];
+
 
 export default function GamingFamily18to24Female() {
   const { updateResponses, goToNextSection, goToPreviousSection, responses } = useSurvey();
@@ -171,7 +139,7 @@ export default function GamingFamily18to24Female() {
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
             <FormField
               control={form.control}
-              name="old_generation"
+              name="family_perception"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Do you feel gaming is misunderstood by older generations?</FormLabel>

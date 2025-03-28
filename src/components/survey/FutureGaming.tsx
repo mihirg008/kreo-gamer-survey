@@ -9,6 +9,7 @@ import { useSurvey } from '@/context/SurveyContext';
 import { futureGamingSchema } from '@/lib/survey-validation';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
+import { Checkbox } from '@/components/ui/checkbox';
 import {
   Form,
   FormControl,
@@ -26,49 +27,6 @@ import {
 } from '@/components/ui/select';
 import ThankYou from './ThankYou';
 
-const interestOptions = [
-  { value: 'very_interested', label: 'Very Interested' },
-  { value: 'somewhat_interested', label: 'Somewhat Interested' },
-  { value: 'neutral', label: 'Neutral' },
-  { value: 'not_interested', label: 'Not Interested' },
-];
-
-const vrAdoptionOptions = [
-  { value: 'already_use', label: 'Already using VR' },
-  { value: 'planning_soon', label: 'Planning to buy soon' },
-  { value: 'interested', label: 'Interested but no plans' },
-  { value: 'not_interested', label: 'Not interested' },
-];
-
-const cloudGamingOptions = [
-  { value: 'prefer_cloud', label: 'Prefer cloud gaming' },
-  { value: 'mix', label: 'Mix of cloud and traditional' },
-  { value: 'prefer_traditional', label: 'Prefer traditional gaming' },
-  { value: 'undecided', label: 'Undecided' },
-];
-
-const sustainabilityOptions = [
-  { value: 'very_important', label: 'Very Important' },
-  { value: 'somewhat_important', label: 'Somewhat Important' },
-  { value: 'neutral', label: 'Neutral' },
-  { value: 'not_important', label: 'Not Important' },
-];
-
-const aiInterestOptions = [
-  { value: 'very_excited', label: 'Very excited about AI in games' },
-  { value: 'somewhat_excited', label: 'Somewhat excited' },
-  { value: 'neutral', label: 'Neutral' },
-  { value: 'concerned', label: 'Concerned about AI in games' },
-  { value: 'very_concerned', label: 'Very concerned about AI in games' },
-];
-
-const blockchainOptions = [
-  { value: 'very_interested', label: 'Very interested in blockchain/NFT games' },
-  { value: 'somewhat_interested', label: 'Somewhat interested' },
-  { value: 'neutral', label: 'Neutral' },
-  { value: 'not_interested', label: 'Not interested' },
-  { value: 'opposed', label: 'Opposed to blockchain in gaming' },
-];
 
 
 const sustainableOptions = [
@@ -76,12 +34,7 @@ const sustainableOptions = [
   { value: 'no', label: 'No' },
 ];
 
-const subscriptionOptions = [
-  { value: 'prefer_subscription', label: 'Prefer subscription services (Game Pass, etc.)' },
-  { value: 'prefer_ownership', label: 'Prefer to own individual games' },
-  { value: 'mix', label: 'Prefer a mix of both' },
-  { value: 'undecided', label: 'Undecided' },
-];
+
 
 
 
@@ -94,12 +47,7 @@ const futuregamingOptions = [
 ];
 
 
-const spendingOptions = [
-  { value: 'increase', label: 'Likely to increase spending on gaming' },
-  { value: 'same', label: 'Likely to maintain same spending level' },
-  { value: 'decrease', label: 'Likely to decrease spending on gaming' },
-  { value: 'unsure', label: 'Unsure about future spending' },
-];
+
 
 export default function FutureGaming() {
   const { updateResponses, goToPreviousSection, goToNextSection, responses } = useSurvey();
@@ -114,6 +62,7 @@ export default function FutureGaming() {
     blockchain_gaming?: string;
     subscription_services?: string;
     future_spending?: string;
+    future_gaming?: string[];
   };
 
   const form = useForm<z.infer<typeof futureGamingSchema>>({
@@ -127,6 +76,7 @@ export default function FutureGaming() {
       blockchain_gaming: savedData.blockchain_gaming || '',
       subscription_services: savedData.subscription_services || '',
       future_spending: savedData.future_spending || '',
+      future_gaming: savedData.future_gaming || [],
     },
   });
 
@@ -174,20 +124,20 @@ export default function FutureGaming() {
                   <div className="grid grid-cols-2 gap-4 mt-2">
                     {futuregamingOptions.map((method) => (
                       <FormField
-                        key={method.id}
+                        key={method.value}
                         control={form.control}
                         name="future_gaming"
                         render={({ field }) => (
                           <FormItem className="flex items-center space-x-3">
                             <FormControl>
                               <Checkbox
-                                checked={field.value?.includes(method.id)}
+                                checked={field.value?.includes(method.value)}
                                 onCheckedChange={(checked) => {
                                   const value = field.value || [];
                                   if (checked) {
-                                    field.onChange([...value, method.id]);
+                                    field.onChange([...value, method.value]);
                                   } else {
-                                    field.onChange(value.filter((val) => val !== method.id));
+                                    field.onChange(value.filter((val) => val !== method.value));
                                   }
                                 }}
                               />
@@ -208,7 +158,7 @@ export default function FutureGaming() {
             
             <FormField
               control={form.control}
-              name="sustainable_interest"
+              name="sustainability"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Would you support sustainable and eco-friendly gaming gear if available?</FormLabel>

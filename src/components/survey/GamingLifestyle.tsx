@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
@@ -11,6 +11,7 @@ import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
 import {
   Form,
   FormControl,
@@ -56,25 +57,6 @@ const contentcreatorOptions = [
 ];
 
 
-const custopmPerOptions = [
-  { id: 'ninja', label: 'Yes, already use' },
-  { id: 'shroud', label: 'Would like to try' },
-  { id: 'pokimane', label: '' },
-  { id: 'pewdiepie', label: 'PewDiePie' },
-  { id: 'drlupo', label: 'DrLupo' },
-  { id: 'tfue', label: 'Tfue' },
-  { id: 'indian_streamers', label: 'Indian Streamers' },
-  { id: 'none', label: 'Don\'t follow influencers' },
-];
-
-
-const spendingOptions = [
-  { value: 'none', label: 'No spending' },
-  { value: 'under_500', label: 'Under ₹500' },
-  { value: '500_2000', label: '₹500 - ₹2,000' },
-  { value: 'above_2000', label: 'Above ₹2,000' },
-];
-
 
 const esportpartOptions = [
   { value: 'none', label: 'Yes, regularly' },
@@ -89,27 +71,10 @@ const contentwatchOptions = [
   { id: 'rarely', label: 'Rarely' },
 ];
 
-const eventTypes = [
-  { id: 'tournaments', label: 'Gaming Tournaments' },
-  { id: 'conventions', label: 'Gaming Conventions' },
-  { id: 'meetups', label: 'Community Meetups' },
-  { id: 'esports', label: 'Esports Events' },
-];
-
-const esportsOptions = [
-  { id: 'league_of_legends', label: 'League of Legends' },
-  { id: 'dota2', label: 'Dota 2' },
-  { id: 'csgo', label: 'CS:GO' },
-  { id: 'valorant', label: 'Valorant' },
-  { id: 'overwatch', label: 'Overwatch' },
-  { id: 'pubg', label: 'PUBG' },
-  { id: 'fortnite', label: 'Fortnite' },
-  { id: 'rocket_league', label: 'Rocket League' },
-];
 
 
 const foodOptions = [
-  { id: 'fast_food', label: 'Fast food (McDonald’s, KFC, Dominos...)' },
+  { id: 'fast_food', label: 'Fast food (McDonald\'s, KFC, Dominos...)' },
   { id: 'snacks', label: 'Snacks (Lays, Kurkure, Pringles..)' },
   { id: 'healthy', label: 'Healthy options (Nuts, Protein bars, Fruits...)' },
 ];
@@ -121,45 +86,22 @@ const drinksOptions = [
   { id: 'others', label: 'Coke, Mazza, Frooti, Paperboat...' },
 ];
 
-const influencerOptions = [
-  { id: 'ninja', label: 'Ninja' },
-  { id: 'shroud', label: 'Shroud' },
-  { id: 'pokimane', label: 'Pokimane' },
-  { id: 'pewdiepie', label: 'PewDiePie' },
-  { id: 'drlupo', label: 'DrLupo' },
-  { id: 'tfue', label: 'Tfue' },
-  { id: 'indian_streamers', label: 'Indian Streamers' },
-  { id: 'none', label: 'Don\'t follow influencers' },
+const customPerOptions = [
+  { id: 'yes', label: 'Yes, I use customized peripherals' },
+  { id: 'want_to', label: 'No, but I would like to' },
+  { id: 'not_interested', label: 'No, not interested' },
 ];
 
-const communityOptions = [
-  { id: 'discord', label: 'Discord Servers' },
-  { id: 'reddit', label: 'Reddit Communities' },
-  { id: 'facebook', label: 'Facebook Groups' },
-  { id: 'twitter', label: 'Twitter Communities' },
-  { id: 'official_forums', label: 'Official Game Forums' },
-  { id: 'whatsapp', label: 'WhatsApp Groups' },
-  { id: 'telegram', label: 'Telegram Channels' },
-];
+
 
 
 const merchspendsOptions = [
-  { id: 'zero', label: '₹0 - I don’t buy merch' },
+  { id: 'zero', label: '₹0 - I don\'t buy merch' },
   { id: '500_to_2000', label: '₹500-2000 - Occasional buyer ' },
   { id: '2000_to_5000', label: '₹2000-5000 - Enthusiast' },
   { id: '5000_plus', label: ' ₹5000+ - Hardcore collector' },
 ];
 
-const subscriptionOptions = [
-  { id: 'game_pass', label: 'Xbox Game Pass' },
-  { id: 'ps_plus', label: 'PlayStation Plus' },
-  { id: 'ea_play', label: 'EA Play' },
-  { id: 'ubisoft_plus', label: 'Ubisoft+' },
-  { id: 'nintendo_online', label: 'Nintendo Switch Online' },
-  { id: 'twitch_prime', label: 'Twitch Prime' },
-  { id: 'youtube_premium', label: 'YouTube Premium' },
-  { id: 'none', label: 'No subscriptions' },
-];
 
 
 const contentconsumeOptions = [
@@ -172,9 +114,8 @@ const contentconsumeOptions = [
 ];
 
 
-
 const igsOptions = [
-  { id: 'zero', label: '₹0 - I’m strictly F2P ' },
+  { id: 'zero', label: '₹0 - I\'m strictly F2P ' },
   { id: '100_to_500', label: '₹100-500 - Casual spender' },
   { id: '500_to_2000', label: '₹500-2000 - Invested in the grind' },
   { id: '2000_plus', label: ' ₹2000+ - Take my money, devs!' },
@@ -189,19 +130,10 @@ const collectOptions = [
 
 
 
-const newsSourceOptions = [
-  { id: 'ign', label: 'IGN' },
-  { id: 'gamespot', label: 'GameSpot' },
-  { id: 'kotaku', label: 'Kotaku' },
-  { id: 'polygon', label: 'Polygon' },
-  { id: 'youtube', label: 'YouTube Channels' },
-  { id: 'reddit', label: 'Reddit' },
-  { id: 'twitter', label: 'Twitter' },
-  { id: 'discord', label: 'Discord' },
-];
 
 export default function GamingLifestyle() {
   const { updateResponses, goToNextSection, goToPreviousSection, responses } = useSurvey();
+  const [filteredActivity, setFilteredActivity] = useState(activityOptions);
 
   const savedData = (responses.gaming_lifestyle || {}) as {
     streams_content?: boolean;
@@ -377,7 +309,7 @@ export default function GamingLifestyle() {
                     </FormControl>
                     <SelectContent>
                       {foodOptions.map((option) => (
-                        <SelectItem key={option.value} value={option.value}>
+                        <SelectItem key={option.id} value={option.id}>
                           {option.label}
                         </SelectItem>
                       ))}
@@ -401,8 +333,8 @@ export default function GamingLifestyle() {
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
-                      {drinkOptions.map((option) => (
-                        <SelectItem key={option.value} value={option.value}>
+                      {drinksOptions.map((option) => (
+                        <SelectItem key={option.id} value={option.id}>
                           {option.label}
                         </SelectItem>
                       ))}
@@ -480,20 +412,20 @@ export default function GamingLifestyle() {
                   <div className="grid grid-cols-2 gap-4 mt-2">
                     {esportpartOptions.map((customize) => (
                       <FormField
-                        key={customize.id}
+                        key={customize.value}
                         control={form.control}
                         name="esp_participation"
                         render={({ field }) => (
                           <FormItem className="flex items-center space-x-3">
                             <FormControl>
                               <Checkbox
-                                checked={field.value?.includes(customize.id)}
+                                checked={field.value?.includes(customize.value)}
                                 onCheckedChange={(checked) => {
                                   const value = field.value || [];
                                   if (checked) {
-                                    field.onChange([...value, customize.id]);
+                                    field.onChange([...value, customize.value]);
                                   } else {
-                                    field.onChange(value.filter((val) => val !== customize.id));
+                                    field.onChange(value.filter((val) => val !== customize.value));
                                   }
                                 }}
                               />

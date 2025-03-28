@@ -9,7 +9,6 @@ import { useSurvey } from '@/context/SurveyContext';
 import { gamingFamily25PlusFemaleSchema } from '@/lib/survey-validation';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Checkbox } from '@/components/ui/checkbox';
 import { Textarea } from '@/components/ui/textarea';
 import {
   Form,
@@ -26,13 +25,19 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 
 const oldgenOptions = [
   { value: 'yes', label: 'Yes' },
   { value: 'no', label: 'No' },
   { value: 'sometimes', label: 'Sometimes' },
 ];
+
+const yesNoOptions = [
+  { value: 'yes', label: 'Yes' },
+  { value: 'no', label: 'No' },
+  { value: 'sometimes', label: 'Sometimes' },
+];
+
 const perceptionOptions = [
   { value: 'waste_of_time', label: 'A waste of time' },
   { value: 'fun_hobby', label: 'A fun hobby' },
@@ -60,68 +65,6 @@ const characterOptions = [
   { value: 'custom', label: 'Custom avatar' },
 ];
 
-const yesNoOptions = [
-  { value: 'yes', label: 'Yes' },
-  { value: 'no', label: 'No' },
-  { value: 'sometimes', label: 'Sometimes' },
-];
-
-const frequencyOptions = [
-  { value: 'always', label: 'Always' },
-  { value: 'often', label: 'Often' },
-  { value: 'sometimes', label: 'Sometimes' },
-  { value: 'rarely', label: 'Rarely' },
-  { value: 'never', label: 'Never' },
-];
-
-const yesNoOptions = [
-  { value: 'yes', label: 'Yes' },
-  { value: 'no', label: 'No' },
-  { value: 'sometimes', label: 'Sometimes' },
-];
-
-const impactOptions = [
-  { value: 'very_positive', label: 'Very positively' },
-  { value: 'somewhat_positive', label: 'Somewhat positively' },
-  { value: 'neutral', label: 'Neutral - no effect' },
-  { value: 'somewhat_negative', label: 'Somewhat negatively' },
-  { value: 'very_negative', label: 'Very negatively' },
-  { value: 'mixed', label: 'Mixed - both positive and negative' },
-];
-
-const balanceOptions = [
-  { value: 'very_well', label: 'Very well - I have a good balance' },
-  { value: 'somewhat_well', label: 'Somewhat well - Occasional conflicts' },
-  { value: 'neutral', label: 'Neutral' },
-  { value: 'somewhat_difficult', label: 'Somewhat difficult - Regular conflicts' },
-  { value: 'very_difficult', label: 'Very difficult - Significant conflicts' },
-];
-
-const representationOptions = [
-  { value: 'well_represented', label: 'Well represented' },
-  { value: 'somewhat_represented', label: 'Somewhat represented' },
-  { value: 'neutral', label: 'Neutral' },
-  { value: 'somewhat_underrepresented', label: 'Somewhat underrepresented' },
-  { value: 'very_underrepresented', label: 'Very underrepresented' },
-];
-
-const communityOptions = [
-  { value: 'very_supportive', label: 'Very supportive' },
-  { value: 'somewhat_supportive', label: 'Somewhat supportive' },
-  { value: 'neutral', label: 'Neutral/mixed' },
-  { value: 'somewhat_unsupportive', label: 'Somewhat unsupportive' },
-  { value: 'very_unsupportive', label: 'Very unsupportive' },
-  { value: 'avoid', label: 'I avoid gaming communities' },
-];
-
-const stereotypeNavigationOptions = [
-  { value: 'challenge', label: 'I actively challenge stereotypes' },
-  { value: 'ignore', label: 'I ignore stereotypes' },
-  { value: 'hide_gender', label: 'I hide my gender while gaming' },
-  { value: 'women_only', label: 'I mostly play in women-friendly spaces' },
-  { value: 'adapt', label: 'I adapt my behavior to fit in' },
-  { value: 'other', label: 'Other approach' },
-];
 
 export default function GamingFamily25PlusFemale() {
   const { updateResponses, goToNextSection, goToPreviousSection, responses } = useSurvey();
@@ -196,7 +139,7 @@ export default function GamingFamily25PlusFemale() {
             
             <FormField
               control={form.control}
-              name="old_generation"
+              name="family_perception"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Do you feel gaming is misunderstood by older generations?</FormLabel>
@@ -272,7 +215,7 @@ export default function GamingFamily25PlusFemale() {
 
 <FormField
               control={form.control}
-              name="academic_networking"
+              name="gaming_networking"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>How has gaming affected your life?</FormLabel>
@@ -341,7 +284,7 @@ export default function GamingFamily25PlusFemale() {
 
             <FormField
               control={form.control}
-              name="women_communities"
+              name="community_support"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Do you participate in gaming communities specifically for women?</FormLabel>
@@ -350,7 +293,7 @@ export default function GamingFamily25PlusFemale() {
                       <SelectTrigger className="bg-background/50">
                         <SelectValue placeholder="Select your answer" />
                       </SelectTrigger>
-                    </FormControl>
+                    </FormControl>  
                     <SelectContent>
                       {yesNoOptions.map((option) => (
                         <SelectItem key={option.value} value={option.value}>
