@@ -26,6 +26,37 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 
+const gameStart = [
+  { id: 'less_than_1', label: 'Less than a year ago' },
+  { id: '1-3', label: '1-3 years ago' },
+  { id: '3-5', label: '3-5 years ago' },
+  { id: '5_plus', label: 'More than 5 years ago' },
+];
+
+const gType = [
+  { id: 'single', label: 'Single Player - I Play solo' },
+  { id: 'co-op', label: 'Co-op modes ++' },
+  { id: 'Multiplayer', label: 'Multiplayer' },
+  { id: 'Any', label: 'Any - I just like to play!' },
+];
+
+const buyingPref = [
+  { id: 'buy_offline', label: 'Buy physical copy' },
+  { id: 'buy_offline', label: 'Buy online' },
+  { id: 'crack', label: 'Use cracked version' },
+];
+
+const frequencyOptions = [
+  { value: 'daily', label: 'Daily' },
+  { value: 'few_times_week', label: 'Few times a week' },
+  { value: 'occasionally', label: 'Occasionally' },
+];
+
+const modPref = [
+  { value: 'yes', label: 'Yes' },
+  { value: 'no', label: 'No' },
+];
+
 const hoursOptions = [
   { value: 'under_7', label: 'Under 7 hours' },
   { value: '7_14', label: '7-14 hours' },
@@ -54,13 +85,7 @@ const yearsGaming = [
   { value: 'more_than_7', label: 'More than 7 years' },
 ];
 
-const frequencyOptions = [
-  { value: 'daily', label: 'Daily' },
-  { value: 'few_times_week', label: 'Few times a week' },
-  { value: 'weekends', label: 'Weekends only' },
-  { value: 'few_times_month', label: 'Few times a month' },
-  { value: 'rarely', label: 'Rarely' },
-];
+
 
 const sessionLengthOptions = [
   { value: 'under_1_hour', label: 'Under 1 hour' },
@@ -146,7 +171,213 @@ export default function GamingHabits() {
 
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+
             <FormField
+              control={form.control}
+              name="gaming_start"
+              render={() => (
+                <FormItem>
+                  <FormLabel>When did you first start gaming?</FormLabel>
+                  <div className="grid grid-cols-2 gap-4 mt-2">
+                    {gameStart.map((slot) => (
+                      <FormField
+                        key={slot.id}
+                        control={form.control}
+                        name="gaming_start"
+                        render={({ field }) => (
+                          <FormItem className="flex items-center space-x-3">
+                            <FormControl>
+                              <Checkbox
+                                checked={field.value?.includes(slot.id)}
+                                onCheckedChange={(checked) => {
+                                  const value = field.value || [];
+                                  if (checked) {
+                                    field.onChange([...value, slot.id]);
+                                  } else {
+                                    field.onChange(value.filter((val) => val !== slot.id));
+                                  }
+                                }}
+                              />
+                            </FormControl>
+                            <FormLabel className="font-normal">
+                              {slot.label}
+                            </FormLabel>
+                          </FormItem>
+                        )}
+                      />
+                    ))}
+                  </div>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="gaming_frequency"
+              render={() => (
+                <FormItem>
+                  <FormLabel>How often do you play games?</FormLabel>
+                  <div className="grid grid-cols-2 gap-4 mt-2">
+                    {frequencyOptions.map((slot) => (
+                      <FormField
+                        key={slot.id}
+                        control={form.control}
+                        name="gaming_frequency"
+                        render={({ field }) => (
+                          <FormItem className="flex items-center space-x-3">
+                            <FormControl>
+                              <Checkbox
+                                checked={field.value?.includes(slot.id)}
+                                onCheckedChange={(checked) => {
+                                  const value = field.value || [];
+                                  if (checked) {
+                                    field.onChange([...value, slot.id]);
+                                  } else {
+                                    field.onChange(value.filter((val) => val !== slot.id));
+                                  }
+                                }}
+                              />
+                            </FormControl>
+                            <FormLabel className="font-normal">
+                              {slot.label}
+                            </FormLabel>
+                          </FormItem>
+                        )}
+                      />
+                    ))}
+                  </div>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+
+            <FormField
+              control={form.control}
+              name="game_type"
+              render={() => (
+                <FormItem>
+                  <FormLabel>Do you prefer single-player or multiplayer games?</FormLabel>
+                  <div className="grid grid-cols-2 gap-4 mt-2">
+                    {gType.map((slot) => (
+                      <FormField
+                        key={slot.id}
+                        control={form.control}
+                        name="game_type"
+                        render={({ field }) => (
+                          <FormItem className="flex items-center space-x-3">
+                            <FormControl>
+                              <Checkbox
+                                checked={field.value?.includes(slot.id)}
+                                onCheckedChange={(checked) => {
+                                  const value = field.value || [];
+                                  if (checked) {
+                                    field.onChange([...value, slot.id]);
+                                  } else {
+                                    field.onChange(value.filter((val) => val !== slot.id));
+                                  }
+                                }}
+                              />
+                            </FormControl>
+                            <FormLabel className="font-normal">
+                              {slot.label}
+                            </FormLabel>
+                          </FormItem>
+                        )}
+                      />
+                    ))}
+                  </div>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+
+            <FormField
+              control={form.control}
+              name="game_buy"
+              render={() => (
+                <FormItem>
+                  <FormLabel>Do you prefer buying a game (disk, online) or using a cracked version?</FormLabel>
+                  <div className="grid grid-cols-2 gap-4 mt-2">
+                    {buyingPref.map((slot) => (
+                      <FormField
+                        key={slot.id}
+                        control={form.control}
+                        name="game_buy"
+                        render={({ field }) => (
+                          <FormItem className="flex items-center space-x-3">
+                            <FormControl>
+                              <Checkbox
+                                checked={field.value?.includes(slot.id)}
+                                onCheckedChange={(checked) => {
+                                  const value = field.value || [];
+                                  if (checked) {
+                                    field.onChange([...value, slot.id]);
+                                  } else {
+                                    field.onChange(value.filter((val) => val !== slot.id));
+                                  }
+                                }}
+                              />
+                            </FormControl>
+                            <FormLabel className="font-normal">
+                              {slot.label}
+                            </FormLabel>
+                          </FormItem>
+                        )}
+                      />
+                    ))}
+                  </div>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+
+            <FormField
+              control={form.control}
+              name="mod_controller"
+              render={() => (
+                <FormItem>
+                  <FormLabel>Do you use modified/experimental gaming controllers?</FormLabel>
+                  <div className="grid grid-cols-2 gap-4 mt-2">
+                    {modPref.map((slot) => (
+                      <FormField
+                        key={slot.id}
+                        control={form.control}
+                        name="mod_controller"
+                        render={({ field }) => (
+                          <FormItem className="flex items-center space-x-3">
+                            <FormControl>
+                              <Checkbox
+                                checked={field.value?.includes(slot.id)}
+                                onCheckedChange={(checked) => {
+                                  const value = field.value || [];
+                                  if (checked) {
+                                    field.onChange([...value, slot.id]);
+                                  } else {
+                                    field.onChange(value.filter((val) => val !== slot.id));
+                                  }
+                                }}
+                              />
+                            </FormControl>
+                            <FormLabel className="font-normal">
+                              {slot.label}
+                            </FormLabel>
+                          </FormItem>
+                        )}
+                      />
+                    ))}
+                  </div>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            
+            
+            
+{/*             <FormField
               control={form.control}
               name="gaming_frequency"
               render={({ field }) => (
@@ -169,9 +400,9 @@ export default function GamingHabits() {
                   <FormMessage />
                 </FormItem>
               )}
-            />
+            /> */}
 
-            <FormField
+{/*             <FormField
               control={form.control}
               name="hours_weekly"
               render={({ field }) => (
@@ -194,9 +425,9 @@ export default function GamingHabits() {
                   <FormMessage />
                 </FormItem>
               )}
-            />
+            /> */}
 
-            <FormField
+{/*             <FormField
               control={form.control}
               name="gaming_sessions"
               render={({ field }) => (
@@ -219,9 +450,9 @@ export default function GamingHabits() {
                   <FormMessage />
                 </FormItem>
               )}
-            />
+            /> */}
 
-            <FormField
+{/*             <FormField
               control={form.control}
               name="play_time"
               render={() => (
@@ -259,9 +490,9 @@ export default function GamingHabits() {
                   <FormMessage />
                 </FormItem>
               )}
-            />
+            /> */}
 
-            <FormField
+{/*             <FormField
               control={form.control}
               name="competitive_play"
               render={({ field }) => (
@@ -280,8 +511,8 @@ export default function GamingHabits() {
                 </FormItem>
               )}
             />
-
-            <FormField
+ */}
+{/*             <FormField
               control={form.control}
               name="skill_level"
               render={({ field }) => (
@@ -304,9 +535,9 @@ export default function GamingHabits() {
                   <FormMessage />
                 </FormItem>
               )}
-            />
+            /> */}
 
-            <FormField
+{/*             <FormField
               control={form.control}
               name="rage_quit_frequency"
               render={({ field }) => (
@@ -330,8 +561,8 @@ export default function GamingHabits() {
                 </FormItem>
               )}
             />
-
-            <FormField
+ */}
+{/*             <FormField
               control={form.control}
               name="gaming_breaks"
               render={({ field }) => (
@@ -354,9 +585,9 @@ export default function GamingHabits() {
                   <FormMessage />
                 </FormItem>
               )}
-            />
+            /> */}
 
-            <FormField
+{/*             <FormField
               control={form.control}
               name="years_gaming"
               render={({ field }) => (
@@ -379,7 +610,7 @@ export default function GamingHabits() {
                   <FormMessage />
                 </FormItem>
               )}
-            />
+            /> */}
 
             <div className="flex justify-end space-x-4 pt-4">
               <Button 
@@ -388,13 +619,13 @@ export default function GamingHabits() {
                 onClick={goToPreviousSection}
                 className="w-32"
               >
-                Previous
+                Previous Level
               </Button>
               <Button 
                 type="submit"
                 className="w-32 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700"
               >
-                Next
+                Level Up!
               </Button>
             </div>
           </form>
