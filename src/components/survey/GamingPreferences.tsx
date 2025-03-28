@@ -574,7 +574,7 @@ export default function GamingPreferences() {
             />
 
             <div className="space-y-6">
-              <h3 className="text-lg font-semibold text-white">Favorite Games</h3>
+              <h3 className="text-lg font-semibold">Favorite Games</h3>
               
               {/* Favorite Game 1 */}
               <FormField
@@ -582,18 +582,19 @@ export default function GamingPreferences() {
                 name="favorite_game_1"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="text-white">Favorite Game 1</FormLabel>
+                    <FormLabel>Favorite Game 1</FormLabel>
                     <Select onValueChange={field.onChange} defaultValue={field.value}>
                       <FormControl>
-                        <SelectTrigger className="bg-[#1A1A1A] border-[#333333] text-white">
+                        <SelectTrigger className="bg-background/50">
                           <SelectValue placeholder="Select your first favorite game" />
                         </SelectTrigger>
                       </FormControl>
-                      <SelectContent className="bg-[#1A1A1A] border-[#333333]">
-                        <div className="p-2">
-                          <Input
+                      <SelectContent>
+                        <div className="flex items-center px-2 pb-2">
+                          <input
+                            type="text"
                             placeholder="Search games..."
-                            className="mb-2 bg-[#2A2A2A] border-[#333333] text-white"
+                            className="w-full px-2 py-1 text-sm border rounded-md"
                             onChange={(e) => {
                               const searchTerm = e.target.value.toLowerCase();
                               setFilteredGames(
@@ -604,14 +605,14 @@ export default function GamingPreferences() {
                             }}
                           />
                         </div>
-                        {filteredGames.map((option) => (
-                          <SelectItem key={option.id} value={option.id} className="text-white hover:bg-[#2A2A2A]">
-                            {option.label}
-                          </SelectItem>
-                        ))}
-                        <SelectItem value="other" className="text-white hover:bg-[#2A2A2A]">
-                          Other
-                        </SelectItem>
+                        <div className="max-h-[300px] overflow-y-auto">
+                          {filteredGames.map((option) => (
+                            <SelectItem key={option.id} value={option.id}>
+                              {option.label}
+                            </SelectItem>
+                          ))}
+                          <SelectItem value="other">Other</SelectItem>
+                        </div>
                       </SelectContent>
                     </Select>
                     {field.value === 'other' && (
@@ -621,17 +622,18 @@ export default function GamingPreferences() {
                         render={({ field: otherField }) => (
                           <FormItem className="mt-2">
                             <FormControl>
-                              <Input
-                                {...otherField}
+                              <input
+                                type="text"
                                 placeholder="Enter your favorite game"
-                                className="bg-[#1A1A1A] border-[#333333] text-white"
+                                className="w-full px-3 py-2 text-sm border rounded-md bg-background/50"
+                                {...otherField}
                               />
                             </FormControl>
                           </FormItem>
                         )}
                       />
                     )}
-                    <FormMessage className="text-red-500" />
+                    <FormMessage />
                   </FormItem>
                 )}
               />
@@ -642,18 +644,19 @@ export default function GamingPreferences() {
                 name="favorite_game_2"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="text-white">Favorite Game 2</FormLabel>
+                    <FormLabel>Favorite Game 2</FormLabel>
                     <Select onValueChange={field.onChange} defaultValue={field.value}>
                       <FormControl>
-                        <SelectTrigger className="bg-[#1A1A1A] border-[#333333] text-white">
+                        <SelectTrigger className="bg-background/50">
                           <SelectValue placeholder="Select your second favorite game" />
                         </SelectTrigger>
                       </FormControl>
-                      <SelectContent className="bg-[#1A1A1A] border-[#333333]">
-                        <div className="p-2">
-                          <Input
+                      <SelectContent>
+                        <div className="flex items-center px-2 pb-2">
+                          <input
+                            type="text"
                             placeholder="Search games..."
-                            className="mb-2 bg-[#2A2A2A] border-[#333333] text-white"
+                            className="w-full px-2 py-1 text-sm border rounded-md"
                             onChange={(e) => {
                               const searchTerm = e.target.value.toLowerCase();
                               setFilteredGames(
@@ -664,14 +667,14 @@ export default function GamingPreferences() {
                             }}
                           />
                         </div>
-                        {filteredGames.map((option) => (
-                          <SelectItem key={option.id} value={option.id} className="text-white hover:bg-[#2A2A2A]">
-                            {option.label}
-                          </SelectItem>
-                        ))}
-                        <SelectItem value="other" className="text-white hover:bg-[#2A2A2A]">
-                          Other
-                        </SelectItem>
+                        <div className="max-h-[300px] overflow-y-auto">
+                          {filteredGames.map((option) => (
+                            <SelectItem key={option.id} value={option.id}>
+                              {option.label}
+                            </SelectItem>
+                          ))}
+                          <SelectItem value="other">Other</SelectItem>
+                        </div>
                       </SelectContent>
                     </Select>
                     {field.value === 'other' && (
@@ -681,17 +684,18 @@ export default function GamingPreferences() {
                         render={({ field: otherField }) => (
                           <FormItem className="mt-2">
                             <FormControl>
-                              <Input
-                                {...otherField}
+                              <input
+                                type="text"
                                 placeholder="Enter your favorite game"
-                                className="bg-[#1A1A1A] border-[#333333] text-white"
+                                className="w-full px-3 py-2 text-sm border rounded-md bg-background/50"
+                                {...otherField}
                               />
                             </FormControl>
                           </FormItem>
                         )}
                       />
                     )}
-                    <FormMessage className="text-red-500" />
+                    <FormMessage />
                   </FormItem>
                 )}
               />
@@ -702,18 +706,19 @@ export default function GamingPreferences() {
                 name="favorite_game_3"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="text-white">Favorite Game 3</FormLabel>
+                    <FormLabel>Favorite Game 3</FormLabel>
                     <Select onValueChange={field.onChange} defaultValue={field.value}>
                       <FormControl>
-                        <SelectTrigger className="bg-[#1A1A1A] border-[#333333] text-white">
+                        <SelectTrigger className="bg-background/50">
                           <SelectValue placeholder="Select your third favorite game" />
                         </SelectTrigger>
                       </FormControl>
-                      <SelectContent className="bg-[#1A1A1A] border-[#333333]">
-                        <div className="p-2">
-                          <Input
+                      <SelectContent>
+                        <div className="flex items-center px-2 pb-2">
+                          <input
+                            type="text"
                             placeholder="Search games..."
-                            className="mb-2 bg-[#2A2A2A] border-[#333333] text-white"
+                            className="w-full px-2 py-1 text-sm border rounded-md"
                             onChange={(e) => {
                               const searchTerm = e.target.value.toLowerCase();
                               setFilteredGames(
@@ -724,14 +729,14 @@ export default function GamingPreferences() {
                             }}
                           />
                         </div>
-                        {filteredGames.map((option) => (
-                          <SelectItem key={option.id} value={option.id} className="text-white hover:bg-[#2A2A2A]">
-                            {option.label}
-                          </SelectItem>
-                        ))}
-                        <SelectItem value="other" className="text-white hover:bg-[#2A2A2A]">
-                          Other
-                        </SelectItem>
+                        <div className="max-h-[300px] overflow-y-auto">
+                          {filteredGames.map((option) => (
+                            <SelectItem key={option.id} value={option.id}>
+                              {option.label}
+                            </SelectItem>
+                          ))}
+                          <SelectItem value="other">Other</SelectItem>
+                        </div>
                       </SelectContent>
                     </Select>
                     {field.value === 'other' && (
@@ -741,17 +746,18 @@ export default function GamingPreferences() {
                         render={({ field: otherField }) => (
                           <FormItem className="mt-2">
                             <FormControl>
-                              <Input
-                                {...otherField}
+                              <input
+                                type="text"
                                 placeholder="Enter your favorite game"
-                                className="bg-[#1A1A1A] border-[#333333] text-white"
+                                className="w-full px-3 py-2 text-sm border rounded-md bg-background/50"
+                                {...otherField}
                               />
                             </FormControl>
                           </FormItem>
                         )}
                       />
                     )}
-                    <FormMessage className="text-red-500" />
+                    <FormMessage />
                   </FormItem>
                 )}
               />
@@ -811,7 +817,7 @@ export default function GamingPreferences() {
                         name="preferred_genre"
                         render={({ field }) => (
                           <FormItem className="flex items-center space-x-3">
-                            <FormControl>
+                            <FormControl></FormControl>
                               <Checkbox
                                 checked={field.value?.includes(genre.id)}
                                 onCheckedChange={(checked) => {
