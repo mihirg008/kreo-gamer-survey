@@ -611,7 +611,11 @@ export default function GamingPreferences() {
                               {option.label}
                             </SelectItem>
                           ))}
-                          <SelectItem value="other">Other</SelectItem>
+                        </div>
+                        <div className="border-t">
+                          <SelectItem value="other" className="font-medium">
+                            Other
+                          </SelectItem>
                         </div>
                       </SelectContent>
                     </Select>
@@ -673,7 +677,11 @@ export default function GamingPreferences() {
                               {option.label}
                             </SelectItem>
                           ))}
-                          <SelectItem value="other">Other</SelectItem>
+                        </div>
+                        <div className="border-t">
+                          <SelectItem value="other" className="font-medium">
+                            Other
+                          </SelectItem>
                         </div>
                       </SelectContent>
                     </Select>
@@ -735,7 +743,11 @@ export default function GamingPreferences() {
                               {option.label}
                             </SelectItem>
                           ))}
-                          <SelectItem value="other">Other</SelectItem>
+                        </div>
+                        <div className="border-t">
+                          <SelectItem value="other" className="font-medium">
+                            Other
+                          </SelectItem>
                         </div>
                       </SelectContent>
                     </Select>
